@@ -1,0 +1,47 @@
+[
+  {
+    "type_of_test": "1 way outgoing",
+    "amount": "random",
+    "outgoing_wallet": "not_oos",
+    "incoming_wallet": "oos",
+    "start_date": null,
+    "note": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "1 way incoming",
+    "amount": "random",
+    "outgoing_wallet": "oos",
+    "incoming_wallet": "not_oos",
+    "start_date": null,
+    "note": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "with different start date",
+    "amount": "random",
+    "outgoing_wallet": "random",
+    "incoming_wallet": "random",
+    "start_date": "random",
+    "note": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "with note",
+    "amount": "random",
+    "outgoing_wallet": "random",
+    "incoming_wallet": "random",
+    "start_date": null,
+    "note": "random",
+    "reminder": null
+  },
+  {
+    "type_of_test": "with reminder",
+    "amount": "random",
+    "outgoing_wallet": "random",
+    "incoming_wallet": "random",
+    "start_date": "future",
+    "note": null,
+    "reminder": "random"
+  }
+]
