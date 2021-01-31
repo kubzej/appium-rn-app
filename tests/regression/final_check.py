@@ -135,7 +135,7 @@ class TestsWithoutReset:
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, reminder",
         [
-            ("Test", "random", "random", "random", None, None, None, "random", None, None, None)
+            ("Test", "random", "random", "random", None, None, None, None, None, None, None)
             # i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction)
         ])
     def test_create_transaction(self, type_of_test, transaction_type, category, amount, currency, wallet, start_date,

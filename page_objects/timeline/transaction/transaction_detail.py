@@ -94,10 +94,10 @@ class TransactionDetail:
     LABELS = "Labels"
     LABEL_ITEM = "Label Item"
     if PLATFORM == "Android":
-        LABEL_INPUT = "//android.view.ViewGroup[@content-desc='Label Input']/android.view.ViewGroup/android.widget.EditText"
+        LABEL_INPUT = "//android.widget.EditText"
     else:
-        LABEL_INPUT = "Label Input"
-    PLUS_BUTTON = "Plus Button"
+        LABEL_INPUT = "//XCUIElementTypeTextField"
+    NON_EXISTING_LABEL = "Non Existing Label"
     VISIBLE_LABELS_ANDROID = "//android.view.ViewGroup[@content-desc='Label Item']/android.widget.TextView"
     VISIBLE_LABELS_IOS = "//XCUIElementTypeOther[@name='Label Item']/XCUIElementTypeOther"
     SELECTED_LABELS_ANDROID = "//android.view.ViewGroup[@content-desc='Check Mark']/android.view.ViewGroup/ancestor::*[1]/following-sibling::*[1]"
@@ -525,7 +525,7 @@ class TransactionDetail:
         self.ew.tap_element(self.LABELS)
         self.ew.wait_and_tap_element(self.LABEL_INPUT, 5)
         self.ew.get_element(self.LABEL_INPUT).send_keys(name)
-        self.ew.wait_and_tap_element(self.PLUS_BUTTON, 5)
+        self.ew.wait_and_tap_element(self.NON_EXISTING_LABEL, 5)
         self.ew.tap_element(self.BACK_BUTTON)
 
         vr.validate_input_against_more_outputs(name, self.get_labels(True))
