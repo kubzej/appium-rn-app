@@ -51,6 +51,8 @@ class TransactionValidator:
                               f"undefined/" \
                               f"{self.adjust_reminder(attributes['reminder'])}"
 
+        print(f'LOKATOR: {transaction_locator}')
+
         self.prepare_timeline(attributes['start_date'])
 
         android_timeout = time.time() + 60
@@ -76,9 +78,13 @@ class TransactionValidator:
             amount_final = amount
             wallet_amount_final = "undefined"
         else:
-            amount_final = wallet_amount
-            wallet_amount_final = amount
-        return [amount_final, wallet_amount_final]
+            amount_final = ""
+            for i in wallet_amount:
+                if i in ["-", ".", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                    amount_final = amount_final + i
+
+            wallet_amount_final = "{:.2f}".format(float(amount))
+        return ["{:.2f}".format(float(amount_final)), wallet_amount_final]
 
     def adjust_note(self, note):
         if note is None:

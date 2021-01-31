@@ -30,12 +30,16 @@ class AuthenticationActions:
         self.email_password.set_password(password)
         self.ew.tap_element(self.email_password.SIGN_UP_BUTTON)
         time.sleep(0.5)
+        if PLATFORM == "iOS":
+            self.marketing_dialog.agree_with_ios_notifications()
 
     def login_by_email(self, email, password):
         self.welcome_screen.open_login_by_email_screen()
         self.email_password.set_email(email)
         self.email_password.set_password(password)
         self.ew.tap_element(self.email_password.LOGIN_BUTTON)
+        if PLATFORM == "iOS":
+            self.marketing_dialog.agree_with_ios_notifications()
 
     def logout(self):
         self.more_general.go_to_more_section()

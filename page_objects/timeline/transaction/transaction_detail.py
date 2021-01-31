@@ -17,7 +17,10 @@ class TransactionDetail:
 
     # OTHER
     BACK_BUTTON = "Back Button"
-    TRANSACTION_HEADER_TITLE = "Transaction Header Title"
+    if PLATFORM == "Android":
+        TRANSACTION_HEADER_TITLE = "Transaction Header Title"
+    else:
+        TRANSACTION_HEADER_TITLE = '**/XCUIElementTypeStaticText[`label == "Transaction Header Title"`]'
     SAVE_TRANSACTION_BUTTON = "Save Transaction Button"
 
     # KEYBOARD
@@ -32,25 +35,36 @@ class TransactionDetail:
     INCOME_PICKER = "Income Picker"
     TRANSACTION_PICKER = "Transaction Picker"
     TRANSFER_PICKER = "Transfer Picker"
-    SELECTED_TYPE = "Selected Type"
+    if PLATFORM == "Android":
+        SELECTED_TYPE = "Selected Type"
+    else:
+        SELECTED_TYPE = '**/XCUIElementTypeStaticText[`label == "Selected Type"`]'
 
     # AMOUNT
     if PLATFORM == "Android":
         AMOUNT_INPUT = "//android.view.ViewGroup[@content-desc='Amount Input']/android.view.ViewGroup/android.widget.TextView"
         WALLET_AMOUNT = "//android.view.ViewGroup[@content-desc='Wallet Price']/android.widget.TextView"
     else:
-        AMOUNT_INPUT = "Amount Input"
+        AMOUNT_INPUT = 'label == "Amount Input"'
         WALLET_AMOUNT = "//XCUIElementTypeOther[@name='Wallet Price']/XCUIElementTypeStaticText"
 
     # CURRENCY
     CONFIRM_BUTTON = "Confirm Button"
-    CURRENCY = "Currency"
+    if PLATFORM == "Android":
+        CURRENCY = "Currency"
+    else:
+        CURRENCY = "(//XCUIElementTypeOther[@name='Currency'])[1]/XCUIElementTypeOther"
     SELECTED_CURRENCY_ANDROID = "//android.view.ViewGroup[@content-desc='Currency']/android.widget.TextView"
 
     # WALLET
-    WALLET = "Wallet"
-    OUTGOING_WALLET = "Outgoing Wallet"
-    INCOMING_WALLET = "Incoming Wallet"
+    if PLATFORM == "Android":
+        WALLET = "Wallet"
+        OUTGOING_WALLET = "Outgoing Wallet"
+        INCOMING_WALLET = "Incoming Wallet"
+    else:
+        WALLET = 'label == "Wallet"'
+        OUTGOING_WALLET = 'label == "Outgoing Wallet"'
+        INCOMING_WALLET = 'label == "Incoming Wallet"'
     WALLET_PICKER = "Select Wallet Picker"
     WALLET_ITEM = "Wallet Item"
     SELECTED_WALLET_ANDROID = "//android.view.ViewGroup[@content-desc='Wallet']//android.widget.TextView[2]"
@@ -58,14 +72,15 @@ class TransactionDetail:
     SELECTED_INCOMING_WALLET_ANDROID = "//android.view.ViewGroup[@content-desc='Incoming Wallet']//android.widget.TextView[2]"
 
     # START DATE
-    START_DATE = "Start Date"
     CALENDAR_PICKER = "Select date Picker"
     SELECTED_START_DATE_ANDROID = "//android.view.ViewGroup[@content-desc='Start Date']/android.view.ViewGroup/android.widget.TextView"
     SELECTED_END_DATE_ANDROID = "//android.view.ViewGroup[@content-desc='End Date']/android.view.ViewGroup/android.widget.TextView[2]"
     if PLATFORM == "Android":
+        START_DATE = "Start Date"
         ACTUAL_MONTH_YEAR = "//android.widget.SeekBar/android.widget.TextView"
     else:
-        ACTUAL_MONTH_YEAR = "(//XCUIElementTypeOther[contains(@name,'undefined')])[2]"
+        START_DATE = 'label == "Start Date"'
+        ACTUAL_MONTH_YEAR = "(//XCUIElementTypeOther[@name='Select date Picker']//XCUIElementTypeOther[contains(@name,'undefined')])[2]"
 
     # NOTE
     if PLATFORM == "Android":
@@ -106,7 +121,10 @@ class TransactionDetail:
     SELECTED_RECURRENCE_ANDROID = "//android.view.ViewGroup[@content-desc='Recurrence']/android.view.ViewGroup/android.widget.TextView[2]"
 
     # END DATE
-    END_DATE = "End Date"
+    if PLATFORM == "Android":
+        END_DATE = "End Date"
+    else:
+        END_DATE = 'label == "End Date"'
 
     # REMINDER
     REMINDER = "Reminder"
@@ -149,7 +167,7 @@ class TransactionDetail:
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.SELECTED_TYPE)
         else:
-            return self.ew.get_attributes(self.SELECTED_TYPE, "name")[2]
+            return self.ew.get_attribute(self.SELECTED_TYPE, "name")
 
     def set_type_to_transfer(self):
         self.ew.wait_and_tap_element(self.TRANSFER_PICKER, 5)
@@ -187,7 +205,7 @@ class TransactionDetail:
         if PLATFORM == "Android":
             category = self.ew.get_text_of_element(self.TRANSACTION_HEADER_TITLE).split(" ")[1:]
         else:
-            category = self.ew.get_attributes(self.TRANSACTION_HEADER_TITLE, "name")[2].split(" ")[1:]
+            category = self.ew.get_attribute(self.TRANSACTION_HEADER_TITLE, "name").split(" ")[1:]
         return ' '.join(category)
 
     def set_amount(self, amount):
@@ -219,7 +237,7 @@ class TransactionDetail:
         self.ew.wait_till_element_is_visible(self.AMOUNT_INPUT, 5)
         try:
             if PLATFORM == "Android":
-                return self.ew.get_attribute(self.WALLET_AMOUNT, "content-desc")
+                return self.ew.get_text_of_element(self.WALLET_AMOUNT)
             else:
                 return self.ew.get_attribute(self.WALLET_AMOUNT, "name")
         except NoSuchElementException:
@@ -239,7 +257,7 @@ class TransactionDetail:
         if PLATFORM == "Android":
             return self.ew.get_attribute(self.SELECTED_CURRENCY_ANDROID, "content-desc")
         else:
-            return self.ew.get_attributes(self.CURRENCY, "name")[1]
+            return self.ew.get_attribute(self.CURRENCY, "name")
 
     def set_exchange_rate(self):
         self.ew.wait_and_tap_element(self.CONFIRM_BUTTON, 10)
@@ -258,21 +276,36 @@ class TransactionDetail:
 
         if wallet == "random":
             wallet = random.choice(wallets_in_picker)
-            self.ew.tap_element(wallet)
+            if PLATFORM == "Android":
+                self.ew.tap_element(wallet)
+            else:
+                self.ew.tap_element(f'label == "{wallet}"')
         elif wallet == "different":
             wallets_in_picker.remove(selected_wallet)
             wallet = random.choice(wallets_in_picker)
-            self.ew.tap_element(wallet)
+            if PLATFORM == "Android":
+                self.ew.tap_element(wallet)
+            else:
+                self.ew.tap_element(f'label == "{wallet}"')
         elif wallet == "oos":
             wallet = "Out of Spendee"
-            self.ew.tap_element(wallet)
+            if PLATFORM == "Android":
+                self.ew.tap_element(wallet)
+            else:
+                self.ew.tap_element(f'label == "{wallet}"')
         elif wallet == "not_oos":
             if self.ew.is_element_present("Out of Spendee"):
                 wallets_in_picker.remove("Out of Spendee")
             wallet = random.choice(wallets_in_picker)
-            self.ew.tap_element(wallet)
+            if PLATFORM == "Android":
+                self.ew.tap_element(wallet)
+            else:
+                self.ew.tap_element(f'label == "{wallet}"')
         else:
-            self.ew.tap_element(wallet)
+            if PLATFORM == "Android":
+                self.ew.tap_element(wallet)
+            else:
+                self.ew.tap_element(f'label == "{wallet}"')
 
         self.ew.wait_till_element_is_not_visible(self.WALLET_PICKER, 5)
         if self.ew.is_element_present(self.CONFIRM_BUTTON):
@@ -333,8 +366,12 @@ class TransactionDetail:
 
     def set_calendar_month_year(self, date):
         year, month, day = (int(x) for x in date.split('-'))
-        month_in_app = vs.calendar_months[self.ew.get_text_of_element(self.ACTUAL_MONTH_YEAR).split(" ")[0]]
-        year_in_app = int(self.ew.get_text_of_element(self.ACTUAL_MONTH_YEAR).split(" ")[1])
+        if PLATFORM == "Android":
+            month_in_app = vs.calendar_months[self.ew.get_text_of_element(self.ACTUAL_MONTH_YEAR).split(" ")[0]]
+            year_in_app = int(self.ew.get_text_of_element(self.ACTUAL_MONTH_YEAR).split(" ")[1])
+        else:
+            month_in_app = vs.calendar_months[self.ew.get_attribute(self.ACTUAL_MONTH_YEAR, "label").split(" ")[0]]
+            year_in_app = int(self.ew.get_attribute(self.ACTUAL_MONTH_YEAR, "label").split(" ")[1])
 
         direction = None
         if (year > year_in_app) or (year == year_in_app and month > month_in_app):
@@ -640,5 +677,5 @@ class TransactionDetail:
                                     "5 days before", "6 days before", "7 days before"]
                 reminder = vs.reminders[reminders_in_app.index(reminder)]
             return reminder
-        except NoSuchElementException:
+        except (ValueError, NoSuchElementException):
             return None

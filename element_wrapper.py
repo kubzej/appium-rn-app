@@ -20,6 +20,10 @@ class ElementWrapper:
             return MobileBy.XPATH
         elif str(locator).startswith("com.android"):
             return MobileBy.ID
+        elif str(locator).startswith('label'):
+            return MobileBy.IOS_PREDICATE
+        elif str(locator).startswith('**'):
+            return MobileBy.IOS_CLASS_CHAIN
         else:
             return MobileBy.ACCESSIBILITY_ID
 

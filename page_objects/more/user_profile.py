@@ -10,12 +10,17 @@ class UserProfile:
     MORE_ABOUT_YOU_HEADER = "More About You Header"
 
     # Profile
-    USER_PROFILE = "User Profile"
+    if PLATFORM == "Android":
+        USER_PROFILE = "User Profile"
+    else:
+        USER_PROFILE = 'label == "User Profile"'
     PROFILE_HEADER = "Profile Header"
     BACK_BUTTON = "Back Button"
 
     # More section
-    USER_NAME_ANDROID = "//android.view.ViewGroup[@content-desc='User Profile']/android.widget.TextView[1]"
+    USER_NAME_ANDROID = "//android.view.ViewGroup[@content-desc='User Profile']/android.view.ViewGroup/android.widget.TextView[1]"
+
+
 
     if PLATFORM == "Android":
         FIRST_NAME = "First Name Input"

@@ -19,6 +19,8 @@ from page_objects.timeline.transfer.transfer_validator import TransferValidator
 from page_objects.more.user_profile import UserProfile
 from page_objects.authentication.marketing_dialog import MarketingDialog
 
+import time
+
 
 @pytest.mark.usefixtures('driver_with_reset')
 class TestsWithReset:
@@ -38,20 +40,18 @@ class TestsWithReset:
         (vs.email_register, vs.password, "positive"),
         (vs.prefix, vs.password, "invalid_email"),
         (vs.email_register, vs.password_invalid, "invalid password"),
-        (vs.email_login, vs.password, "existing email")])
+        (vs.email_login, vs.password, "existing email")
+    ])
     def test_register_by_email(self, email, password, type_of_test):
         self.set_up()
         self.authentication_actions.register_by_email(email, password)
 
         if type_of_test == "positive":
-            self.ew.wait_till_element_is_visible(self.user_profile.MORE_ABOUT_YOU_HEADER, 60)
-            if PLATFORM == "iOS":
-                self.marketing_dialog.agree_with_marketing()
+            self.ew.wait_till_element_is_visible(self.user_profile.MORE_ABOUT_YOU_HEADER, 30)
             self.user_profile.set_first_name(vs.first_name)
             self.user_profile.set_last_name(vs.last_name)
             self.ew.tap_element(self.user_profile.CONTINUE_BUTTON)
-            if PLATFORM == "Android":
-                self.marketing_dialog.agree_with_marketing()
+            self.marketing_dialog.agree_with_marketing()
             try:
                 self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
             except NoSuchElementException:
@@ -60,17 +60,18 @@ class TestsWithReset:
 
         elif type_of_test == "existing email":
             try:
-                self.ew.wait_till_element_is_visible(self.email_password.ERROR_DIALOG, 10)
+                self.ew.wait_till_element_is_visible(self.email_password.EXISTING_EMAIL_DIALOG, 10)
             except NoSuchElementException:
                 pass
-            assert self.ew.is_element_present(self.email_password.ERROR_DIALOG) is True
+            assert self.ew.is_element_present(self.email_password.EXISTING_EMAIL_DIALOG) is True
         else:
             assert self.ew.is_element_present(self.email_password.VALIDATION_ERROR_WARNING) is True
 
     @pytest.mark.parametrize("email, password, type_of_test", [
         (vs.email_login, vs.password, "positive"),
         (vs.email_not_existing, vs.password, "existing_email"),
-        (vs.email_login, vs.password_invalid, "invalid_password")])
+        (vs.email_login, vs.password_invalid, "invalid_password")
+        ])
     def test_login_by_email(self, email, password, type_of_test):
         self.set_up()
         self.authentication_actions.login_by_email(email, password)
@@ -84,10 +85,10 @@ class TestsWithReset:
             assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
         else:
             try:
-                self.ew.wait_till_element_is_visible(self.email_password.ERROR_DIALOG, 10)
+                self.ew.wait_till_element_is_visible(self.email_password.INVALID_CREDENTIALS_DIALOG, 10)
             except NoSuchElementException:
                 pass
-            assert self.ew.is_element_present(self.email_password.ERROR_DIALOG) is True
+            assert self.ew.is_element_present(self.email_password.INVALID_CREDENTIALS_DIALOG) is True
 
     def test_logout(self):
         self.set_up()
@@ -134,8 +135,8 @@ class TestsWithoutReset:
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, reminder",
         [
-            # ("Test", "random", "random", "random", None, None, None, None, None, None, None)
-            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction)
+            ("Test", "random", "random", "random", None, None, None, "random", None, None, None)
+            # i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction)
         ])
     def test_create_transaction(self, type_of_test, transaction_type, category, amount, currency, wallet, start_date,
                                 note, label, photo, reminder):
