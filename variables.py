@@ -52,9 +52,9 @@ reminders = ["current day", "1 day in advance", "2 days in advance", "3 days in 
              "5 days in advance", "6 days on advance", "7 days in advance"]
 
 # APPS
-app_android = PATH('../SpendeeRN/android/app/build/outputs/apk/devel/debug/' + 'app-devel-debug.apk')
+app_android = PATH('../dp-spendee-app/android/app/build/outputs/apk/devel/debug/' + 'app-devel-debug.apk')
 # app_ios = PATH('../SpendeeRN/ios/build/Spendee-Devel/Build/Products/Devel.Debug-iphonesimulator/' + 'Spendee.app')
-app_ios = PATH('../../../Library/Developer/Xcode/DerivedData/Spendee-haezeywijubjrxdwerpylmqigqtd/Build/Products/Devel.Debug-iphonesimulator/Spendee.app')
+app_ios = PATH('../../../../Library/Developer/Xcode/DerivedData/Spendee-dsjzhbbigatyedfungmtfqinppze/Build/Products/Devel.Debug-iphonesimulator/Spendee.app')
 
 # JSONs FOR TESTS
 json_test_create_transaction = r'../../resources/test_parameters/test_create_transaction_parameters.json'

@@ -1,2 +1,2 @@
-# automation-rn
+# appium-rn-app
 

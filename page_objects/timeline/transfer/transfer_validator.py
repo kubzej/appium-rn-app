@@ -55,6 +55,8 @@ class TransferValidator:
                            f"undefined/" \
                            f"{self.transaction_validator.adjust_reminder(attributes['reminder'])}"
 
+        print(f'LOCATOR: {transfer_locator}')
+
         if is_two_way_transfer:
             _, _, amount, wallet_amount, outgoing_wallet, incoming_wallet, _, _, _, _, _, _ = (str(x) for x in
                                                                                                transfer_locator.split(
@@ -108,12 +110,12 @@ class TransferValidator:
             wallet_amount_final = "undefined"
         elif currency != "USD" and oos_present is False:
             amount_final = wallet_amount
-            wallet_amount_final = amount
+            wallet_amount_final = "{:.2f}".format(float(amount))
         else:
             raise NotImplementedError(
                 "Not implemented case for 1-way transfer with different currency than main USD currency")
 
-        return [amount_final, wallet_amount_final]
+        return ["{:.2f}".format(float(amount_final)), wallet_amount_final]
 
     def adjust_wallets(self, outgoing_wallet, incoming_wallet):
         p = [outgoing_wallet, incoming_wallet]

@@ -7,7 +7,8 @@ class EmailPassword:
     PASSWORD_INPUT = "Password Input"
     LOGIN_BUTTON = "Login Button"
     SIGN_UP_BUTTON = "Sign Up Button"
-    ERROR_DIALOG = "Error Dialog"
+    EXISTING_EMAIL_DIALOG = "Email Already In Use Dialog"
+    INVALID_CREDENTIALS_DIALOG = "Invalid Credentials Dialog"
     VALIDATION_ERROR_WARNING = "Validation Error Warning"
 
     def __init__(self, driver):
