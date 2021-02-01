@@ -51,7 +51,7 @@ class TransactionValidator:
                               f"undefined/" \
                               f"{self.adjust_reminder(attributes['reminder'])}"
 
-        print(f'LOKATOR: {transaction_locator}')
+        print(f'LOCATOR: {transaction_locator}')
 
         self.prepare_timeline(attributes['start_date'])
 
@@ -105,9 +105,11 @@ class TransactionValidator:
     def adjust_reminder(self, reminder):
         if reminder is None or reminder == "Never":
             return "undefined"
+        else:
+            return reminder
 
     def prepare_timeline(self, start_date):
-        self.ew.wait_till_element_is_visible("Navigation Timeline", 20)
+        self.ew.wait_till_element_is_visible("Navigation Timeline", 30)
         year, month, day = (int(x) for x in start_date.split('-'))
         date = datetime.date(year, month, day)
         today = datetime.date.today()

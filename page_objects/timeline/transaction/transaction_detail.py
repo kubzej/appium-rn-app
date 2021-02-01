@@ -112,8 +112,8 @@ class TransactionDetail:
     else:
         CHOOSE_PHOTO = "Choose from Library…"
         PHOTO_FOLDER = "All Photos"
-        PHOTO_ITEM = "//XCUIElementTypeCollectionView[@name='PhotosGridView']/XCUIElementTypeCell"
-    ALLOW_PHOTO_ACCESS_ANDROID = "//android.widget.Button[@text='Allow']"
+        PHOTO_ITEM = "(//XCUIElementTypeImage)[1]"
+    ALLOW_PHOTO_ACCESS_ANDROID = "com.android.packageinstaller:id/permission_allow_button"
 
     # RECURRENCE
     RECURRENCE = "Recurrence"
@@ -127,7 +127,10 @@ class TransactionDetail:
         END_DATE = 'label == "End Date"'
 
     # REMINDER
-    REMINDER = "Reminder"
+    if PLATFORM == "Android":
+        REMINDER = "Reminder"
+    else:
+        REMINDER = 'label == "Reminder"'
     REMINDER_PICKER = "Reminder Picker"
     SELECTED_REMINDER_ANDROID = "//android.view.ViewGroup[@content-desc='Reminder']/android.view.ViewGroup/android.widget.TextView[2]"
 
@@ -554,7 +557,8 @@ class TransactionDetail:
         self.ew.wait_and_tap_element(self.CHOOSE_PHOTO, 5)
         if self.ew.is_element_present(self.ALLOW_PHOTO_ACCESS_ANDROID):
             self.ew.tap_element(self.ALLOW_PHOTO_ACCESS_ANDROID)
-        self.ew.wait_and_tap_element(self.PHOTO_FOLDER, 5)
+        if PLATFORM == "Android":
+            self.ew.wait_and_tap_element(self.PHOTO_FOLDER, 5)
         self.ew.wait_and_tap_element(self.PHOTO_ITEM, 5)
 
         vr.validate_input_against_output(True, self.get_photo())
@@ -678,4 +682,4 @@ class TransactionDetail:
                 reminder = vs.reminders[reminders_in_app.index(reminder)]
             return reminder
         except (ValueError, NoSuchElementException):
-            return None
+            return  None
