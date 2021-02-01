@@ -18,6 +18,15 @@
     "reminder": null
   },
   {
+    "type_of_test": "2-way transfer",
+    "amount": "random",
+    "outgoing_wallet": "not_oos",
+    "incoming_wallet": "not_oos",
+    "start_date": null,
+    "note": null,
+    "reminder": null
+  },
+  {
     "type_of_test": "with different start date",
     "amount": "random",
     "outgoing_wallet": "random",
