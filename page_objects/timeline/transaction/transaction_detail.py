@@ -682,4 +682,4 @@ class TransactionDetail:
                 reminder = vs.reminders[reminders_in_app.index(reminder)]
             return reminder
         except (ValueError, NoSuchElementException):
-            return  None
+            return None
