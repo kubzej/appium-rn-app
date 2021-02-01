@@ -28,6 +28,7 @@ class TransactionDetail:
                 "6": "Numpad 6", "7": "Numpad 7", "8": "Numpad 8", "9": "Numpad 9",
                 ".": "Numpad Decimal Point", ",": "Numpad Decimal Point"}
     NUMPAD_BACKDROP = "Numpad Backdrop"
+    NUMPAD_CLEAR = "Numpad Clear"
 
     # TYPE AND CATEGORY
     CATEGORY_ICON = "Category Icon"
@@ -39,6 +40,8 @@ class TransactionDetail:
         SELECTED_TYPE = "Selected Type"
     else:
         SELECTED_TYPE = '**/XCUIElementTypeStaticText[`label == "Selected Type"`]'
+    GEAR_ICON = "Gear Icon"
+    CONFIRM_CATEGORY_ICON = "Confirm Category Icon"
 
     # AMOUNT
     if PLATFORM == "Android":
@@ -74,7 +77,9 @@ class TransactionDetail:
     # START DATE
     CALENDAR_PICKER = "Select date Picker"
     SELECTED_START_DATE_ANDROID = "//android.view.ViewGroup[@content-desc='Start Date']/android.view.ViewGroup/android.widget.TextView"
+    SELECTED_START_DATE_ANDROID_2 = "//android.view.ViewGroup[@content-desc='Start Date']/android.widget.TextView"
     SELECTED_END_DATE_ANDROID = "//android.view.ViewGroup[@content-desc='End Date']/android.view.ViewGroup/android.widget.TextView[2]"
+    SELECTED_END_DATE_ANDROID_2 = "//android.view.ViewGroup[@content-desc='End Date']/android.widget.TextView[2]"
     if PLATFORM == "Android":
         START_DATE = "Start Date"
         ACTUAL_MONTH_YEAR = "//android.widget.SeekBar/android.widget.TextView"
@@ -85,8 +90,10 @@ class TransactionDetail:
     # NOTE
     if PLATFORM == "Android":
         NOTE = "Note"
+        EXISTING_NOTE = "Note"
     else:
         NOTE = "//XCUIElementTypeTextView[@name='Note Write a note']"
+        EXISTING_NOTE = '**/XCUIElementTypeTextView[`label == "Note"`]'
     SELECTED_NOTE_IOS = "Note"
     NOTE_ELEMENT = "Note Element"
 
@@ -160,7 +167,7 @@ class TransactionDetail:
             v_input = "Income"
 
         self.ew.wait_and_tap_element(transaction_type, 5)
-        if PLATFORM == "Android" and transaction_type == self.INCOME_PICKER:
+        if PLATFORM == "Android":
             time.sleep(0.5)
 
         vr.validate_input_against_output(v_input, self.get_type_of_transaction())
@@ -443,7 +450,13 @@ class TransactionDetail:
             date_android = self.SELECTED_END_DATE_ANDROID
 
         if PLATFORM == "Android":
-            self.ew.wait_till_element_is_visible(date_android, 5)
+            try:
+                self.ew.wait_till_element_is_visible(date_android, 5)
+            except NoSuchElementException:
+                if type_of_date == "start":
+                    date_android = self.SELECTED_START_DATE_ANDROID_2
+                else:
+                    date_android = self.SELECTED_END_DATE_ANDROID_2
             date_in_app = self.ew.get_text_of_element(date_android)
         else:
             self.ew.wait_till_element_is_visible(date_ios, 5)
@@ -493,6 +506,7 @@ class TransactionDetail:
         self.ew.wait_till_element_is_visible(self.LABELS, 5)
         if label == "random":
             if self.ew.is_element_present(self.LABEL_ITEM):
+                print('NASEL LABEL')
                 labels = self.get_labels(False)
                 label = random.choice(labels)
                 if PLATFORM == "Android":
@@ -503,6 +517,7 @@ class TransactionDetail:
                     self.action.tap(self.ew.get_elements(self.LABEL_ITEM)[i]).perform()
                 vr.validate_input_against_more_outputs(label, self.get_labels(True))
             else:
+                print('NENASEL LABEL')
                 self.create_label(label)
         else:
             if PLATFORM == "Android":

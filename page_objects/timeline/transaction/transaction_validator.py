@@ -109,7 +109,7 @@ class TransactionValidator:
             return reminder
 
     def prepare_timeline(self, start_date):
-        self.ew.wait_till_element_is_visible("Navigation Timeline", 30)
+        self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         year, month, day = (int(x) for x in start_date.split('-'))
         date = datetime.date(year, month, day)
         today = datetime.date.today()

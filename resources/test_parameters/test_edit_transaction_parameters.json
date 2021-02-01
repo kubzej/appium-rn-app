@@ -1,0 +1,110 @@
+[
+  {
+    "type_of_test": "change of type",
+    "transaction_type": "opposite",
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of category",
+    "transaction_type": null,
+    "category": "random",
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of amount",
+    "transaction_type": null,
+    "category": null,
+    "amount": "random",
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of wallet",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": "different",
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of start date",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": "random",
+    "note": null,
+    "label": null,
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of note",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": "random",
+    "label": null,
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "add label to transaction",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": "random",
+    "photo": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of photo",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": true,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of reminder",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": "future",
+    "note": null,
+    "label": null,
+    "photo": null,
+    "reminder": "random"
+  }
+]

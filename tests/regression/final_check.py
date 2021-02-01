@@ -159,3 +159,17 @@ class TestsWithoutReset:
         if self.transfer_origination_modal.is_origination_modal_present() or self.transfer_destination_modal.is_destination_modal_present():
             self.transfer_origination_modal.create_as_new_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
+
+    @pytest.mark.parametrize(
+        "type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, reminder",
+        [
+            ("Test", None, None, None, None, None, None, None, None, None)
+            # i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_transaction)
+        ])
+    def test_edit_transaction(self, type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, reminder):
+        self.set_up()
+        self.transaction_actions.open_transaction()
+        self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label, photo, reminder)
+        attributes = self.transaction_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
