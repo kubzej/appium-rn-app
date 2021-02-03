@@ -1,0 +1,14 @@
+[
+  {
+    "type_of_test": "Change outgoing transfer to expense transaction",
+    "outgoing_wallet": "not_oos",
+    "incoming_wallet": "oos",
+    "transaction_type": "expenses"
+  },
+    {
+    "type_of_test": "Change incoming transfer to income transaction",
+    "outgoing_wallet": "oos",
+    "incoming_wallet": "not_oos",
+    "transaction_type": "income"
+  }
+]

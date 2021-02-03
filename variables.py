@@ -61,3 +61,4 @@ json_test_create_transaction = r'../../resources/test_parameters/test_create_tra
 json_test_create_transfer = r'../../resources/test_parameters/test_create_transfer_parameters.json'
 json_test_edit_transaction = r'../../resources/test_parameters/test_edit_transaction_parameters.json'
 json_test_edit_transfer = r'../../resources/test_parameters/test_edit_transfer_parameters.json'
+json_test_change_transfer_to_transaction = r'../../resources/test_parameters/test_change_transfer_to_transaction_parameters.json'
