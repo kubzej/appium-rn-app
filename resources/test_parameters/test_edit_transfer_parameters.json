@@ -1,0 +1,42 @@
+[
+  {
+    "type_of_test": "Change of amount",
+    "transaction_type": null,
+    "amount": "random",
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "reminder": null
+  },
+    {
+    "type_of_test": "Change of start date",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": "random",
+    "note": null,
+    "reminder": null
+  },
+    {
+    "type_of_test": "Change of note",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": "random",
+    "reminder": null
+  },
+    {
+    "type_of_test": "Change of reminder",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": "future",
+    "note": null,
+    "reminder": "random"
+  }
+]

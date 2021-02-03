@@ -1,6 +1,7 @@
 from element_wrapper import ElementWrapper
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
+from page_objects.timeline.transfer.origination_destination_modal import TransferDestinationModal
 from selenium.common.exceptions import NoSuchElementException
 
 class TransactionActions:
@@ -11,6 +12,7 @@ class TransactionActions:
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
+        self.transfer_destination_modal = TransferDestinationModal(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
 
     def create_transaction(self, transaction_type, category, amount, currency, wallet, start_date, note, label, photo,
@@ -40,6 +42,8 @@ class TransactionActions:
 
     def save_transaction(self):
         self.ew.wait_and_tap_element(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
+        if self.transfer_destination_modal.is_destination_modal_present() or self.transfer_destination_modal.is_origination_modal_present():
+            self.transfer_destination_modal.create_as_new_transaction()
 
     def open_transaction(self):
 

@@ -2,8 +2,8 @@ import desired_capabilities
 import pytest
 from appium import webdriver
 
-# PLATFORM = "Android"
-PLATFORM = "iOS"
+PLATFORM = "Android"
+# PLATFORM = "iOS"
 
 
 @pytest.fixture()
