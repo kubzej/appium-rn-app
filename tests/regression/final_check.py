@@ -203,3 +203,19 @@ class TestsWithoutReset:
         attributes = self.transaction_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes)
+
+    def test_delete_transaction(self):
+        self.set_up()
+        self.transaction_actions.open_transaction()
+        attributes = self.transaction_validator.get_all_attributes()
+        self.transaction_actions.delete_transaction()
+        assert self.transaction_validator.is_transaction_on_timeline(attributes) is False
+
+    def test_delete_transfer(self):
+        self.set_up()
+        self.transfer_actions.open_transfer()
+        attributes = self.transfer_validator.get_all_attributes()
+        self.transaction_actions.delete_transaction()
+        assert self.transfer_validator.is_transfer_on_timeline(attributes) is False
+
+
