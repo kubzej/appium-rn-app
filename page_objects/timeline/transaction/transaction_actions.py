@@ -92,3 +92,7 @@ class TransactionActions:
             self.ew.swipe_if_element_not_present(self.transaction_detail.REMINDER)
             self.transaction_detail.set_reminder(reminder)
         self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
+
+    def delete_transaction(self):
+        self.ew.wait_and_tap_element(self.transaction_detail.TRASH_ICON, 10)
+        self.ew.wait_and_tap_element(self.transaction_detail.DELETE_BUTTON, 10)

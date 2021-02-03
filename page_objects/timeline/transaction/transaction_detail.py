@@ -22,6 +22,8 @@ class TransactionDetail:
     else:
         TRANSACTION_HEADER_TITLE = '**/XCUIElementTypeStaticText[`label == "Transaction Header Title"`]'
     SAVE_TRANSACTION_BUTTON = "Save Transaction Button"
+    TRASH_ICON = "Trash Icon"
+    DELETE_BUTTON = "Delete"
 
     # KEYBOARD
     KEYBOARD = {"0": "Numpad 0", "1": "Numpad 1", "2": "Numpad 2", "3": "Numpad 3", "4": "Numpad 4", "5": "Numpad 5",
