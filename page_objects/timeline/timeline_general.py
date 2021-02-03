@@ -16,7 +16,7 @@ class TimelineGeneral:
 
     def go_to_timeline(self):
         self.ew.wait_and_tap_element(self.NAVIGATION_TIMELINE, 30)
-        self.ew.wait_till_element_is_visible(self.OVERVIEW_BUTTON, 10)
+        self.ew.wait_till_element_is_visible(self.ADD_TRANSACTION_BUTTON, 10)
 
     def open_transaction_create_screen(self):
         self.ew.wait_and_tap_element(self.NAVIGATION_TIMELINE, 30)
