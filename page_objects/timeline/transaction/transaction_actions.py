@@ -15,8 +15,7 @@ class TransactionActions:
         self.transfer_destination_modal = TransferDestinationModal(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
 
-    def create_transaction(self, transaction_type, category, amount, currency, wallet, start_date, note, label, photo,
-                           reminder):
+    def create_transaction(self, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
         self.timeline_general.open_transaction_create_screen()
         if transaction_type is not None:
             self.transaction_detail.set_type_of_transaction(transaction_type)
@@ -34,6 +33,14 @@ class TransactionActions:
             self.transaction_detail.set_label(label)
         if photo is not None:
             self.transaction_detail.set_photo()
+        if recurrence is not None:
+            self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
+            self.ew.swipe_if_element_not_present(self.transaction_detail.RECURRENCE)
+            self.transaction_detail.set_recurrence(recurrence)
+        if end_date is not None:
+            self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
+            self.ew.swipe_if_element_not_present(self.transaction_detail.END_DATE)
+            self.transaction_detail.set_end_date(end_date)
         if reminder is not None:
             self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
             self.ew.swipe_if_element_not_present(self.transaction_detail.REMINDER)
@@ -50,13 +57,13 @@ class TransactionActions:
         self.ew.wait_till_element_is_visible(self.timeline_general.OVERVIEW_BUTTON, 30)
         self.timeline_general.go_to_timeline()
         if self.ew.is_element_present(self.EXISTING_TRANSACTION) is False:
-            self.create_transaction(transaction_type="random", category="random", amount="random", currency=None, wallet=None, start_date=None, note=None, label=None, photo=None, reminder=None)
+            self.create_transaction(transaction_type="random", category="random", amount="random", currency=None, wallet=None, start_date=None, note=None, label=None, photo=None, recurrence=None, end_date=None, reminder=None)
             self.save_transaction()
             self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         self.ew.wait_and_tap_element(self.EXISTING_TRANSACTION, 15)
         self.ew.wait_till_element_is_visible(self.transaction_detail.TRANSACTION_HEADER_TITLE, 15)
 
-    def edit_transaction(self, transaction_type, category, amount, wallet, start_date, note, label, photo, reminder):
+    def edit_transaction(self, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
         if transaction_type is not None:
             self.ew.tap_element(self.transaction_detail.CATEGORY_ICON)
             if transaction_type == "transfer":
@@ -87,6 +94,14 @@ class TransactionActions:
             self.transaction_detail.set_label(label)
         if photo is not None:
             self.transaction_detail.set_photo()
+        if recurrence is not None:
+            self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
+            self.ew.swipe_if_element_not_present(self.transaction_detail.RECURRENCE)
+            self.transaction_detail.set_recurrence(recurrence)
+        if end_date is not None:
+            self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
+            self.ew.swipe_if_element_not_present(self.transaction_detail.END_DATE)
+            self.transaction_detail.set_end_date(end_date)
         if reminder is not None:
             self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
             self.ew.swipe_if_element_not_present(self.transaction_detail.REMINDER)

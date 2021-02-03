@@ -7,6 +7,8 @@
     "incoming_wallet": null,
     "start_date": null,
     "note": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
     {
@@ -17,6 +19,8 @@
     "incoming_wallet": null,
     "start_date": "random",
     "note": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
     {
@@ -27,6 +31,8 @@
     "incoming_wallet": null,
     "start_date": null,
     "note": "random",
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
     {
@@ -37,6 +43,8 @@
     "incoming_wallet": null,
     "start_date": "future",
     "note": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": "random"
   }
 ]

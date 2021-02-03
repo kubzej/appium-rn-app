@@ -9,6 +9,8 @@
     "note": null,
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -21,6 +23,8 @@
     "note": null,
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -33,6 +37,8 @@
     "note": null,
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -45,6 +51,8 @@
     "note": null,
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -57,6 +65,8 @@
     "note": null,
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -69,6 +79,8 @@
     "note": "random",
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -81,6 +93,8 @@
     "note": null,
     "label": "random",
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -93,6 +107,8 @@
     "note": null,
     "label": null,
     "photo": true,
+    "recurrence": null,
+    "end_date": null,
     "reminder": null
   },
   {
@@ -105,6 +121,8 @@
     "note": null,
     "label": null,
     "photo": null,
+    "recurrence": null,
+    "end_date": null,
     "reminder": "random"
   }
 ]
