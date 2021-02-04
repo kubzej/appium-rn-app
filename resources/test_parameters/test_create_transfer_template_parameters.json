@@ -1,0 +1,68 @@
+[
+  {
+    "type_of_test": "1-way outgoing",
+    "amount": "random",
+    "outgoing_wallet": "not_oos",
+    "incoming_wallet": "oos",
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "1-way incoming",
+    "amount": "random",
+    "outgoing_wallet": "oos",
+    "incoming_wallet": "not_oos",
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "2-way",
+    "amount": "random",
+    "outgoing_wallet": "not_oos",
+    "incoming_wallet": "not_oos",
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "with note",
+    "amount": "random",
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": "random",
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "with end date",
+    "amount": "random",
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": "random",
+    "reminder": null
+  },
+  {
+    "type_of_test": "with reminder",
+    "amount": "random",
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": "random"
+  }
+]

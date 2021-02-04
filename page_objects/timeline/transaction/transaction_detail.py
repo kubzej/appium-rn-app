@@ -231,7 +231,7 @@ class TransactionDetail:
         self.ew.wait_till_element_is_visible(self.KEYBOARD["1"], 10)
         amount_list = list(amount)
         for i in amount_list:
-            self.ew.tap_element(self.KEYBOARD[i])
+            self.ew.wait_and_tap_element(self.KEYBOARD[i], 5)
         self.ew.wait_and_tap_element(self.NUMPAD_BACKDROP, 5)
 
         v_output = self.get_amount()

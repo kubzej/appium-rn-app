@@ -148,7 +148,7 @@ class TestsWithoutReset:
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
     @pytest.mark.parametrize("type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
-        # ("Test", "random", None, None, None, None, None, None, None)
+        # ("Test", "random", "not_oos", "not_oos", None, None, None, None, None)
         i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer)
     ])
     def test_create_transfer(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
@@ -237,7 +237,7 @@ class TestsWithoutReset:
         "type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
             # ("Test", None, None, None, None, None, None, None, None, None, None, None)
-            i for i in vs.get_list_orf_parameters_for_testing(vs.json_test_edit_transaction_template)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_transaction_template)
         ])
     def test_edit_transaction_template(self, type_of_test, transaction_type, category, amount, wallet,
                                           start_date, note, label, photo, recurrence, end_date, reminder):
@@ -247,3 +247,16 @@ class TestsWithoutReset:
         attributes = self.transaction_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
+
+    @pytest.mark.parametrize(
+        "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
+            # ("Test", "random", None, None, None, None, "random", None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer_template)
+        ])
+    def test_create_transfer_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+        self.set_up()
+        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
+        attributes = self.transfer_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transfer_validator.is_transfer_on_timeline(attributes)
+

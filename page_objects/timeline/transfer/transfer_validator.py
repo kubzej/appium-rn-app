@@ -31,6 +31,8 @@ class TransferValidator:
                           "incoming_wallet": self.transaction_detail.get_wallet("transfer_incoming"),
                           "start_date": self.transaction_detail.get_date("start"),
                           "note": self.transaction_detail.get_note(),
+                          "recurrence": self.transaction_detail.get_recurrence(),
+                          "end_date": self.transaction_detail.get_date("end"),
                           "reminder": self.transaction_detail.get_reminder(),
                           }
 
@@ -51,14 +53,14 @@ class TransferValidator:
                            f"{self.transaction_validator.adjust_note(attributes['note'])}/" \
                            f"undefined/" \
                            f"false/" \
-                           f"undefined/" \
-                           f"undefined/" \
+                           f"{self.transaction_validator.adjust_recurrence(attributes['recurrence'])}/" \
+                           f"{self.transaction_validator.adjust_end_date(attributes['end_date'])}/" \
                            f"{self.transaction_validator.adjust_reminder(attributes['reminder'])}"
 
         print(f'LOCATOR: {transfer_locator}')
 
         if is_two_way_transfer:
-            _, _, amount, wallet_amount, outgoing_wallet, incoming_wallet, _, _, _, _, _, _ = (str(x) for x in
+            _, _, amount, wallet_amount, outgoing_wallet, incoming_wallet, _, _, _, recurrence, _, _ = (str(x) for x in
                                                                                                transfer_locator.split(
                                                                                                    '/'))
             s_out = transfer_locator.split("/")
@@ -68,13 +70,17 @@ class TransferValidator:
             if wallet_amount != "undefined":
                 s_out[3] = f"-{wallet_amount}"
 
-            s_in[4] = incoming_wallet
-            s_in[5] = outgoing_wallet
+            if recurrence == "undefined":
+                s_in[4] = incoming_wallet
+                s_in[5] = outgoing_wallet
 
             transfer_outgoing_locator = '/'.join(s_out)
             transfer_incoming_locator = '/'.join(s_in)
 
-        self.transaction_validator.prepare_timeline(attributes['start_date'])
+            print(f'OUTGOING LOCATOR: {transfer_outgoing_locator}')
+            print(f'INCOMING LOCATOR: {transfer_incoming_locator}')
+
+        self.transaction_validator.prepare_timeline(attributes['start_date'], self.transaction_validator.adjust_recurrence(attributes['recurrence']))
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5

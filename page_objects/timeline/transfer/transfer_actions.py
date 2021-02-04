@@ -8,6 +8,12 @@ from selenium.common.exceptions import NoSuchElementException
 class TransferActions():
 
     EXISTING_TRANSFER = "Existing Item: transfer-undefined"
+    EXISTING_TRANSFER_TEMPLATES = ["Existing Item: transfer-every day", "Existing Item: transfer-every 2 days",
+                                      "Existing Item: transfer-every working day", "Existing Item: transfer-every week",
+                                      "Existing Item: transfer-every 2 weeks", "Existing Item: transfer-every 4 weeks",
+                                      "Existing Item: transfer-every month", "Existing Item: transfer-every 2 months",
+                                      "Existing Item: transfer-every 3 months", "Existing Item: transfer-every 6 months",
+                                      "Existing Item: transfer-every year"]
 
     def __init__(self, driver):
         self.driver = driver
@@ -46,6 +52,31 @@ class TransferActions():
             self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         self.ew.wait_and_tap_element(self.EXISTING_TRANSFER, 15)
         self.ew.wait_till_element_is_visible(self.transaction_detail.TRANSACTION_HEADER_TITLE, 15)
+
+    def open_transfer_template(self):
+        self.ew.wait_till_element_is_visible(self.timeline_general.TRANSACTION_SECTION, 60)
+        if self.ew.is_element_present(self.timeline_general.SCHEDULED) is True:
+            self.timeline_general.open_scheduled_section()
+            for i in self.EXISTING_TRANSFER_TEMPLATES:
+                if self.ew.is_element_present(i):
+                    self.ew.tap_element(i)
+                    break
+                elif i == "Existing Item: transfer-every year":
+                    self.create_transfer(amount="random", outgoing_wallet=None, incoming_wallet=None, start_date=None,
+                                         note=None, recurrence=None, end_date=None, reminder=None)
+                    self.transaction_actions.save_transaction()
+                    self.timeline_general.open_scheduled_section()
+                    for i in self.EXISTING_TRANSFER_TEMPLATES:
+                        if self.ew.is_element_present(i):
+                            self.ew.tap_element(i)
+        else:
+            self.create_transfer(amount="random", outgoing_wallet=None, incoming_wallet=None, start_date=None,
+                                 note=None, recurrence=None, end_date=None, reminder=None)
+            self.transaction_actions.save_transaction()
+            self.timeline_general.open_scheduled_section()
+            for i in self.EXISTING_TRANSFER_TEMPLATES:
+                if self.ew.is_element_present(i):
+                    self.ew.tap_element(i)
 
     def edit_transfer(self, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
         if transaction_type is not None:

@@ -130,13 +130,13 @@ class TransactionValidator:
         if date > today or recurrence != "undefined":
 
             if self.ew.is_element_present(self.timeline_general.SCHEDULED_SCREEN) is False:
-                self.ew.wait_till_element_is_not_visible(self.timeline_general.TRANSACTION_SECTION, 20)
+                self.ew.wait_till_element_is_visible(self.timeline_general.TRANSACTION_SECTION, 20)
                 self.timeline_general.open_scheduled_section()
             else:
                 if PLATFORM == "Android":
                     time.sleep(5)
                 else:
-                    time.sleep(1)
+                    time.sleep(2)
 
         elif date < today:
             self.period_filter.set_filter_period(self.period_filter.ALL_TIME_PERIOD)
