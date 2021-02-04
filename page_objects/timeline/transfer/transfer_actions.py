@@ -7,7 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 class TransferActions():
 
-    EXISTING_TRANSFER = "Existing Item: transfer"
+    EXISTING_TRANSFER = "Existing Item: transfer-undefined"
 
     def __init__(self, driver):
         self.driver = driver

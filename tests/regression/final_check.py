@@ -232,3 +232,18 @@ class TestsWithoutReset:
         attributes = self.transaction_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes)
+
+    @pytest.mark.parametrize(
+        "type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
+        [
+            # ("Test", None, None, None, None, None, None, None, None, None, None, None)
+            i for i in vs.get_list_orf_parameters_for_testing(vs.json_test_edit_transaction_template)
+        ])
+    def test_edit_transaction_template(self, type_of_test, transaction_type, category, amount, wallet,
+                                          start_date, note, label, photo, recurrence, end_date, reminder):
+        self.set_up()
+        self.transaction_actions.open_transaction_template()
+        self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder)
+        attributes = self.transaction_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transaction_validator.is_transaction_on_timeline(attributes) is True

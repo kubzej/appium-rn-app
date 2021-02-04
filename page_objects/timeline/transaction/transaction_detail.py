@@ -131,6 +131,7 @@ class TransactionDetail:
         RECURRENCE = 'label == "Recurrence"'
     RECURRENCE_PICKER = "Recurrence Picker"
     SELECTED_RECURRENCE_ANDROID = "//android.view.ViewGroup[@content-desc='Recurrence']/android.view.ViewGroup/android.widget.TextView[2]"
+    SELECTED_RECURRENCE_ANDROID_EDIT = '//android.view.ViewGroup[@content-desc="Recurrence"]/android.widget.TextView[2]'
 
     # END DATE
     if PLATFORM == "Android":
@@ -492,7 +493,7 @@ class TransactionDetail:
     def set_note(self, note):
         if note == "random":
             note = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(0, 8)])
-        self.ew.wait_till_element_is_visible(self.NOTE, 5)
+        self.ew.wait_till_element_is_visible(self.NOTE_ELEMENT, 5)
         self.ew.get_element(self.NOTE).send_keys(note)
         if self.driver.is_keyboard_shown():
             self.ew.tap_element(self.NOTE_ELEMENT)
@@ -629,7 +630,10 @@ class TransactionDetail:
         try:
             self.ew.wait_till_element_is_visible(self.RECURRENCE, 5)
             if PLATFORM == "Android":
-                recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID).lower()
+                try:
+                    recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID).lower()
+                except AttributeError:
+                    recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID_EDIT).lower()
             else:
                 recurrence = self.ew.get_attribute(self.RECURRENCE, "name").lower()
 
