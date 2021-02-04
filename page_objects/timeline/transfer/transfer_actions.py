@@ -63,7 +63,7 @@ class TransferActions():
                     break
                 elif i == "Existing Item: transfer-every year":
                     self.create_transfer(amount="random", outgoing_wallet=None, incoming_wallet=None, start_date=None,
-                                         note=None, recurrence=None, end_date=None, reminder=None)
+                                         note=None, recurrence="random", end_date=None, reminder=None)
                     self.transaction_actions.save_transaction()
                     self.timeline_general.open_scheduled_section()
                     for i in self.EXISTING_TRANSFER_TEMPLATES:
@@ -71,7 +71,7 @@ class TransferActions():
                             self.ew.tap_element(i)
         else:
             self.create_transfer(amount="random", outgoing_wallet=None, incoming_wallet=None, start_date=None,
-                                 note=None, recurrence=None, end_date=None, reminder=None)
+                                 note=None, recurrence="random", end_date=None, reminder=None)
             self.transaction_actions.save_transaction()
             self.timeline_general.open_scheduled_section()
             for i in self.EXISTING_TRANSFER_TEMPLATES:
@@ -90,7 +90,7 @@ class TransferActions():
             self.ew.tap_element(self.transaction_detail.AMOUNT_INPUT)
             self.ew.wait_till_element_is_visible(self.transaction_detail.NUMPAD_CLEAR, 10)
             for i in range(6):
-                self.ew.tap_element(self.transaction_detail.NUMPAD_CLEAR)
+                self.ew.wait_and_tap_element(self.transaction_detail.NUMPAD_CLEAR, 5)
             self.transaction_detail.set_amount(amount)
         if outgoing_wallet is not None:
             if self.transaction_detail.get_wallet("transfer_outgoing") == "Out of Spendee":

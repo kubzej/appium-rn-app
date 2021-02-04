@@ -1,0 +1,74 @@
+[
+  {
+    "type_of_test": "change of amount",
+    "transaction_type": null,
+    "amount": "random",
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "recurrence": null,
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of start date",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": "random",
+    "note": null,
+    "recurrence": null,
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of note",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": "random",
+    "recurrence": null,
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of recurrence",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+   {
+    "type_of_test": "change of end date",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "recurrence": null,
+    "end_date": "random",
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of reminder",
+    "transaction_type": null,
+    "amount": null,
+    "outgoing_wallet": null,
+    "incoming_wallet": null,
+    "start_date": null,
+    "note": null,
+    "recurrence": null,
+    "end_date": null,
+    "reminder": "random"
+  }
+]
