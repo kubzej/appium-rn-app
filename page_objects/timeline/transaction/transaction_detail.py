@@ -125,7 +125,10 @@ class TransactionDetail:
     ALLOW_PHOTO_ACCESS_ANDROID = "com.android.packageinstaller:id/permission_allow_button"
 
     # RECURRENCE
-    RECURRENCE = "Recurrence"
+    if PLATFORM == "Android":
+        RECURRENCE = "Recurrence"
+    else:
+        RECURRENCE = 'label == "Recurrence"'
     RECURRENCE_PICKER = "Recurrence Picker"
     SELECTED_RECURRENCE_ANDROID = "//android.view.ViewGroup[@content-desc='Recurrence']/android.view.ViewGroup/android.widget.TextView[2]"
 
@@ -450,19 +453,21 @@ class TransactionDetail:
         else:
             date_ios = self.END_DATE
             date_android = self.SELECTED_END_DATE_ANDROID
-
-        if PLATFORM == "Android":
-            try:
-                self.ew.wait_till_element_is_visible(date_android, 5)
-            except NoSuchElementException:
-                if type_of_date == "start":
-                    date_android = self.SELECTED_START_DATE_ANDROID_2
-                else:
-                    date_android = self.SELECTED_END_DATE_ANDROID_2
-            date_in_app = self.ew.get_text_of_element(date_android)
-        else:
-            self.ew.wait_till_element_is_visible(date_ios, 5)
-            date_in_app = self.ew.get_attribute(date_ios, "name")
+        try:
+            if PLATFORM == "Android":
+                try:
+                    self.ew.wait_till_element_is_visible(date_android, 5)
+                except NoSuchElementException:
+                    if type_of_date == "start":
+                        date_android = self.SELECTED_START_DATE_ANDROID_2
+                    else:
+                        date_android = self.SELECTED_END_DATE_ANDROID_2
+                date_in_app = self.ew.get_text_of_element(date_android)
+            else:
+                self.ew.wait_till_element_is_visible(date_ios, 5)
+                date_in_app = self.ew.get_attribute(date_ios, "name")
+        except (NoSuchElementException, AttributeError):
+            return None
 
         if date_in_app == "Today" or date_in_app == "Yesterday?":
             date = str(datetime.date.today())
@@ -470,6 +475,8 @@ class TransactionDetail:
             date = str(datetime.date.today() - datetime.timedelta(days=1))
         elif date_in_app == "Tomorrow":
             date = str(datetime.date.today() + datetime.timedelta(days=1))
+        elif date_in_app is None or date_in_app == "Never":
+            return None
         else:
             try:
                 month, day, year = (str(x) for x in date_in_app.split(' '))
@@ -508,7 +515,6 @@ class TransactionDetail:
         self.ew.wait_till_element_is_visible(self.LABELS, 5)
         if label == "random":
             if self.ew.is_element_present(self.LABEL_ITEM):
-                print('NASEL LABEL')
                 labels = self.get_labels(False)
                 label = random.choice(labels)
                 if PLATFORM == "Android":
@@ -519,7 +525,6 @@ class TransactionDetail:
                     self.action.tap(self.ew.get_elements(self.LABEL_ITEM)[i]).perform()
                 vr.validate_input_against_more_outputs(label, self.get_labels(True))
             else:
-                print('NENASEL LABEL')
                 self.create_label(label)
         else:
             if PLATFORM == "Android":
@@ -581,8 +586,8 @@ class TransactionDetail:
         vr.validate_input_against_output(True, self.get_photo())
 
     def get_photo(self):
-        self.ew.wait_till_element_is_visible(self.PHOTO, 5)
         try:
+            self.ew.wait_till_element_is_visible(self.PHOTO, 5)
             self.ew.wait_till_element_is_visible(self.SELECTED_PHOTO, 3)
         except:
             NoSuchElementException()
@@ -621,12 +626,20 @@ class TransactionDetail:
         vr.validate_input_against_output(recurrence, self.get_recurrence())
 
     def get_recurrence(self):
-        self.ew.wait_till_element_is_visible(self.RECURRENCE, 5)
-        if PLATFORM == "Android":
-            recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID).lower()
-        else:
-            recurrence = self.ew.get_attribute(self.RECURRENCE, "name").lower()
-        return recurrence
+        try:
+            self.ew.wait_till_element_is_visible(self.RECURRENCE, 5)
+            if PLATFORM == "Android":
+                recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID).lower()
+            else:
+                recurrence = self.ew.get_attribute(self.RECURRENCE, "name").lower()
+
+            if recurrence != "never" and PLATFORM == "Android":
+                recurrences_in_app = ["every day", "every 2 days", "every work day", "every week", "every 2 weeks",
+                                      "every 4 weeks", "every month", "every 2 months", "every 3 months", "every 6 months", "every year"]
+                recurrence = vs.recurrences[recurrences_in_app.index(recurrence)]
+            return recurrence
+        except (AttributeError, NoSuchElementException):
+            return None
 
     def set_end_date(self, end_date):
         start_date = self.get_date("start")

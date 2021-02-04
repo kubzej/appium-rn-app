@@ -135,8 +135,8 @@ class TestsWithoutReset:
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
-            ("Test", "random", "random", "random", None, None, None, None, None, None, None, None, None)
-            # i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction)
+            # ("Test", "random", "random", "random", None, None, None, None, None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction)
         ])
     def test_create_transaction(self, type_of_test, transaction_type, category, amount, currency, wallet, start_date,
                                 note, label, photo, recurrence, end_date, reminder):
@@ -218,6 +218,17 @@ class TestsWithoutReset:
         self.transaction_actions.delete_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is False
 
-
-
-
+    @pytest.mark.parametrize(
+        "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
+        [
+            # ("Test", "random", "random", "random", None, None, None, None, None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction_template)
+        ])
+    def test_create_transaction_template(self, type_of_test, transaction_type, category, amount, currency, wallet,
+                                          start_date, note, label, photo, recurrence, end_date, reminder):
+        self.set_up()
+        self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date, note, label,
+                                                    photo, recurrence, end_date, reminder)
+        attributes = self.transaction_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transaction_validator.is_transaction_on_timeline(attributes)

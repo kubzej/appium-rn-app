@@ -32,6 +32,8 @@ class TransactionValidator:
                           "note": self.transaction_detail.get_note(),
                           "labels": self.transaction_detail.get_labels(True),
                           "photo": self.transaction_detail.get_photo(),
+                          "recurrence": self.transaction_detail.get_recurrence(),
+                          "end_date": self.transaction_detail.get_date("end"),
                           "reminder": self.transaction_detail.get_reminder(),
                           }
 
@@ -47,13 +49,13 @@ class TransactionValidator:
                               f"{self.adjust_note(attributes['note'])}/" \
                               f"{self.adjust_labels(attributes['labels'])}/" \
                               f"{str(attributes['photo']).lower()}/" \
-                              f"undefined/" \
-                              f"undefined/" \
+                              f"{self.adjust_recurrence(attributes['recurrence'])}/" \
+                              f"{self.adjust_end_date(attributes['end_date'])}/" \
                               f"{self.adjust_reminder(attributes['reminder'])}"
 
         print(f'LOCATOR: {transaction_locator}')
 
-        self.prepare_timeline(attributes['start_date'])
+        self.prepare_timeline(attributes['start_date'], self.adjust_recurrence(attributes['recurrence']))
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5
@@ -70,7 +72,6 @@ class TransactionValidator:
                 is_transaction_present = self.ew.is_element_present(transaction_locator)
                 if time.time() > ios_timeout:
                     return False
-
         return True
 
     def adjust_amounts(self, amount, wallet_amount):
@@ -102,22 +103,36 @@ class TransactionValidator:
 
         return labels_final
 
+    def adjust_recurrence(self, recurrence):
+        if recurrence is None or recurrence == "never":
+            return "undefined"
+        else:
+            return recurrence
+
+    def adjust_end_date(self, end_date):
+        if end_date is None:
+            return "undefined"
+        else:
+            return end_date
+
     def adjust_reminder(self, reminder):
         if reminder is None or reminder == "Never":
             return "undefined"
         else:
             return reminder
 
-    def prepare_timeline(self, start_date):
+    def prepare_timeline(self, start_date, recurrence):
         self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         year, month, day = (int(x) for x in start_date.split('-'))
         date = datetime.date(year, month, day)
         today = datetime.date.today()
 
-        if date > today:
+        if date > today or recurrence != "undefined":
             self.ew.wait_till_element_is_not_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 20)
             if PLATFORM == "Android":
-                time.sleep(3)
+                time.sleep(5)
+            else:
+                time.sleep(1)
             self.timeline_general.open_scheduled_section()
         elif date < today:
             self.period_filter.set_filter_period(self.period_filter.ALL_TIME_PERIOD)
