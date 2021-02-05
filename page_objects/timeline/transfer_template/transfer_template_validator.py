@@ -7,11 +7,14 @@ from element_wrapper import ElementWrapper
 from page_objects.timeline.filters.period_filter import PeriodFilter
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
+from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
+from page_objects.timeline.transfer.transfer_validator import TransferValidator
 from page_objects.timeline.transaction.transaction_validator import TransactionValidator
 from resolutions import Resolutions
 
 
-class TransferValidator:
+
+class TransferTemplateValidator:
 
     def __init__(self, driver):
         self.driver = driver
@@ -21,7 +24,9 @@ class TransferValidator:
         self.rs = Resolutions(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
+        self.transfer_validator = TransferValidator(self.driver)
         self.transaction_validator = TransactionValidator(self.driver)
+        self.transaction_template_validator = TransactionTemplateValidator(self.driver)
 
     def get_all_attributes(self):
         all_attributes = {"amount": self.transaction_detail.get_amount(),
@@ -31,12 +36,14 @@ class TransferValidator:
                           "incoming_wallet": self.transaction_detail.get_wallet("transfer_incoming"),
                           "start_date": self.transaction_detail.get_date("start"),
                           "note": self.transaction_detail.get_note(),
+                          "recurrence": self.transaction_detail.get_recurrence(),
+                          "end_date": self.transaction_detail.get_date("end"),
                           "reminder": self.transaction_detail.get_reminder(),
                           }
 
         return all_attributes
 
-    def is_transfer_on_timeline(self, attributes):
+    def is_transfer_template_on_timeline(self, attributes):
         if "Out of Spendee" not in [attributes['outgoing_wallet'], attributes['incoming_wallet']]:
             is_two_way_transfer = True
         else:
@@ -44,15 +51,15 @@ class TransferValidator:
 
         transfer_locator = f"transfer/" \
                            f"undefined/" \
-                           f"{self.adjust_amounts(attributes['amount'], attributes['wallet_amount'], attributes['currency'], attributes['outgoing_wallet'], attributes['incoming_wallet'])[0]}/" \
-                           f"{self.adjust_amounts(attributes['amount'], attributes['wallet_amount'], attributes['currency'], attributes['outgoing_wallet'], attributes['incoming_wallet'])[1]}/" \
-                           f"{self.adjust_wallets(attributes['outgoing_wallet'], attributes['incoming_wallet'])[0]}/" \
-                           f"{self.adjust_wallets(attributes['outgoing_wallet'], attributes['incoming_wallet'])[1]}/" \
+                           f"{self.transfer_validator.adjust_amounts(attributes['amount'], attributes['wallet_amount'], attributes['currency'], attributes['outgoing_wallet'], attributes['incoming_wallet'])[0]}/" \
+                           f"{self.transfer_validator.adjust_amounts(attributes['amount'], attributes['wallet_amount'], attributes['currency'], attributes['outgoing_wallet'], attributes['incoming_wallet'])[1]}/" \
+                           f"{self.transfer_validator.adjust_wallets(attributes['outgoing_wallet'], attributes['incoming_wallet'])[0]}/" \
+                           f"{self.transfer_validator.adjust_wallets(attributes['outgoing_wallet'], attributes['incoming_wallet'])[1]}/" \
                            f"{self.transaction_validator.adjust_note(attributes['note'])}/" \
                            f"undefined/" \
                            f"false/" \
-                           f"undefined/" \
-                           f"undefined/" \
+                           f"{self.transaction_template_validator.adjust_recurrence(attributes['recurrence'])}/" \
+                           f"{self.transaction_template_validator.adjust_end_date(attributes['end_date'])}/" \
                            f"{self.transaction_validator.adjust_reminder(attributes['reminder'])}"
 
         print(f'LOCATOR: {transfer_locator}')
@@ -78,7 +85,7 @@ class TransferValidator:
             print(f'OUTGOING LOCATOR: {transfer_outgoing_locator}')
             print(f'INCOMING LOCATOR: {transfer_incoming_locator}')
 
-        self.transaction_validator.prepare_timeline(attributes['start_date'], "undefined")
+        self.transaction_validator.prepare_timeline(attributes['start_date'], self.transaction_template_validator.adjust_recurrence(attributes['recurrence']))
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5
@@ -102,30 +109,3 @@ class TransferValidator:
         if is_two_way_transfer and self.ew.is_element_present(transfer_incoming_locator) is False:
             return False
         return True
-
-    def adjust_amounts(self, amount, wallet_amount, currency, outgoing_wallet, incoming_wallet):
-        if "Out of Spendee" in [outgoing_wallet, incoming_wallet]:
-            oos_present = True
-        else:
-            oos_present = False
-
-        if currency == "USD":
-            amount_final = amount
-            wallet_amount_final = "undefined"
-        elif currency != "USD" and oos_present is False:
-            amount_final = wallet_amount
-            wallet_amount_final = "{:.2f}".format(float(amount))
-        else:
-            raise NotImplementedError(
-                "Not implemented case for 1-way transfer with different currency than main USD currency")
-
-        return ["{:.2f}".format(float(amount_final)), wallet_amount_final]
-
-    def adjust_wallets(self, outgoing_wallet, incoming_wallet):
-        p = [outgoing_wallet, incoming_wallet]
-        wallets = [i if i != "Out of Spendee" else "undefined" for i in p]
-
-        if wallets[0] == "undefined":
-            wallets = [wallets[1], wallets[0]]
-
-        return wallets

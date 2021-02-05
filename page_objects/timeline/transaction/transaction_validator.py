@@ -32,8 +32,6 @@ class TransactionValidator:
                           "note": self.transaction_detail.get_note(),
                           "labels": self.transaction_detail.get_labels(True),
                           "photo": self.transaction_detail.get_photo(),
-                          "recurrence": self.transaction_detail.get_recurrence(),
-                          "end_date": self.transaction_detail.get_date("end"),
                           "reminder": self.transaction_detail.get_reminder(),
                           }
 
@@ -49,13 +47,13 @@ class TransactionValidator:
                               f"{self.adjust_note(attributes['note'])}/" \
                               f"{self.adjust_labels(attributes['labels'])}/" \
                               f"{str(attributes['photo']).lower()}/" \
-                              f"{self.adjust_recurrence(attributes['recurrence'])}/" \
-                              f"{self.adjust_end_date(attributes['end_date'])}/" \
+                              f"undefined/" \
+                              f"undefined/" \
                               f"{self.adjust_reminder(attributes['reminder'])}"
 
         print(f'LOCATOR: {transaction_locator}')
 
-        self.prepare_timeline(attributes['start_date'], self.adjust_recurrence(attributes['recurrence']))
+        self.prepare_timeline(attributes['start_date'], "undefined")
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5
@@ -102,18 +100,6 @@ class TransactionValidator:
             labels_final = "undefined"
 
         return labels_final
-
-    def adjust_recurrence(self, recurrence):
-        if recurrence is None or recurrence == "never":
-            return "undefined"
-        else:
-            return recurrence
-
-    def adjust_end_date(self, end_date):
-        if end_date is None:
-            return "undefined"
-        else:
-            return end_date
 
     def adjust_reminder(self, reminder):
         if reminder is None or reminder == "Never":

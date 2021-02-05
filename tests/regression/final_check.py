@@ -18,6 +18,8 @@ from page_objects.timeline.transfer.transfer_actions import TransferActions
 from page_objects.timeline.transfer.transfer_validator import TransferValidator
 from page_objects.more.user_profile import UserProfile
 from page_objects.authentication.marketing_dialog import MarketingDialog
+from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
+from page_objects.timeline.transfer_template.transfer_template_validator import TransferTemplateValidator
 
 import time
 
@@ -111,10 +113,12 @@ class TestsWithoutReset:
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
         self.transaction_validator = TransactionValidator(self.driver)
+        self.transaction_template_validator = TransactionTemplateValidator(self.driver)
         self.transfer_actions = TransferActions(self.driver)
         self.transfer_destination_modal = TransferDestinationModal(self.driver)
         self.transfer_origination_modal = TransferOriginationModal(self.driver)
         self.transfer_validator = TransferValidator(self.driver)
+        self.transfer_template_validator = TransferTemplateValidator(self.driver)
         self.user_profile = UserProfile(self.driver)
 
     def test_edit_profile_name(self):
@@ -229,9 +233,9 @@ class TestsWithoutReset:
         self.set_up()
         self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date, note, label,
                                                     photo, recurrence, end_date, reminder)
-        attributes = self.transaction_validator.get_all_attributes()
+        attributes = self.transaction_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
-        assert self.transaction_validator.is_transaction_on_timeline(attributes)
+        assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes)
 
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
@@ -244,9 +248,9 @@ class TestsWithoutReset:
         self.set_up()
         self.transaction_actions.open_transaction_template()
         self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder)
-        attributes = self.transaction_validator.get_all_attributes()
+        attributes = self.transaction_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
-        assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
+        assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes) is True
 
     @pytest.mark.parametrize(
         "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
@@ -256,9 +260,9 @@ class TestsWithoutReset:
     def test_create_transfer_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
         self.set_up()
         self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
-        attributes = self.transfer_validator.get_all_attributes()
+        attributes = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
-        assert self.transfer_validator.is_transfer_on_timeline(attributes)
+        assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
 
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder",
@@ -270,6 +274,23 @@ class TestsWithoutReset:
         self.set_up()
         self.transfer_actions.open_transfer_template()
         self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
-        attributes = self.transfer_validator.get_all_attributes()
+        attributes = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
-        assert self.transfer_validator.is_transfer_on_timeline(attributes)
+        assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
+
+    @pytest.mark.parametrize(
+        "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
+        [
+            # ("Test", "random", "random", "random", None, None, None, "random", None, None, "random", None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_generate_transaction_from_template)
+        ])
+    def test_generate_transaction_from_template(self, type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
+        self.set_up()
+        self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder)
+        attributes = self.transaction_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+
+        if start_date == "future":
+            assert self.transaction_validator.is_transaction_on_timeline(attributes) is False
+        else:
+            assert self.transaction_validator.is_transaction_on_timeline(attributes) is True

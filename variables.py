@@ -66,3 +66,5 @@ json_test_create_transaction_template = r'../../resources/test_parameters/test_c
 json_test_edit_transaction_template = r'../../resources/test_parameters/test_edit_transaction_template_parameters.json'
 json_test_create_transfer_template = r'../../resources/test_parameters/test_create_transfer_template_parameters.json'
 json_test_edit_transfer_template = r'../../resources/test_parameters/test_edit_transfer_template_parameters.json'
+json_test_generate_transaction_from_template = r'../../resources/test_parameters/test_generate_transaction_from_template_parameters.json'
+json_test_generate_transfer_from_template = r'../../resources/test_parameters/test_generate_transfer_from_template_parameters.json'
