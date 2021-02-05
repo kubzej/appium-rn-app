@@ -9,6 +9,7 @@ class TimelineGeneral:
     SCHEDULED = "Scheduled"
     SCHEDULED_SCREEN = "Scheduled Screen"
     TRANSACTION_CATEGORY_PICKER = "Transaction Category Picker"
+    TRANSACTION_SECTION = "Transaction Section"
 
     def __init__(self, driver):
         self.driver = driver

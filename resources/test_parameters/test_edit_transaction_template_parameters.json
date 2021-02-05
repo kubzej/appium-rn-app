@@ -1,6 +1,6 @@
 [
   {
-    "type_of_test": "change of type",
+    "type_of_test": "change of type of transaction",
     "transaction_type": "opposite",
     "category": null,
     "amount": null,
@@ -42,20 +42,6 @@
     "reminder": null
   },
   {
-    "type_of_test": "change of wallet",
-    "transaction_type": null,
-    "category": null,
-    "amount": null,
-    "wallet": "different",
-    "start_date": null,
-    "note": null,
-    "label": null,
-    "photo": null,
-    "recurrence": null,
-    "end_date": null,
-    "reminder": null
-  },
-  {
     "type_of_test": "change of start date",
     "transaction_type": null,
     "category": null,
@@ -66,6 +52,34 @@
     "label": null,
     "photo": null,
     "recurrence": null,
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of end date",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": null,
+    "recurrence": null,
+    "end_date": "random",
+    "reminder": null
+  },
+  {
+    "type_of_test": "change of recurrence",
+    "transaction_type": null,
+    "category": null,
+    "amount": null,
+    "wallet": null,
+    "start_date": null,
+    "note": null,
+    "label": null,
+    "photo": null,
+    "recurrence": "random",
     "end_date": null,
     "reminder": null
   },
@@ -84,7 +98,7 @@
     "reminder": null
   },
   {
-    "type_of_test": "add label to transaction",
+    "type_of_test": "change of label",
     "transaction_type": null,
     "category": null,
     "amount": null,
@@ -96,33 +110,5 @@
     "recurrence": null,
     "end_date": null,
     "reminder": null
-  },
-  {
-    "type_of_test": "change of photo",
-    "transaction_type": null,
-    "category": null,
-    "amount": null,
-    "wallet": null,
-    "start_date": null,
-    "note": null,
-    "label": null,
-    "photo": true,
-    "recurrence": null,
-    "end_date": null,
-    "reminder": null
-  },
-  {
-    "type_of_test": "change of reminder",
-    "transaction_type": null,
-    "category": null,
-    "amount": null,
-    "wallet": null,
-    "start_date": "future",
-    "note": null,
-    "label": null,
-    "photo": null,
-    "recurrence": null,
-    "end_date": null,
-    "reminder": "random"
   }
 ]

@@ -6,7 +6,10 @@ from element_wrapper import ElementWrapper
 
 class PeriodFilter:
 
-    PERIOD_FILTER_BUTTON = "Period Filter Button"
+    if PLATFORM == "Android":
+        PERIOD_FILTER_BUTTON = "Period Filter Button"
+    else:
+        PERIOD_FILTER_BUTTON = 'label == "Period Filter Button"'
 
     # PERIODS
     WEEK_PERIOD = "Week"

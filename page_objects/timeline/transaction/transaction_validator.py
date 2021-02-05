@@ -53,7 +53,7 @@ class TransactionValidator:
 
         print(f'LOCATOR: {transaction_locator}')
 
-        self.prepare_timeline(attributes['start_date'])
+        self.prepare_timeline(attributes['start_date'], "undefined")
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5
@@ -70,7 +70,6 @@ class TransactionValidator:
                 is_transaction_present = self.ew.is_element_present(transaction_locator)
                 if time.time() > ios_timeout:
                     return False
-
         return True
 
     def adjust_amounts(self, amount, wallet_amount):
@@ -108,17 +107,23 @@ class TransactionValidator:
         else:
             return reminder
 
-    def prepare_timeline(self, start_date):
+    def prepare_timeline(self, start_date, recurrence):
         self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         year, month, day = (int(x) for x in start_date.split('-'))
         date = datetime.date(year, month, day)
         today = datetime.date.today()
 
-        if date > today:
-            self.ew.wait_till_element_is_not_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 20)
-            if PLATFORM == "Android":
-                time.sleep(3)
-            self.timeline_general.open_scheduled_section()
+        if date > today or recurrence != "undefined":
+
+            if self.ew.is_element_present(self.timeline_general.SCHEDULED_SCREEN) is False:
+                self.ew.wait_till_element_is_visible(self.timeline_general.TRANSACTION_SECTION, 20)
+                self.timeline_general.open_scheduled_section()
+            else:
+                if PLATFORM == "Android":
+                    time.sleep(5)
+                else:
+                    time.sleep(2)
+
         elif date < today:
             self.period_filter.set_filter_period(self.period_filter.ALL_TIME_PERIOD)
 

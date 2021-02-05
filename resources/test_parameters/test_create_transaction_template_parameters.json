@@ -10,12 +10,12 @@
     "note": null,
     "label": null,
     "photo": null,
-    "recurrence": null,
+    "recurrence": "random",
     "end_date": null,
     "reminder": null
   },
-  {
-    "type_of_test": "different currency",
+    {
+    "type_of_test": "with different currency",
     "transaction_type": "random",
     "category": "random",
     "amount": "random",
@@ -25,41 +25,11 @@
     "note": null,
     "label": null,
     "photo": null,
-    "recurrence": null,
+    "recurrence": "random",
     "end_date": null,
     "reminder": null
   },
-  {
-    "type_of_test": "different wallet",
-    "transaction_type": "random",
-    "category": "random",
-    "amount": "random",
-    "currency": null,
-    "wallet": "different",
-    "start_date": null,
-    "note": null,
-    "label": null,
-    "photo": null,
-    "recurrence": null,
-    "end_date": null,
-    "reminder": null
-  },
-  {
-    "type_of_test": "different start date",
-    "transaction_type": "random",
-    "category": "random",
-    "amount": "random",
-    "currency": null,
-    "wallet": null,
-    "start_date": "random",
-    "note": null,
-    "label": null,
-    "photo": null,
-    "recurrence": null,
-    "end_date": null,
-    "reminder": null
-  },
-  {
+    {
     "type_of_test": "with note",
     "transaction_type": "random",
     "category": "random",
@@ -70,11 +40,11 @@
     "note": "random",
     "label": null,
     "photo": null,
-    "recurrence": null,
+    "recurrence": "random",
     "end_date": null,
     "reminder": null
   },
-  {
+    {
     "type_of_test": "with label",
     "transaction_type": "random",
     "category": "random",
@@ -85,12 +55,12 @@
     "note": null,
     "label": "random",
     "photo": null,
-    "recurrence": null,
+    "recurrence": "random",
     "end_date": null,
     "reminder": null
   },
-  {
-    "type_of_test": "with photo",
+    {
+    "type_of_test": "with end date",
     "transaction_type": "random",
     "category": "random",
     "amount": "random",
@@ -99,38 +69,23 @@
     "start_date": null,
     "note": null,
     "label": null,
-    "photo": true,
-    "recurrence": null,
-    "end_date": null,
+    "photo": null,
+    "recurrence": "random",
+    "end_date": "random",
     "reminder": null
   },
-  {
+    {
     "type_of_test": "with reminder",
     "transaction_type": "random",
     "category": "random",
     "amount": "random",
     "currency": null,
     "wallet": null,
-    "start_date": "future",
+    "start_date": null,
     "note": null,
     "label": null,
     "photo": null,
-    "recurrence": null,
-    "end_date": null,
-    "reminder": "random"
-  },
-  {
-    "type_of_test": "all attributes without photo",
-    "transaction_type": "random",
-    "category": "random",
-    "amount": "random",
-    "currency": "random",
-    "wallet": "random",
-    "start_date": "future",
-    "note": "random",
-    "label": "random",
-    "photo": null,
-    "recurrence": null,
+    "recurrence": "random",
     "end_date": null,
     "reminder": "random"
   }
