@@ -9,8 +9,9 @@ class BudgetActions():
         self.budgets_general = BudgetsGeneral(self.driver)
         self.budget_detail = BudgetDetail(self.driver)
 
-    def create_budget(self, name, amount):
+    def create_budget(self, name, amount, currency):
         self.budgets_general.go_to_budgets()
         self.budgets_general.open_budget_create_screen()
         self.budget_detail.set_name(name)
         self.budget_detail.set_amount(amount)
+        self.budget_detail.set_currency(currency)
