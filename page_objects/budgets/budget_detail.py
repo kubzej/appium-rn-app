@@ -98,3 +98,12 @@ class BudgetDetail():
             return self.ew.get_text_of_element(self.SELECTED_CURRENCY)
         else:
             return self.ew.get_attribute(self.SELECTED_CURRENCY, "name")
+
+    def set_wallets(self, wallets):
+        # random - vyberu náhodný počet
+        # all = vyberu všechny
+        # none = žádná
+        # podle jména
+        # podle čísla
+
+        self.ew.wait_and_tap_element("Wallets", 5)
