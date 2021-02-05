@@ -1,0 +1,35 @@
+[
+  {
+    "type_of_test": "generate to past",
+    "amount": "random",
+    "outgoing_wallet": "random",
+    "incoming_wallet": "random",
+    "start_date": "past",
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "generate to future",
+    "amount": "random",
+    "outgoing_wallet": "random",
+    "incoming_wallet": "random",
+    "start_date": "future",
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  },
+  {
+    "type_of_test": "generate with note",
+    "amount": "random",
+    "outgoing_wallet": "random",
+    "incoming_wallet": "random",
+    "start_date": null,
+    "note": "random",
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null
+  }
+]
