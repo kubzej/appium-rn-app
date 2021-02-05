@@ -12,7 +12,7 @@ class BudgetActions():
     def create_budget(self, name, amount, currency, wallets):
         self.budgets_general.go_to_budgets()
         self.budgets_general.open_budget_create_screen()
-        # self.budget_detail.set_name(name)
-        # self.budget_detail.set_amount(amount)
-        # self.budget_detail.set_currency(currency)
+        self.budget_detail.set_name(name)
+        self.budget_detail.set_amount(amount)
+        self.budget_detail.set_currency(currency)
         self.budget_detail.set_wallets(wallets)

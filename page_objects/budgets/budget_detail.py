@@ -33,6 +33,16 @@ class BudgetDetail():
     # CURRENCY
     CURRENCY = "Currency"
 
+    # WALLETS
+    if PLATFORM == "Android":
+        WALLET_ITEM = '//android.view.ViewGroup[@content-desc="Select Wallets Picker"]/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup'
+        WALLETS = "Wallets"
+    else:
+        WALLET_ITEM = "Wallet Item"
+        WALLETS = 'label == "Wallets"'
+    WALLET_PICKER = "Select Wallets Picker"
+    SELECTED_WALLETS_ANDROID = '//android.view.ViewGroup[@content-desc="Wallets"]/android.view.ViewGroup/android.widget.TextView[2]'
+
     if PLATFORM == "Android":
         SELECTED_CURRENCY = '//android.view.ViewGroup[@content-desc="Currency"]/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText'
         CURRENCY_PICKER = "Select currency Picker"
@@ -100,10 +110,83 @@ class BudgetDetail():
             return self.ew.get_attribute(self.SELECTED_CURRENCY, "name")
 
     def set_wallets(self, wallets):
-        # random - vyberu náhodný počet
-        # all = vyberu všechny
-        # none = žádná
-        # podle jména
-        # podle čísla
 
-        self.ew.wait_and_tap_element("Wallets", 5)
+        self.ew.wait_and_tap_element(self.WALLETS, 5)
+        self.ew.wait_till_element_is_visible(self.WALLET_PICKER, 5)
+
+        all_visible_wallets = self.count_wallets()[0]
+        selected_wallets = self.count_wallets()[1]
+        non_selected_wallets = self.count_wallets()[2]
+        total_wallets = len(all_visible_wallets)
+        total_selected_wallets = len(selected_wallets)
+        total_non_selected_wallets = len(non_selected_wallets)
+
+        if wallets == "random":
+            wallets_to_select = random.sample(all_visible_wallets, random.randrange(0, len(all_visible_wallets)))
+            for i in wallets_to_select:
+                if PLATFORM == "Android":
+                    self.ew.tap_element(i)
+                else:
+                    self.ew.tap_element(f'label == "{i}"')
+        elif wallets == "all_selected":
+            if total_wallets != total_selected_wallets:
+                for i in non_selected_wallets:
+                    if PLATFORM == "Android":
+                        self.ew.tap_element(i)
+                    else:
+                        self.ew.tap_element(f'label == "{i}"')
+        elif wallets == "none_selected":
+            if total_wallets != total_non_selected_wallets:
+                for i in selected_wallets:
+                    if PLATFORM == "Android":
+                        self.ew.tap_element(i)
+                    else:
+                        self.ew.tap_element(f'label == "{i}"')
+        elif isinstance(wallets, int):
+            x = 0
+            actual_selected_wallets = self.count_wallets()[1]
+            for i in all_visible_wallets:
+                x = x + 1
+                if x <= wallets and len(actual_selected_wallets) > 1:
+                    if PLATFORM == "Android":
+                        self.ew.tap_element(i)
+                    else:
+                        self.ew.tap_element(f'label == "{i}"')
+                    actual_selected_wallets = self.count_wallets()[1]
+
+        selected_wallets = self.count_wallets()[1]
+        total_wallets = len(self.count_wallets()[0])
+        total_selected_wallets = len(selected_wallets)
+
+        if total_wallets == total_selected_wallets:
+            v_input = "All Wallets"
+        elif total_selected_wallets == 1:
+            v_input = selected_wallets[0].split('-')[0]
+        else:
+            v_input = str(total_selected_wallets)
+
+        self.ew.tap_element('Backdrop')
+        vr.validate_input_against_output(v_input, self.get_wallets())
+
+    def count_wallets(self):
+        if PLATFORM == "Android":
+            all_visible_wallets = self.ew.get_attributes(self.WALLET_ITEM, "content-desc")
+        else:
+            all_visible_wallets = self.ew.get_attributes(self.WALLET_ITEM, "label")
+
+        selected_wallets = []
+        non_selected_wallets = []
+        for i in all_visible_wallets:
+            if i.endswith('true'):
+                selected_wallets.append(i)
+            else:
+                non_selected_wallets.append(i)
+        return (all_visible_wallets, selected_wallets, non_selected_wallets)
+
+    def get_wallets(self):
+        self.ew.wait_till_element_is_visible(self.WALLETS, 5)
+
+        if PLATFORM == "Android":
+            return self.ew.get_text_of_element(self.SELECTED_WALLETS_ANDROID)
+        else:
+            return self.ew.get_attribute(self.WALLETS, "name")
