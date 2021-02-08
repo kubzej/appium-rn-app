@@ -50,6 +50,22 @@ class BudgetDetail():
         SELECTED_CURRENCY = '**/XCUIElementTypeOther[`label == "Currency"`][1]'
         CURRENCY_PICKER = 'label == "Select currency"'
 
+    # CATEGORIES
+    CATEGORIES = "Categories"
+    HEADER_BUDGET_FOR = "Header Budget For"
+    SELECT_ALL_CHECKED = "Select All-checked"
+    SELECT_ALL_UNCHECKED = "Select All-unchecked"
+    SELECT_ALL_PART = "Select All-part"
+    if PLATFORM == "Android":
+        CATEGORIES = "Categories"
+        CATEGORY_ITEM = '//android.view.ViewGroup[@content-desc="Category Item"]/android.view.ViewGroup'
+        SELECTED_CATEGORIES_ANDROID = '//android.view.ViewGroup[@content-desc="Categories"]/android.widget.TextView[2]'
+        SELECTED_CATEGORIES_ANDROID_2 = '//android.view.ViewGroup[@content-desc="Categories"]/android.view.ViewGroup/android.widget.TextView[2]'
+    else:
+        CATEGORY_ITEM = 'label == "Category Item"'
+        CATEGORIES = 'label == "Categories"'
+    BACK_BUTTON = "Back Button"
+
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
@@ -135,7 +151,7 @@ class BudgetDetail():
                         self.ew.tap_element(i)
                     else:
                         self.ew.tap_element(f'label == "{i}"')
-        elif wallets == "none_selected":
+        elif wallets == "all_unselected":
             if total_wallets != total_non_selected_wallets:
                 for i in selected_wallets:
                     if PLATFORM == "Android":
@@ -190,3 +206,75 @@ class BudgetDetail():
             return self.ew.get_text_of_element(self.SELECTED_WALLETS_ANDROID)
         else:
             return self.ew.get_attribute(self.WALLETS, "name")
+
+    def set_categories(self, categories):
+
+        self.ew.wait_and_tap_element(self.CATEGORIES, 5)
+        self.ew.wait_till_element_is_visible(self.HEADER_BUDGET_FOR, 5)
+
+        all_visible_categories = self.count_categories()[0]
+
+        if categories == "random":
+            categories = random.randrange(0, len(all_visible_categories))
+
+        if categories == "all_selected":
+            if self.ew.is_element_present(self.SELECT_ALL_UNCHECKED):
+                self.ew.tap_element(self.SELECT_ALL_UNCHECKED)
+            elif self.ew.is_element_present(self.SELECT_ALL_PART):
+                self.ew.tap_element(self.SELECT_ALL_PART)
+                self.ew.tap_element(self.SELECT_ALL_UNCHECKED)
+        elif categories == "all_unselected":
+            if self.ew.is_element_present(self.SELECT_ALL_CHECKED):
+                self.ew.tap_element(self.SELECT_ALL_CHECKED)
+            elif self.ew.is_element_present(self.SELECT_ALL_PART):
+                self.ew.tap_element(self.SELECT_ALL_PART)
+        elif isinstance(categories, int):
+            if self.ew.is_element_present(self.SELECT_ALL_CHECKED):
+                self.ew.tap_element(self.SELECT_ALL_CHECKED)
+            elif self.ew.is_element_present(self.SELECT_ALL_PART):
+                self.ew.tap_element(self.SELECT_ALL_PART)
+            x = 0
+            all_visible_categories = self.count_categories()[0]
+            for i in all_visible_categories:
+                x = x + 1
+                if x <= categories:
+                    self.ew.tap_element(i)
+
+        if self.ew.is_element_present(self.SELECT_ALL_CHECKED):
+            v_input = "All Expenses"
+        else:
+            v_input = str(len(self.count_categories()[1]))
+
+        self.ew.tap_element(self.BACK_BUTTON)
+        vr.validate_input_against_output(v_input, self.get_categories())
+
+    def count_categories(self):
+        if PLATFORM == "Android":
+            all_visible_categories = self.ew.get_attributes(self.CATEGORY_ITEM, "content-desc")
+        else:
+            all_items = self.ew.get_attributes(self.CATEGORY_ITEM, "name")
+            all_visible_categories = []
+            for i in all_items:
+                if i != "Category Item":
+                    all_visible_categories.append(i)
+
+        selected_categories = []
+        non_selected_categories = []
+        for i in all_visible_categories:
+            if i.endswith('true'):
+                selected_categories.append(i)
+            else:
+                non_selected_categories.append(i)
+        return (all_visible_categories, selected_categories, non_selected_categories)
+
+    def get_categories(self):
+        self.ew.wait_till_element_is_visible(self.CATEGORIES, 5)
+
+        if PLATFORM == "Android":
+
+            result = self.ew.get_text_of_element(self.SELECTED_CATEGORIES_ANDROID)
+            if result is None:
+                result = self.ew.get_text_of_element(self.SELECTED_CATEGORIES_ANDROID_2)
+            return result
+        else:
+            return self.ew.get_attribute(self.CATEGORIES, "name")
