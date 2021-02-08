@@ -5,6 +5,8 @@ import random
 import time
 import validator as vr
 import variables as vs
+from resolutions import Resolutions
+from appium.webdriver.common.touch_action import TouchAction
 
 
 class BudgetDetail():
@@ -66,9 +68,20 @@ class BudgetDetail():
         CATEGORIES = 'label == "Categories"'
     BACK_BUTTON = "Back Button"
 
+    # RECURRENCE
+    if PLATFORM == "Android":
+        RECURRENCE = "Recurrence"
+        SELECTED_RECURRENCE_ANDROID = '//android.view.ViewGroup[@content-desc="Recurrence"]/android.widget.TextView[2]'
+        SELECTED_RECURRENCE_ANDROID_EDIT = '//android.view.ViewGroup[@content-desc="Recurrence"]/android.view.ViewGroup/android.widget.TextView[2]'
+    else:
+        RECURRENCE = 'label == "Recurrence"'
+    RECURRENCE_PICKER = "Recurrence Picker"
+
     def __init__(self, driver):
         self.driver = driver
+        self.action = TouchAction(self.driver)
         self.ew = ElementWrapper(self.driver)
+        self.rs = Resolutions(self.driver)
 
     def set_name(self, name):
         if name == "random":
@@ -278,3 +291,45 @@ class BudgetDetail():
             return result
         else:
             return self.ew.get_attribute(self.CATEGORIES, "name")
+
+    def set_recurrence(self, recurrence):
+        self.ew.wait_and_tap_element(self.RECURRENCE, 5)
+        self.ew.wait_till_element_is_visible(self.RECURRENCE_PICKER, 5)
+
+        if recurrence == "random":
+            recurrence = random.choice(vs.budget_recurrences)
+
+        res = self.rs.get_resolution()
+        if PLATFORM == "Android":
+            item_visible = self.ew.is_element_present(recurrence)
+            while item_visible is False:
+                self.action.long_press(None, self.rs.all_resolutions[f"{res}"]["x"],
+                                       self.rs.all_resolutions[f"{res}"]["default_picker_up_y_start"]) \
+                    .move_to(None, self.rs.all_resolutions[f"{res}"]["x"],
+                             self.rs.all_resolutions[f"{res}"]["default_picker_up_y_end"]) \
+                    .release().perform()
+                item_visible = self.ew.is_element_present(recurrence)
+            self.ew.wait_and_tap_element(recurrence, 5)
+        else:
+            item_visible = self.ew.get_attribute(recurrence, "visible")
+            while item_visible == "false":
+                self.driver.execute_script("mobile: dragFromToForDuration",
+                                           {"duration": "0.1",
+                                            "fromX": self.rs.all_resolutions[f"{res}"]["x"],
+                                            "fromY": self.rs.all_resolutions[f"{res}"]["default_picker_up_y_start"],
+                                            "toX": self.rs.all_resolutions[f"{res}"]["x"],
+                                            "toY": self.rs.all_resolutions[f"{res}"]["default_picker_up_y_end"]})
+                item_visible = self.ew.get_attribute(recurrence, "visible")
+            self.driver.execute_script("mobile: tap", {"x": 100, "y": 50, "element": self.ew.get_element(recurrence)})
+
+        vr.validate_input_against_output(recurrence, self.get_recurrence())
+
+    def get_recurrence(self):
+        self.ew.wait_till_element_is_visible(self.RECURRENCE, 5)
+        if PLATFORM == "Android":
+            recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID)
+            if recurrence is None:
+                recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID_EDIT)
+        else:
+            recurrence = self.ew.get_attribute(self.RECURRENCE, "name")
+        return recurrence

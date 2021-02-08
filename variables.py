@@ -47,6 +47,7 @@ calendar_months = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5
 recurrences = ["every day", "every 2 days", "every working day", "every week", "every 2 weeks",
                "every 4 weeks", "every month", "every 2 months", "every 3 months", "every 6 months",
                "every year"]
+budget_recurrences = ["Custom (Once)", "Daily", "Weekly", "Biweekly", "Monthly", "Yearly"]
 
 reminders = ["current day", "1 day in advance", "2 days in advance", "3 days in advance", "4 days in advance",
              "5 days in advance", "6 days on advance", "7 days in advance"]
