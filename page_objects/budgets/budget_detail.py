@@ -86,6 +86,12 @@ class BudgetDetail():
         START_DATE = 'label == "Start Date"'
     CALENDAR_PICKER = "Select date Picker"
 
+    # END DATE
+    if PLATFORM == "Android":
+        END_DATE = "End Date"
+    else:
+        END_DATE = 'label == "End Date"'
+
     def __init__(self, driver):
         self.driver = driver
         self.action = TouchAction(self.driver)
@@ -364,3 +370,27 @@ class BudgetDetail():
         self.transaction_detail.set_calendar_month_year(start_date)
         self.transaction_detail.set_calendar_day(start_date)
         vr.validate_input_against_output(start_date, self.transaction_detail.get_date("start"))
+
+    def set_end_date(self, end_date):
+        start_date = self.transaction_detail.get_date("start")
+        year_start, month_start, day_start = (int(x) for x in start_date.split('-'))
+        start_date = datetime.date(year_start, month_start, day_start)
+
+        if end_date == "random":
+            end_date = str(start_date + datetime.timedelta(days=random.randint(1, 30)))
+        elif end_date == "day_after_start_date":
+            end_date = str(start_date + datetime.timedelta(days=1))
+        else:
+            year_end, month_end, day_end = (int(x) for x in end_date.split('-'))
+            end_date = datetime.date(year_end, month_end, day_end)
+            if start_date < end_date:
+                end_date = str(end_date)
+            else:
+                raise ValueError(f"endDate {end_date} is not older than start_date {str(start_date)}")
+
+        self.ew.wait_and_tap_element(self.END_DATE, 5)
+        self.ew.wait_till_element_is_visible(self.CALENDAR_PICKER, 5)
+        self.transaction_detail.set_calendar_month_year(end_date)
+        self.transaction_detail.set_calendar_day(end_date)
+
+        vr.validate_input_against_output(end_date, self.transaction_detail.get_date("end"))
