@@ -7,6 +7,8 @@ import validator as vr
 import variables as vs
 from resolutions import Resolutions
 from appium.webdriver.common.touch_action import TouchAction
+import datetime
+from page_objects.timeline.transaction.transaction_detail import TransactionDetail
 
 
 class BudgetDetail():
@@ -77,11 +79,19 @@ class BudgetDetail():
         RECURRENCE = 'label == "Recurrence"'
     RECURRENCE_PICKER = "Recurrence Picker"
 
+    # START DATE
+    if PLATFORM == "Android":
+        START_DATE = "Start Date"
+    else:
+        START_DATE = 'label == "Start Date"'
+    CALENDAR_PICKER = "Select date Picker"
+
     def __init__(self, driver):
         self.driver = driver
         self.action = TouchAction(self.driver)
         self.ew = ElementWrapper(self.driver)
         self.rs = Resolutions(self.driver)
+        self.transaction_detail = TransactionDetail(self.driver)
 
     def set_name(self, name):
         if name == "random":
@@ -333,3 +343,24 @@ class BudgetDetail():
         else:
             recurrence = self.ew.get_attribute(self.RECURRENCE, "name")
         return recurrence
+
+    def set_start_date(self, start_date):
+        if start_date == "random":
+            start_date = str(
+                datetime.date(int(datetime.date.today().year), random.randint(1, 12), random.randint(1, 28)))
+        elif start_date == "past":
+            start_date = str(datetime.date.today() - datetime.timedelta(days=random.randint(1, 30)))
+        elif start_date == "future":
+            start_date = str(datetime.date.today() + datetime.timedelta(days=random.randint(1, 30)))
+        elif start_date == "today":
+            start_date = str(datetime.date.today())
+        elif start_date == "yesterday":
+            start_date = str(datetime.date.today() - datetime.timedelta(days=1))
+        elif start_date == "tomorrow":
+            start_date = str(datetime.date.today() + datetime.timedelta(days=1))
+
+        self.ew.wait_and_tap_element(self.START_DATE, 5)
+        self.ew.wait_till_element_is_visible(self.CALENDAR_PICKER, 5)
+        self.transaction_detail.set_calendar_month_year(start_date)
+        self.transaction_detail.set_calendar_day(start_date)
+        vr.validate_input_against_output(start_date, self.transaction_detail.get_date("start"))

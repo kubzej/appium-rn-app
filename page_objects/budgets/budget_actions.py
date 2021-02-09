@@ -9,7 +9,7 @@ class BudgetActions():
         self.budgets_general = BudgetsGeneral(self.driver)
         self.budget_detail = BudgetDetail(self.driver)
 
-    def create_budget(self, name, amount, currency, wallets, categories, recurrence):
+    def create_budget(self, name, amount, currency, wallets, categories, recurrence, start_date):
         self.budgets_general.go_to_budgets()
         self.budgets_general.open_budget_create_screen()
         self.budget_detail.set_name(name)
@@ -18,3 +18,4 @@ class BudgetActions():
         self.budget_detail.set_wallets(wallets)
         self.budget_detail.set_categories(categories)
         self.budget_detail.set_recurrence(recurrence)
+        self.budget_detail.set_start_date(start_date)

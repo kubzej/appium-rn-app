@@ -85,6 +85,10 @@ class TransactionDetail:
     SELECTED_START_DATE_ANDROID_2 = "//android.view.ViewGroup[@content-desc='Start Date']/android.widget.TextView"
     SELECTED_END_DATE_ANDROID = "//android.view.ViewGroup[@content-desc='End Date']/android.view.ViewGroup/android.widget.TextView[2]"
     SELECTED_END_DATE_ANDROID_2 = "//android.view.ViewGroup[@content-desc='End Date']/android.widget.TextView[2]"
+    SELECTED_START_DATE_ANDROID_BUDGET = '//android.view.ViewGroup[@content-desc="Start Date"]/android.view.ViewGroup/android.widget.TextView[2]'
+    SELECTED_START_DATE_ANDROID_BUDGET_2 = '//android.view.ViewGroup[@content-desc="Start Date"]/android.widget.TextView[2]'
+    SELECTED_END_DATE_ANDROID_BUDGET = '//android.view.ViewGroup[@content-desc="End Date"]/android.view.ViewGroup/android.widget.TextView[2]'
+    SELECTED_END_DATE_ANDROID_BUDGET_2 = '//android.view.ViewGroup[@content-desc="End Date"]/android.widget.TextView[2]'
     if PLATFORM == "Android":
         START_DATE = "Start Date"
         ACTUAL_MONTH_YEAR = "//android.widget.SeekBar/android.widget.TextView"
@@ -459,21 +463,34 @@ class TransactionDetail:
             self.ew.tap_element(f"native.calendar.SELECT_DATE_SLOT-{date}")
 
     def get_date(self, type_of_date):
+        is_transaction = self.ew.is_element_present(self.TRANSACTION_HEADER_TITLE)
         if type_of_date == "start":
             date_ios = self.START_DATE
-            date_android = self.SELECTED_START_DATE_ANDROID
+            if is_transaction:
+                date_android = self.SELECTED_START_DATE_ANDROID
+            else:
+                date_android = self.SELECTED_START_DATE_ANDROID_BUDGET
         else:
             date_ios = self.END_DATE
-            date_android = self.SELECTED_END_DATE_ANDROID
+            if is_transaction:
+                date_android = self.SELECTED_END_DATE_ANDROID
+            else:
+                date_android = self.SELECTED_END_DATE_ANDROID_BUDGET
         try:
             if PLATFORM == "Android":
                 try:
                     self.ew.wait_till_element_is_visible(date_android, 5)
                 except NoSuchElementException:
                     if type_of_date == "start":
-                        date_android = self.SELECTED_START_DATE_ANDROID_2
+                        if is_transaction:
+                            date_android = self.SELECTED_START_DATE_ANDROID_2
+                        else:
+                            date_android = self.SELECTED_START_DATE_ANDROID_BUDGET_2
                     else:
-                        date_android = self.SELECTED_END_DATE_ANDROID_2
+                        if is_transaction:
+                            date_android = self.SELECTED_END_DATE_ANDROID_2
+                        else:
+                            date_android = self.SELECTED_END_DATE_ANDROID_BUDGET_2
                 date_in_app = self.ew.get_text_of_element(date_android)
             else:
                 self.ew.wait_till_element_is_visible(date_ios, 5)
