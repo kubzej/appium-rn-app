@@ -2,6 +2,7 @@ import pytest
 from selenium.common.exceptions import NoSuchElementException
 
 import variables as vs
+import secrets as s
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.authentication.authentication_actions import AuthenticationActions
@@ -39,10 +40,10 @@ class TestsWithReset:
         self.welcome_screen.skip_notifications_alert()
 
     @pytest.mark.parametrize("email, password, type_of_test", [
-        (vs.email_register, vs.password, "positive"),
-        (vs.prefix, vs.password, "invalid_email"),
-        (vs.email_register, vs.password_invalid, "invalid password"),
-        (vs.email_login, vs.password, "existing email")
+        (s.email_register, s.password, "positive"),
+        (s.prefix, s.password, "invalid_email"),
+        (s.email_register, s.password_invalid, "invalid password"),
+        (s.email_login, s.password, "existing email")
     ])
     def test_register_by_email(self, email, password, type_of_test):
         self.set_up()
@@ -70,9 +71,9 @@ class TestsWithReset:
             assert self.ew.is_element_present(self.email_password.VALIDATION_ERROR_WARNING) is True
 
     @pytest.mark.parametrize("email, password, type_of_test", [
-        (vs.email_login, vs.password, "positive"),
-        (vs.email_not_existing, vs.password, "existing_email"),
-        (vs.email_login, vs.password_invalid, "invalid_password")
+        (s.email_login, s.password, "positive"),
+        (s.email_not_existing, s.password, "existing_email"),
+        (s.email_login, s.password_invalid, "invalid_password")
         ])
     def test_login_by_email(self, email, password, type_of_test):
         self.set_up()
@@ -94,7 +95,7 @@ class TestsWithReset:
 
     def test_logout(self):
         self.set_up()
-        self.authentication_actions.login_by_email(vs.email_login, vs.password)
+        self.authentication_actions.login_by_email(s.email_login, s.password)
         self.authentication_actions.logout()
 
         try:

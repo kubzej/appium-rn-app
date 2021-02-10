@@ -1,5 +1,5 @@
 import os
-import variables as vs
+import secrets as s
 
 
 def PATH(p):
@@ -11,7 +11,7 @@ def PATH(p):
 def get_desired_capabilities_android(no_reset):
     desired_caps = {
         'platformName': 'Android',
-        'app': vs.app_android,
+        'app': s.app_android,
         'automationName': 'uiautomator2',
         'noReset': no_reset,
     }
@@ -21,7 +21,7 @@ def get_desired_capabilities_android(no_reset):
 def get_desired_capabilities_ios(no_reset):
     desired_caps = {
         'platformName': 'iOS',
-        'app': vs.app_ios,
+        'app': s.app_ios,
         'automationName': 'XCUITest',
         'deviceName': 'iPhone 11',
         'noReset': no_reset,

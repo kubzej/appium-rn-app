@@ -1,9 +1,6 @@
 import names
 import os
 import json
-import random
-import string
-
 
 def PATH(p):
     return os.path.abspath(
@@ -22,17 +19,8 @@ def get_list_of_parameters_for_testing(json_file):
         return l
 
 
-prefix = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(8)])
-domain = '@spendee.com'
-auttest_prefix = "qa.aut."
-email_register = auttest_prefix + prefix + domain
-email_login = "automation@spendee.com"
-email_not_existing = "automation_not_existing@spendee.com"
-password = "spendee123"
-password_invalid = "abc"
 first_name = names.get_first_name()
 last_name = names.get_last_name()
-
 
 default_set_of_categories = ["Food & Drink", "Shopping", "Transport", "Home", "Bills & Fees", "Entertainment",
                              "Car", "Travel", "Family & Personal", "Healthcare", "Education", "Groceries",
@@ -52,10 +40,7 @@ budget_recurrences = ["Custom (Once)", "Daily", "Weekly", "Biweekly", "Monthly",
 reminders = ["current day", "1 day in advance", "2 days in advance", "3 days in advance", "4 days in advance",
              "5 days in advance", "6 days on advance", "7 days in advance"]
 
-# APPS
-app_android = PATH('../dp-spendee-app/android/app/build/outputs/apk/devel/debug/' + 'app-devel-debug.apk')
-# app_ios = PATH('../SpendeeRN/ios/build/Spendee-Devel/Build/Products/Devel.Debug-iphonesimulator/' + 'Spendee.app')
-app_ios = PATH('../../../../Library/Developer/Xcode/DerivedData/Spendee-dsjzhbbigatyedfungmtfqinppze/Build/Products/Devel.Debug-iphonesimulator/Spendee.app')
+
 
 # JSONs FOR TESTS
 json_test_create_transaction = r'../../resources/test_parameters/test_create_transaction_parameters.json'
