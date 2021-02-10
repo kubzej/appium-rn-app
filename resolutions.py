@@ -12,6 +12,8 @@ class Resolutions:
             "element_not_present_swipe_y_end": 450,
             "transaction_timeline_up_y_start": 800,
             "transaction_timeline_up_y_end": 400,
+            "budget_overview_y_start": 800,
+            "budget_overview_y_end": 400,
             "phones": ["iPhone 11"]
         },
         "1080_1794": {
@@ -26,6 +28,8 @@ class Resolutions:
             "element_not_present_swipe_y_end": 1200,
             "transaction_timeline_up_y_start": 1650,
             "transaction_timeline_up_y_end": 300,
+            "budget_overview_y_start": 1650,
+            "budget_overview_y_end": 300,
             "phones": ["Pixel 2"]
         },
         "1080_1997": {
