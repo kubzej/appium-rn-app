@@ -16,6 +16,8 @@ class BudgetDetail():
     # OTHER
     BUDGET_HEADER = "Budget Header"
     SAVE_BUDGET_BUTTON = "Save Budget Button"
+    TRASH_ICON = "Trash Icon"
+    DELETE_BUTTON = "Delete"
 
     # NAME
     NAME_INPUT = "Name Input"

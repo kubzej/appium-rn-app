@@ -351,3 +351,10 @@ class TestsWithoutReset:
         attributes = self.budget_validator.get_all_attributes()
         self.budget_actions.save_budget()
         assert self.budget_validator.is_budget_created(attributes) is True
+
+    def test_delete_budget(self):
+        self.set_up()
+        self.budget_actions.open_budget()
+        attributes = self.budget_validator.get_all_attributes()
+        self.budget_actions.delete_budget()
+        assert self.budget_validator.is_budget_created(attributes) is False

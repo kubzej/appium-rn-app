@@ -73,6 +73,7 @@ class BudgetActions():
         self.ew.wait_till_element_is_visible(self.budget_detail.BUDGET_HEADER, 10)
 
     def open_budget(self):
+        self.budgets_general.go_to_budgets()
         self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 5)
         if self.ew.is_element_present(self.budgets_general.BUDGET_ITEM) is False:
             self.create_budget(name="random", amount="random", currency=None, wallets=None, categories=None,
@@ -84,7 +85,6 @@ class BudgetActions():
         self.ew.wait_till_element_is_visible(self.budget_detail.BUDGET_HEADER, 5)
 
     def edit_budget(self, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
-        self.budgets_general.go_to_budgets()
         self.open_budget()
         if name is not None:
             if PLATFORM == "Android":
@@ -111,5 +111,10 @@ class BudgetActions():
             self.budget_detail.set_start_date(start_date)
         if end_date is not None:
             self.budget_detail.set_end_date(end_date)
+
+    def delete_budget(self):
+        self.ew.wait_and_tap_element(self.budget_detail.TRASH_ICON, 10)
+        self.ew.wait_and_tap_element(self.budget_detail.DELETE_BUTTON, 10)
+        self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 10)
 
 
