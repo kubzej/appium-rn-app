@@ -66,12 +66,15 @@ class TransactionDetail:
         WALLET = "Wallet"
         OUTGOING_WALLET = "Outgoing Wallet"
         INCOMING_WALLET = "Incoming Wallet"
+        WALLET_ITEM = '//android.view.ViewGroup[@content-desc="Select Wallet Picker"]/android.widget.ScrollView/' \
+                      'android.view.ViewGroup/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup'
     else:
         WALLET = 'label == "Wallet"'
         OUTGOING_WALLET = 'label == "Outgoing Wallet"'
         INCOMING_WALLET = 'label == "Incoming Wallet"'
+        WALLET_ITEM = "Wallet Item"
     WALLET_PICKER = "Select Wallet Picker"
-    WALLET_ITEM = "Wallet Item"
+
     SELECTED_WALLET_ANDROID = "//android.view.ViewGroup[@content-desc='Wallet']//android.widget.TextView[2]"
     SELECTED_OUTGOING_WALLET_ANDROID = "//android.view.ViewGroup[@content-desc='Outgoing Wallet']//android.widget.TextView[2]"
     SELECTED_INCOMING_WALLET_ANDROID = "//android.view.ViewGroup[@content-desc='Incoming Wallet']//android.widget.TextView[2]"
@@ -82,6 +85,10 @@ class TransactionDetail:
     SELECTED_START_DATE_ANDROID_2 = "//android.view.ViewGroup[@content-desc='Start Date']/android.widget.TextView"
     SELECTED_END_DATE_ANDROID = "//android.view.ViewGroup[@content-desc='End Date']/android.view.ViewGroup/android.widget.TextView[2]"
     SELECTED_END_DATE_ANDROID_2 = "//android.view.ViewGroup[@content-desc='End Date']/android.widget.TextView[2]"
+    SELECTED_START_DATE_ANDROID_BUDGET = '//android.view.ViewGroup[@content-desc="Start Date"]/android.view.ViewGroup/android.widget.TextView[2]'
+    SELECTED_START_DATE_ANDROID_BUDGET_2 = '//android.view.ViewGroup[@content-desc="Start Date"]/android.widget.TextView[2]'
+    SELECTED_END_DATE_ANDROID_BUDGET = '//android.view.ViewGroup[@content-desc="End Date"]/android.view.ViewGroup/android.widget.TextView[2]'
+    SELECTED_END_DATE_ANDROID_BUDGET_2 = '//android.view.ViewGroup[@content-desc="End Date"]/android.widget.TextView[2]'
     if PLATFORM == "Android":
         START_DATE = "Start Date"
         ACTUAL_MONTH_YEAR = "//android.widget.SeekBar/android.widget.TextView"
@@ -304,14 +311,21 @@ class TransactionDetail:
             else:
                 self.ew.tap_element(f'label == "{wallet}"')
         elif wallet == "oos":
-            wallet = "Out of Spendee"
+
+            for i in wallets_in_picker:
+                if i.startswith('Out of Spendee'):
+                    postfix_oos = i.split('-')[1]
+
+            wallet = f"Out of Spendee-{postfix_oos}"
             if PLATFORM == "Android":
                 self.ew.tap_element(wallet)
             else:
                 self.ew.tap_element(f'label == "{wallet}"')
         elif wallet == "not_oos":
-            if self.ew.is_element_present("Out of Spendee"):
-                wallets_in_picker.remove("Out of Spendee")
+            if self.ew.is_element_present("Out of Spendee-false"):
+                wallets_in_picker.remove("Out of Spendee-false")
+            elif self.ew.is_element_present("Out of Spendee-true"):
+                wallets_in_picker.remove("Out of Spendee-true")
             wallet = random.choice(wallets_in_picker)
             if PLATFORM == "Android":
                 self.ew.tap_element(wallet)
@@ -327,7 +341,8 @@ class TransactionDetail:
         if self.ew.is_element_present(self.CONFIRM_BUTTON):
             self.set_exchange_rate()
 
-        vr.validate_input_against_output(wallet, self.get_wallet(type_of_wallet))
+        v_input = wallet.split('-')[0]
+        vr.validate_input_against_output(v_input, self.get_wallet(type_of_wallet))
 
     def get_wallet(self, type_of_wallet):
 
@@ -354,7 +369,7 @@ class TransactionDetail:
 
     def get_wallets_in_picker(self):
         if PLATFORM == "Android":
-            return self.ew.get_text_of_elements(self.WALLET_ITEM)
+            return self.ew.get_attributes(self.WALLET_ITEM, "content-desc")
         else:
             return self.ew.get_attributes(self.WALLET_ITEM, "label")
 
@@ -445,24 +460,37 @@ class TransactionDetail:
                     f" {datetime.date(year, month, day).strftime('%A')} {datetime.date(year, month, day).strftime('%B')} {day} ")
 
         elif PLATFORM == "iOS":
-            self.ew.tap_element(f"native.calendar.SELECT_DATE_SLOT-{date}")
+            self.ew.wait_and_tap_element(f"native.calendar.SELECT_DATE_SLOT-{date}", 10)
 
     def get_date(self, type_of_date):
+        is_transaction = self.ew.is_element_present(self.TRANSACTION_HEADER_TITLE)
         if type_of_date == "start":
             date_ios = self.START_DATE
-            date_android = self.SELECTED_START_DATE_ANDROID
+            if is_transaction:
+                date_android = self.SELECTED_START_DATE_ANDROID
+            else:
+                date_android = self.SELECTED_START_DATE_ANDROID_BUDGET
         else:
             date_ios = self.END_DATE
-            date_android = self.SELECTED_END_DATE_ANDROID
+            if is_transaction:
+                date_android = self.SELECTED_END_DATE_ANDROID
+            else:
+                date_android = self.SELECTED_END_DATE_ANDROID_BUDGET
         try:
             if PLATFORM == "Android":
                 try:
                     self.ew.wait_till_element_is_visible(date_android, 5)
                 except NoSuchElementException:
                     if type_of_date == "start":
-                        date_android = self.SELECTED_START_DATE_ANDROID_2
+                        if is_transaction:
+                            date_android = self.SELECTED_START_DATE_ANDROID_2
+                        else:
+                            date_android = self.SELECTED_START_DATE_ANDROID_BUDGET_2
                     else:
-                        date_android = self.SELECTED_END_DATE_ANDROID_2
+                        if is_transaction:
+                            date_android = self.SELECTED_END_DATE_ANDROID_2
+                        else:
+                            date_android = self.SELECTED_END_DATE_ANDROID_BUDGET_2
                 date_in_app = self.ew.get_text_of_element(date_android)
             else:
                 self.ew.wait_till_element_is_visible(date_ios, 5)

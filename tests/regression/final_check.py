@@ -2,6 +2,7 @@ import pytest
 from selenium.common.exceptions import NoSuchElementException
 
 import variables as vs
+import secrets as s
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.authentication.authentication_actions import AuthenticationActions
@@ -20,8 +21,8 @@ from page_objects.more.user_profile import UserProfile
 from page_objects.authentication.marketing_dialog import MarketingDialog
 from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
 from page_objects.timeline.transfer_template.transfer_template_validator import TransferTemplateValidator
-
-import time
+from page_objects.budgets.budget_actions import BudgetActions
+from page_objects.budgets.budget_validator import BudgetValidator
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -39,10 +40,10 @@ class TestsWithReset:
         self.welcome_screen.skip_notifications_alert()
 
     @pytest.mark.parametrize("email, password, type_of_test", [
-        (vs.email_register, vs.password, "positive"),
-        (vs.prefix, vs.password, "invalid_email"),
-        (vs.email_register, vs.password_invalid, "invalid password"),
-        (vs.email_login, vs.password, "existing email")
+        (s.email_register, s.password, "positive"),
+        (s.prefix, s.password, "invalid_email"),
+        (s.email_register, s.password_invalid, "invalid password"),
+        (s.email_login, s.password, "existing email")
     ])
     def test_register_by_email(self, email, password, type_of_test):
         self.set_up()
@@ -70,9 +71,9 @@ class TestsWithReset:
             assert self.ew.is_element_present(self.email_password.VALIDATION_ERROR_WARNING) is True
 
     @pytest.mark.parametrize("email, password, type_of_test", [
-        (vs.email_login, vs.password, "positive"),
-        (vs.email_not_existing, vs.password, "existing_email"),
-        (vs.email_login, vs.password_invalid, "invalid_password")
+        (s.email_login, s.password, "positive"),
+        (s.email_not_existing, s.password, "existing_email"),
+        (s.email_login, s.password_invalid, "invalid_password")
         ])
     def test_login_by_email(self, email, password, type_of_test):
         self.set_up()
@@ -94,7 +95,7 @@ class TestsWithReset:
 
     def test_logout(self):
         self.set_up()
-        self.authentication_actions.login_by_email(vs.email_login, vs.password)
+        self.authentication_actions.login_by_email(s.email_login, s.password)
         self.authentication_actions.logout()
 
         try:
@@ -109,6 +110,8 @@ class TestsWithoutReset:
 
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
+        self.budget_actions = BudgetActions(self.driver)
+        self.budget_validator = BudgetValidator(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
@@ -152,7 +155,7 @@ class TestsWithoutReset:
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
     @pytest.mark.parametrize("type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
-        # ("Test", "random", "not_oos", "not_oos", None, None, None, None, None)
+        # ("Test", "random", None, "oos", None, None, None, None, None)
         i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer)
     ])
     def test_create_transfer(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
@@ -324,3 +327,34 @@ class TestsWithoutReset:
         attributes = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.delete_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes) is False
+
+    @pytest.mark.parametrize(
+        "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
+            # ("Test", "random", "random", None, None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_budget)
+        ])
+    def test_create_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+        self.set_up()
+        self.budget_actions.create_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
+        attributes = self.budget_validator.get_all_attributes()
+        self.budget_actions.save_budget()
+        assert self.budget_validator.is_budget_created(attributes) is True
+
+    @pytest.mark.parametrize(
+        "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
+            # ("Test", "random", "random", None, None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_budget)
+        ])
+    def test_edit_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+        self.set_up()
+        self.budget_actions.edit_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
+        attributes = self.budget_validator.get_all_attributes()
+        self.budget_actions.save_budget()
+        assert self.budget_validator.is_budget_created(attributes) is True
+
+    def test_delete_budget(self):
+        self.set_up()
+        self.budget_actions.open_budget()
+        attributes = self.budget_validator.get_all_attributes()
+        self.budget_actions.delete_budget()
+        assert self.budget_validator.is_budget_created(attributes) is False
