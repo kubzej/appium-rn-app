@@ -1,0 +1,79 @@
+[
+  {
+    "type_of_test": "default",
+    "name": "random",
+    "amount": "random",
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "with different currency",
+    "name": "random",
+    "amount": "random",
+    "currency": "random",
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "with only some wallets",
+    "name": "random",
+    "amount": "random",
+    "currency": null,
+    "wallets": "random",
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "with only some categories",
+    "name": "random",
+    "amount": "random",
+    "currency": null,
+    "wallets": null,
+    "categories":"random",
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "with different start date",
+    "name": "random",
+    "amount": "random",
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": "future",
+    "end_date": null
+  },
+  {
+    "type_of_test": "with different recurrence",
+    "name": "random",
+    "amount": "random",
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": "random",
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "with Once recurrence",
+    "name": "random",
+    "amount": "random",
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": "Custom (Once)",
+    "start_date": null,
+    "end_date":"random"
+  }
+]

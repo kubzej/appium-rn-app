@@ -20,8 +20,8 @@ from page_objects.more.user_profile import UserProfile
 from page_objects.authentication.marketing_dialog import MarketingDialog
 from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
 from page_objects.timeline.transfer_template.transfer_template_validator import TransferTemplateValidator
-
-import time
+from page_objects.budgets.budget_actions import BudgetActions
+from page_objects.budgets.budget_validator import BudgetValidator
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -109,6 +109,8 @@ class TestsWithoutReset:
 
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
+        self.budget_actions = BudgetActions(self.driver)
+        self.budget_validator = BudgetValidator(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
@@ -152,7 +154,7 @@ class TestsWithoutReset:
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
     @pytest.mark.parametrize("type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
-        # ("Test", "random", "not_oos", "not_oos", None, None, None, None, None)
+        # ("Test", "random", None, "oos", None, None, None, None, None)
         i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer)
     ])
     def test_create_transfer(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
@@ -324,3 +326,15 @@ class TestsWithoutReset:
         attributes = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.delete_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes) is False
+
+    @pytest.mark.parametrize(
+        "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
+            # ("Test", "random", "random", None, None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_budget)
+        ])
+    def test_create_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+        self.set_up()
+        self.budget_actions.create_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
+        attributes = self.budget_validator.get_all_attributes()
+        self.budget_actions.save_budget()
+        assert self.budget_validator.is_budget_created(attributes) is True

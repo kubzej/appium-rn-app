@@ -15,6 +15,7 @@ class BudgetDetail():
 
     # OTHER
     BUDGET_HEADER = "Budget Header"
+    SAVE_BUDGET_BUTTON = "Save Budget Button"
 
     # NAME
     NAME_INPUT = "Name Input"
@@ -46,6 +47,7 @@ class BudgetDetail():
         WALLETS = 'label == "Wallets"'
     WALLET_PICKER = "Select Wallets Picker"
     SELECTED_WALLETS_ANDROID = '//android.view.ViewGroup[@content-desc="Wallets"]/android.view.ViewGroup/android.widget.TextView[2]'
+    SELECTED_WALLETS_ANDROID_2 = '//android.view.ViewGroup[@content-desc="Wallets"]/android.widget.TextView[2]'
 
     if PLATFORM == "Android":
         SELECTED_CURRENCY = '//android.view.ViewGroup[@content-desc="Currency"]/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText'
@@ -143,7 +145,7 @@ class BudgetDetail():
         self.ew.wait_and_tap_element(self.CURRENCY, 5)
         self.ew.wait_till_element_is_visible(self.CURRENCY_PICKER, 5)
         self.ew.wait_and_tap_element(f"Currency {currency}", 10)
-
+        self.driver.execute_script("mobile: tap", {"x": 100, "y": 50, "element": self.ew.get_element(f"Currency {currency}")})
         self.ew.wait_till_element_is_not_visible(self.CURRENCY_PICKER, 10)
         vr.validate_input_against_output(currency, self.get_currency())
 
@@ -232,9 +234,12 @@ class BudgetDetail():
         self.ew.wait_till_element_is_visible(self.WALLETS, 5)
 
         if PLATFORM == "Android":
-            return self.ew.get_text_of_element(self.SELECTED_WALLETS_ANDROID)
+            result = self.ew.get_text_of_element(self.SELECTED_WALLETS_ANDROID)
+            if result is None:
+                result = self.ew.get_text_of_element(self.SELECTED_WALLETS_ANDROID_2)
         else:
-            return self.ew.get_attribute(self.WALLETS, "name")
+            result = self.ew.get_attribute(self.WALLETS, "name")
+        return result
 
     def set_categories(self, categories):
 
@@ -337,6 +342,7 @@ class BudgetDetail():
                                             "toY": self.rs.all_resolutions[f"{res}"]["default_picker_up_y_end"]})
                 item_visible = self.ew.get_attribute(recurrence, "visible")
             self.driver.execute_script("mobile: tap", {"x": 100, "y": 50, "element": self.ew.get_element(recurrence)})
+            self.ew.wait_and_tap_element(recurrence, 5)
 
         vr.validate_input_against_output(recurrence, self.get_recurrence())
 
@@ -354,10 +360,8 @@ class BudgetDetail():
         if start_date == "random":
             start_date = str(
                 datetime.date(int(datetime.date.today().year), random.randint(1, 12), random.randint(1, 28)))
-        elif start_date == "past":
-            start_date = str(datetime.date.today() - datetime.timedelta(days=random.randint(1, 30)))
         elif start_date == "future":
-            start_date = str(datetime.date.today() + datetime.timedelta(days=random.randint(1, 30)))
+            start_date = str(datetime.date.today() + datetime.timedelta(days=random.randint(1, 5)))
         elif start_date == "today":
             start_date = str(datetime.date.today())
         elif start_date == "yesterday":

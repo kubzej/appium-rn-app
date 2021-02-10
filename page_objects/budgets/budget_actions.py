@@ -12,11 +12,27 @@ class BudgetActions():
     def create_budget(self, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
         self.budgets_general.go_to_budgets()
         self.budgets_general.open_budget_create_screen()
-        self.budget_detail.set_name(name)
-        self.budget_detail.set_amount(amount)
-        self.budget_detail.set_currency(currency)
-        self.budget_detail.set_wallets(wallets)
-        self.budget_detail.set_categories(categories)
-        self.budget_detail.set_recurrence(recurrence)
-        self.budget_detail.set_start_date(start_date)
-        self.budget_detail.set_end_date(end_date)
+        if name is not None:
+            self.budget_detail.set_name(name)
+        if amount is not None:
+            self.budget_detail.set_amount(amount)
+        if currency is not None:
+            self.budget_detail.set_currency(currency)
+        if wallets is not None:
+            self.budget_detail.set_wallets(wallets)
+        if categories is not None:
+            self.budget_detail.set_categories(categories)
+        if recurrence is not None:
+            self.budget_detail.set_recurrence(recurrence)
+        if start_date is not None:
+            self.budget_detail.set_start_date(start_date)
+        if end_date is not None:
+            self.budget_detail.set_end_date(end_date)
+
+    def save_budget(self):
+        if self.driver.is_keyboard_shown():
+            print('jde to tudy')
+            self.driver.hide_keyboard()
+        self.ew.wait_and_tap_element(self.budget_detail.SAVE_BUDGET_BUTTON, 10)
+
+
