@@ -339,3 +339,15 @@ class TestsWithoutReset:
         attributes = self.budget_validator.get_all_attributes()
         self.budget_actions.save_budget()
         assert self.budget_validator.is_budget_created(attributes) is True
+
+    @pytest.mark.parametrize(
+        "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
+            # ("Test", "random", "random", None, None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_budget)
+        ])
+    def test_edit_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+        self.set_up()
+        self.budget_actions.edit_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
+        attributes = self.budget_validator.get_all_attributes()
+        self.budget_actions.save_budget()
+        assert self.budget_validator.is_budget_created(attributes) is True

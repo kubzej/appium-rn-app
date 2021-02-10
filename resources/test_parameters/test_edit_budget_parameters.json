@@ -1,0 +1,79 @@
+[
+  {
+    "type_of_test": "change of name",
+    "name": "random",
+    "amount": null,
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "change of amount",
+    "name": null,
+    "amount": "random",
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "change of currency",
+    "name": null,
+    "amount": null,
+    "currency": "random",
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "change of wallets",
+    "name": null,
+    "amount": null,
+    "currency": null,
+    "wallets": "random",
+    "categories": null,
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "change of categories",
+    "name": null,
+    "amount": null,
+    "currency": null,
+    "wallets": null,
+    "categories": "random",
+    "recurrence": null,
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "change of recurrence",
+    "name": null,
+    "amount": null,
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": "random",
+    "start_date": null,
+    "end_date": null
+  },
+  {
+    "type_of_test": "change of start date",
+    "name": null,
+    "amount": null,
+    "currency": null,
+    "wallets": null,
+    "categories": null,
+    "recurrence": null,
+    "start_date": "future",
+    "end_date": null
+  }
+]

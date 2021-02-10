@@ -55,3 +55,4 @@ json_test_edit_transfer_template = r'../../resources/test_parameters/test_edit_t
 json_test_generate_transaction_from_template = r'../../resources/test_parameters/test_generate_transaction_from_template_parameters.json'
 json_test_generate_transfer_from_template = r'../../resources/test_parameters/test_generate_transfer_from_template_parameters.json'
 json_test_create_budget = r'../../resources/test_parameters/test_create_budget_parameters.json'
+json_test_edit_budget = r'../../resources/test_parameters/test_edit_budget_parameters.json'

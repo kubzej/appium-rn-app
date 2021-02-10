@@ -461,7 +461,6 @@ class TransactionDetail:
 
         elif PLATFORM == "iOS":
             self.ew.wait_and_tap_element(f"native.calendar.SELECT_DATE_SLOT-{date}", 10)
-            self.driver.execute_script("mobile: tap", {"x": 5, "y": 5, "element": self.ew.get_element(f"native.calendar.SELECT_DATE_SLOT-{date}")})
 
     def get_date(self, type_of_date):
         is_transaction = self.ew.is_element_present(self.TRANSACTION_HEADER_TITLE)

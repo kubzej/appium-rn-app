@@ -143,9 +143,8 @@ class BudgetDetail():
             currency = random.choice(vs.accessible_currencies)
 
         self.ew.wait_and_tap_element(self.CURRENCY, 5)
-        self.ew.wait_till_element_is_visible(self.CURRENCY_PICKER, 5)
+        self.ew.wait_till_element_is_visible(self.CURRENCY_PICKER, 10)
         self.ew.wait_and_tap_element(f"Currency {currency}", 10)
-        self.driver.execute_script("mobile: tap", {"x": 100, "y": 50, "element": self.ew.get_element(f"Currency {currency}")})
         self.ew.wait_till_element_is_not_visible(self.CURRENCY_PICKER, 10)
         vr.validate_input_against_output(currency, self.get_currency())
 
@@ -342,7 +341,6 @@ class BudgetDetail():
                                             "toY": self.rs.all_resolutions[f"{res}"]["default_picker_up_y_end"]})
                 item_visible = self.ew.get_attribute(recurrence, "visible")
             self.driver.execute_script("mobile: tap", {"x": 100, "y": 50, "element": self.ew.get_element(recurrence)})
-            self.ew.wait_and_tap_element(recurrence, 5)
 
         vr.validate_input_against_output(recurrence, self.get_recurrence())
 
