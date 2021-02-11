@@ -1,10 +1,10 @@
-#!/Users/jakubmares/Documents/Projects/automation-rn/venv/bin/python
+#!/Users/jakubmares/Documents/Projects/diplomova_prace/dp-appium/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
 
-from pytest import main
+from pytest import console_main
 
 if __name__ == '__main__':
     sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
-    sys.exit(main())
+    sys.exit(console_main())
