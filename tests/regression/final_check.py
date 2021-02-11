@@ -23,6 +23,7 @@ from page_objects.timeline.transaction_template.transaction_template_validator i
 from page_objects.timeline.transfer_template.transfer_template_validator import TransferTemplateValidator
 from page_objects.budgets.budget_actions import BudgetActions
 from page_objects.budgets.budget_validator import BudgetValidator
+from page_objects.wallets.wallets_actions import WalletsActions
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -123,6 +124,7 @@ class TestsWithoutReset:
         self.transfer_validator = TransferValidator(self.driver)
         self.transfer_template_validator = TransferTemplateValidator(self.driver)
         self.user_profile = UserProfile(self.driver)
+        self.wallets_actions = WalletsActions(self.driver)
 
     def test_edit_profile_name(self):
         self.set_up()
@@ -358,3 +360,7 @@ class TestsWithoutReset:
         attributes = self.budget_validator.get_all_attributes()
         self.budget_actions.delete_budget()
         assert self.budget_validator.is_budget_created(attributes) is False
+
+    def test_create_wallet(self):
+        self.set_up()
+        self.wallets_actions.create_wallet()
