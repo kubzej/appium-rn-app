@@ -39,6 +39,12 @@ class BudgetDetail():
 
     # CURRENCY
     CURRENCY = "Currency"
+    if PLATFORM == "Android":
+        SELECTED_CURRENCY = '//android.view.ViewGroup[@content-desc="Currency"]/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText'
+        CURRENCY_PICKER = "Select currency Picker"
+    else:
+        SELECTED_CURRENCY = '**/XCUIElementTypeOther[`label == "Currency"`][1]'
+        CURRENCY_PICKER = 'label == "Select currency"'
 
     # WALLETS
     if PLATFORM == "Android":
@@ -50,13 +56,6 @@ class BudgetDetail():
     WALLET_PICKER = "Select Wallets Picker"
     SELECTED_WALLETS_ANDROID = '//android.view.ViewGroup[@content-desc="Wallets"]/android.view.ViewGroup/android.widget.TextView[2]'
     SELECTED_WALLETS_ANDROID_2 = '//android.view.ViewGroup[@content-desc="Wallets"]/android.widget.TextView[2]'
-
-    if PLATFORM == "Android":
-        SELECTED_CURRENCY = '//android.view.ViewGroup[@content-desc="Currency"]/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText'
-        CURRENCY_PICKER = "Select currency Picker"
-    else:
-        SELECTED_CURRENCY = '**/XCUIElementTypeOther[`label == "Currency"`][1]'
-        CURRENCY_PICKER = 'label == "Select currency"'
 
     # CATEGORIES
     CATEGORIES = "Categories"
