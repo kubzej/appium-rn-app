@@ -16,9 +16,11 @@ class WalletsActions:
         self.wallets_general = WalletsGeneral(self.driver)
         self.wallet_detail = WalletDetail(self.driver)
 
-    def create_wallet(self):
+    def create_wallet(self, name, amount):
         self.wallets_general.go_to_wallets()
         self.open_wallet_create_screen()
+        self.wallet_detail.set_name(name)
+        self.wallet_detail.set_amount(amount)
 
     def open_wallet_create_screen(self):
         self.ew.wait_till_element_is_visible(self.wallets_general.WALLETS_ANIMATED_HEADER, 10)
