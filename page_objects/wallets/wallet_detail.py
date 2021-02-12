@@ -4,12 +4,14 @@ import string
 from conftest import PLATFORM
 import validator as vr
 import variables as vs
+import time
 
 
 class WalletDetail:
 
     # OTHER
     WALLET_HEADER = "Wallet Header"
+    SAVE_WALLET_BUTTON = "Save Wallet Button"
 
     # NAME
     NAME_INPUT = "Name Input"
@@ -140,6 +142,7 @@ class WalletDetail:
 
     def get_categories(self):
         self.ew.wait_till_element_is_visible(self.CATEGORIES, 5)
+        time.sleep(1)
 
         if PLATFORM == "Android":
             result = self.ew.get_text_of_element(self.SELECTED_CATEGORIES_ANDROID)

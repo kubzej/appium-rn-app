@@ -20,7 +20,8 @@ class WalletsActions:
         self.wallets_general.go_to_wallets()
         self.open_wallet_create_screen()
         self.wallet_detail.set_name(name)
-        self.wallet_detail.set_amount(amount)
+        if amount is not None:
+            self.wallet_detail.set_amount(amount)
         if currency is not None:
             self.wallet_detail.set_currency(currency)
         if categories is not None:
@@ -54,3 +55,9 @@ class WalletsActions:
 
         self.ew.wait_and_tap_element(self.wallets_general.ADD_WALLET_BUTTON, 5)
         self.ew.wait_till_element_is_visible(self.wallet_detail.WALLET_HEADER, 10)
+
+    def save_wallet(self):
+        if self.driver.is_keyboard_shown():
+            self.driver.hide_keyboard()
+        self.ew.wait_and_tap_element(self.wallet_detail.SAVE_WALLET_BUTTON, 10)
+        self.ew.wait_till_element_is_not_visible(self.wallet_detail.SAVE_WALLET_BUTTON, 10)
