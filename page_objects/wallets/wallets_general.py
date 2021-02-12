@@ -1,4 +1,5 @@
 from element_wrapper import ElementWrapper
+from conftest import PLATFORM
 
 
 class WalletsGeneral:
@@ -7,6 +8,10 @@ class WalletsGeneral:
     WALLETS_ANIMATED_HEADER = "Wallets Animated Header"
     ADD_WALLET_BUTTON = "Add Wallet Button"
     CONNECT_BANK_BUTTON = "Connect Bank Button"
+    if PLATFORM == "Android":
+        WALLET_ITEM = '//android.widget.ScrollView[@content-desc="Wallets List"]/android.view.ViewGroup/android.view.ViewGroup[1]'
+    else:
+        WALLET_ITEM = '(//XCUIElementTypeOther[@name="Wallets List"])[2]/XCUIElementTypeScrollView//XCUIElementTypeOther//XCUIElementTypeOther'
 
     def __init__(self, driver):
         self.driver = driver

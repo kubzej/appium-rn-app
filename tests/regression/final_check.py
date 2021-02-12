@@ -375,3 +375,17 @@ class TestsWithoutReset:
         self.wallets_actions.save_wallet()
         assert self.wallet_validator.is_wallet_existing(attributes) is True
 
+    @pytest.mark.parametrize(
+        # "type_of_test, name, amount, currency, categories", [
+        #     ("Test", None, "random", None, None)
+            # i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_wallet)
+        ])
+    def test_edit_wallet(self, type_of_test, name, amount, currency, categories):
+        self.set_up()
+        self.wallets_actions.edit_wallet(name, amount, currency, categories)
+        attributes = self.wallet_validator.get_all_attributes()
+        self.wallets_actions.save_wallet()
+        assert self.wallet_validator.is_wallet_existing(attributes)
+
+
+

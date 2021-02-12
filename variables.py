@@ -57,3 +57,4 @@ json_test_generate_transfer_from_template = r'../../resources/test_parameters/te
 json_test_create_budget = r'../../resources/test_parameters/test_create_budget_parameters.json'
 json_test_edit_budget = r'../../resources/test_parameters/test_edit_budget_parameters.json'
 json_test_create_wallet = r'../../resources/test_parameters/test_create_wallet_parameters.json'
+json_test_edit_wallet = r'../../resources/test_parameters/test_edit_wallet_parameters.json'

@@ -1,0 +1,23 @@
+[
+  {
+    "type_of_test": "change of name",
+    "name": "random",
+    "amount": null,
+    "currency": null,
+    "categories": null
+  },
+  {
+    "type_of_test": "change of balance",
+    "name": null,
+    "amount": "random",
+    "currency": null,
+    "categories": null
+  },
+  {
+    "type_of_test": "change of visibility of some categories",
+    "name": null,
+    "amount": null,
+    "currency": null,
+    "categories": "random"
+  }
+]
