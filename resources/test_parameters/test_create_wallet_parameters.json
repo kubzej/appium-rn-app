@@ -1,0 +1,37 @@
+[
+  {
+    "type_of_test": "default",
+    "name": "random",
+    "amount": null,
+    "currency": null,
+    "categories": null
+  },
+  {
+    "type_of_test": "with positive balance",
+    "name": "random",
+    "amount": "random_positive",
+    "currency": null,
+    "categories": null
+  },
+  {
+    "type_of_test": "with negative balance",
+    "name": "random",
+    "amount": "random_negative",
+    "currency": null,
+    "categories": null
+  },
+  {
+    "type_of_test": "with different currency",
+    "name": "random",
+    "amount": null,
+    "currency": "random",
+    "categories": null
+  },
+  {
+    "type_of_test": "with not all categories selected",
+    "name": "random",
+    "amount": null,
+    "currency": null,
+    "categories": "random"
+  }
+]

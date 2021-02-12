@@ -23,6 +23,8 @@ from page_objects.timeline.transaction_template.transaction_template_validator i
 from page_objects.timeline.transfer_template.transfer_template_validator import TransferTemplateValidator
 from page_objects.budgets.budget_actions import BudgetActions
 from page_objects.budgets.budget_validator import BudgetValidator
+from page_objects.wallets.wallets_actions import WalletsActions
+from page_objects.wallets.wallet_validator import WalletValidator
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -123,6 +125,8 @@ class TestsWithoutReset:
         self.transfer_validator = TransferValidator(self.driver)
         self.transfer_template_validator = TransferTemplateValidator(self.driver)
         self.user_profile = UserProfile(self.driver)
+        self.wallets_actions = WalletsActions(self.driver)
+        self.wallet_validator = WalletValidator(self.driver)
 
     def test_edit_profile_name(self):
         self.set_up()
@@ -338,7 +342,7 @@ class TestsWithoutReset:
         self.budget_actions.create_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
         attributes = self.budget_validator.get_all_attributes()
         self.budget_actions.save_budget()
-        assert self.budget_validator.is_budget_created(attributes) is True
+        assert self.budget_validator.is_budget_existing(attributes) is True
 
     @pytest.mark.parametrize(
         "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
@@ -350,11 +354,45 @@ class TestsWithoutReset:
         self.budget_actions.edit_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
         attributes = self.budget_validator.get_all_attributes()
         self.budget_actions.save_budget()
-        assert self.budget_validator.is_budget_created(attributes) is True
+        assert self.budget_validator.is_budget_existing(attributes) is True
 
     def test_delete_budget(self):
         self.set_up()
         self.budget_actions.open_budget()
         attributes = self.budget_validator.get_all_attributes()
         self.budget_actions.delete_budget()
-        assert self.budget_validator.is_budget_created(attributes) is False
+        assert self.budget_validator.is_budget_existing(attributes) is False
+
+    @pytest.mark.parametrize(
+        "type_of_test, name, amount, currency, categories", [
+            # ("Test", "random", None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_wallet)
+        ])
+    def test_create_wallet(self, type_of_test, name, amount, currency, categories):
+        self.set_up()
+        self.wallets_actions.create_wallet(name, amount, currency, categories)
+        attributes = self.wallet_validator.get_all_attributes()
+        self.wallets_actions.save_wallet()
+        assert self.wallet_validator.is_wallet_existing(attributes) is True
+
+    @pytest.mark.parametrize(
+        "type_of_test, name, amount, currency, categories", [
+        #     ("Test", None, "random", None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_wallet)
+        ])
+    def test_edit_wallet(self, type_of_test, name, amount, currency, categories):
+        self.set_up()
+        self.wallets_actions.edit_wallet(name, amount, currency, categories)
+        attributes = self.wallet_validator.get_all_attributes()
+        self.wallets_actions.save_wallet()
+        assert self.wallet_validator.is_wallet_existing(attributes)
+
+    def test_delete_wallet(self):
+        self.set_up()
+        self.wallets_actions.open_wallet()
+        attributes = self.wallet_validator.get_all_attributes()
+        self.wallets_actions.delete_wallet()
+        assert self.wallet_validator.is_wallet_existing(attributes) is False
+
+
+

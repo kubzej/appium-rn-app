@@ -37,7 +37,7 @@ class BudgetValidator:
 
         return all_attributes
 
-    def is_budget_created(self, attributes):
+    def is_budget_existing(self, attributes):
         budget_locator = f"{attributes['name']}/" \
                          f"{attributes['amount']}/" \
                          f"{attributes['currency']}/" \
