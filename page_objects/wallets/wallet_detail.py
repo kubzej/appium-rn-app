@@ -12,6 +12,8 @@ class WalletDetail:
     # OTHER
     WALLET_HEADER = "Wallet Header"
     SAVE_WALLET_BUTTON = "Save Wallet Button"
+    TRASH_ICON = "Trash Icon"
+    DELETE_BUTTON = "Delete"
 
     # NAME
     NAME_INPUT = "Name Input"
