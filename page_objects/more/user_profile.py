@@ -14,13 +14,7 @@ class UserProfile:
         USER_PROFILE = "User Profile"
     else:
         USER_PROFILE = 'label == "User Profile"'
-    PROFILE_HEADER = "Profile Header"
     BACK_BUTTON = "Back Button"
-
-    # More section
-    USER_NAME_ANDROID = "//android.view.ViewGroup[@content-desc='User Profile']/android.view.ViewGroup/android.widget.TextView[1]"
-
-
 
     if PLATFORM == "Android":
         FIRST_NAME = "First Name Input"
@@ -33,11 +27,6 @@ class UserProfile:
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
         self.more_general = MoreGeneral(self.driver)
-
-
-    def go_to_user_profile(self):
-        self.ew.wait_and_tap_element(self.USER_PROFILE, 10)
-        self.ew.wait_till_element_is_visible(self.PROFILE_HEADER, 10)
 
     def set_first_name(self, first_name):
         self.ew.wait_till_element_is_visible(self.FIRST_NAME, 5)
@@ -57,12 +46,6 @@ class UserProfile:
         first_name = self.ew.get_text_of_element(self.FIRST_NAME)
         last_name = self.ew.get_text_of_element(self.LAST_NAME)
         return f"{first_name} {last_name}"
-
-    def get_full_name_on_more_section(self):
-        if PLATFORM == "Android":
-            return self.ew.get_text_of_element(self.USER_NAME_ANDROID)
-        else:
-            return self.ew.get_attribute(self.USER_PROFILE, "name")
 
     def save_user_profile(self):
         self.ew.tap_element(self.BACK_BUTTON)
