@@ -16,6 +16,8 @@ class Resolutions:
             "budget_overview_y_end": 400,
             "wallets_overview_y_start": 800,
             "wallets_overview_y_end": 400,
+            "categories_y_start": 800,
+            "categories_y_end": 400,
             "phones": ["iPhone 11"]
         },
         "1080_1794": {
@@ -34,6 +36,8 @@ class Resolutions:
             "budget_overview_y_end": 300,
             "wallets_overview_y_start": 1650,
             "wallets_overview_y_end": 300,
+            "categories_y_start": 1650,
+            "categories_y_end": 300,
             "phones": ["Pixel 2"]
         },
         "1080_1997": {

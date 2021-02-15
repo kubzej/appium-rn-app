@@ -25,6 +25,8 @@ from page_objects.budgets.budget_actions import BudgetActions
 from page_objects.budgets.budget_validator import BudgetValidator
 from page_objects.wallets.wallets_actions import WalletsActions
 from page_objects.wallets.wallet_validator import WalletValidator
+from page_objects.more.categories.category_actions import CategoryActions
+from page_objects.more.categories.category_validator import CategoryValidator
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -114,6 +116,8 @@ class TestsWithoutReset:
         self.ew = ElementWrapper(self.driver)
         self.budget_actions = BudgetActions(self.driver)
         self.budget_validator = BudgetValidator(self.driver)
+        self.category_actions = CategoryActions(self.driver)
+        self.category_validator = CategoryValidator(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
@@ -135,13 +139,13 @@ class TestsWithoutReset:
         last_name = vs.last_name
 
         self.more_general.go_to_more_section()
-        self.user_profile.go_to_user_profile()
+        self.more_general.go_to_user_profile()
         self.user_profile.clear_first_name()
         self.user_profile.clear_last_name()
         self.user_profile.set_first_name(first_name)
         self.user_profile.set_last_name(last_name)
         self.user_profile.save_user_profile()
-        assert self.user_profile.get_full_name_on_more_section() == f"{first_name} {last_name}"
+        assert self.more_general.get_full_name_on_more_section() == f"{first_name} {last_name}"
 
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
@@ -393,6 +397,16 @@ class TestsWithoutReset:
         attributes = self.wallet_validator.get_all_attributes()
         self.wallets_actions.delete_wallet()
         assert self.wallet_validator.is_wallet_existing(attributes) is False
+
+    def test_create_category(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_categories()
+        self.category_actions.create_category(type_of_category="random", name="random", color="random", image="random")
+        attributes = self.category_validator.get_all_attributes()
+        self.category_actions.save_category()
+        assert self.category_validator.is_category_existing(attributes) is True
+
 
 
 
