@@ -63,3 +63,8 @@ class CategoryActions:
         if image is not None:
             self.category_detail.set_image(image)
 
+    def delete_category(self):
+        self.ew.wait_and_tap_element(self.category_detail.TRASH_ICON, 10)
+        self.ew.wait_and_tap_element(self.category_detail.DELETE_BUTTON, 10)
+        self.ew.wait_till_element_is_visible(self.more_general.CATEGORIES_HEADER, 10)
+

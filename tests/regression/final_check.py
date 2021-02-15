@@ -416,6 +416,15 @@ class TestsWithoutReset:
         self.category_actions.save_category()
         assert self.category_validator.is_category_existing(attributes) is True
 
+    def test_delete_category(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_categories()
+        self.category_actions.open_category()
+        attributes = self.category_validator.get_all_attributes()
+        self.category_actions.delete_category()
+        assert self.category_validator.is_category_existing(attributes) is False
+
 
 
 
