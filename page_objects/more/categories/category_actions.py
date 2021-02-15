@@ -16,3 +16,7 @@ class CategoryActions:
     def open_category_create_screen(self):
         self.ew.wait_and_tap_element(self.ADD_CATEGORY_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.category_detail.CATEGORY_HEADER, 10)
+
+    def create_category(self, name):
+        self.open_category_create_screen()
+        self.category_detail.set_name(name)
