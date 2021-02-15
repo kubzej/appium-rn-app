@@ -2,17 +2,18 @@ from element_wrapper import ElementWrapper
 import random
 import string
 import validator as vr
+import variables as vs
 from conftest import PLATFORM
 
 
 class CategoryDetail:
 
     CATEGORY_HEADER = "Category Header"
+    SELECTED_ATTRIBUTES = '//android.view.ViewGroup[@content-desc="Category Icon"]/android.view.ViewGroup'
 
     # NAME
     NAME_INPUT = "Name Input"
     SELECTED_NAME_IOS = '**/XCUIElementTypeTextField[`label == "Name Input"`]'
-
 
     def __init__(self, driver):
         self.driver = driver
@@ -34,3 +35,17 @@ class CategoryDetail:
             return self.ew.get_text_of_element(self.NAME_INPUT)
         else:
             return self.ew.get_text_of_element(self.SELECTED_NAME_IOS)
+
+    def set_color(self, color):
+        if color == "random":
+            color = random.choice(vs.accessible_colors)
+
+        self.ew.wait_and_tap_element(color, 5)
+
+        vr.validate_input_against_output(color, self.get_color())
+
+    def get_color(self):
+        self.ew.wait_till_element_is_visible(self.SELECTED_ATTRIBUTES, 5)
+        name, color, image = self.ew.get_attribute(self.SELECTED_ATTRIBUTES, 'content-desc').split('/')
+        return color
+
