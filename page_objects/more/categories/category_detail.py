@@ -10,6 +10,7 @@ class CategoryDetail:
 
     CATEGORY_HEADER = "Category Header"
     SELECTED_ATTRIBUTES = '//android.view.ViewGroup[@content-desc="Category Icon"]/android.view.ViewGroup'
+    SAVE_CATEGORY_BUTTON = "Save Category Button"
 
     # NAME
     NAME_INPUT = "Name Input"
