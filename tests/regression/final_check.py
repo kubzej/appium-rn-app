@@ -425,6 +425,18 @@ class TestsWithoutReset:
         self.category_actions.delete_category()
         assert self.category_validator.is_category_existing(attributes) is False
 
+    def test_merge_categories(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_categories()
+        self.category_actions.merge_categories()
+        remaining, deleted = self.category_validator.get_selected_categories()
+        self.category_actions.confirm_merge()
+        assert self.category_validator.is_category_existing(remaining)
+        assert self.category_validator.is_category_existing(deleted) is False
+
+
+
 
 
 

@@ -3,6 +3,7 @@ from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from resolutions import Resolutions
 from page_objects.more.categories.category_detail import CategoryDetail
+from page_objects.more.categories.categories_general import CategoriesGeneral
 import time
 
 
@@ -11,6 +12,7 @@ class CategoryValidator:
     def __init__(self, driver):
         self.driver = driver
         self.category_detail = CategoryDetail(self.driver)
+        self.categories_general = CategoriesGeneral(self.driver)
         self.action = TouchAction(self.driver)
         self.ew = ElementWrapper(self.driver)
         self.rs = Resolutions(self.driver)
@@ -50,3 +52,19 @@ class CategoryValidator:
                 if time.time() > ios_timeout:
                     return False
         return True
+
+    def get_selected_categories(self):
+        categories = self.ew.get_attributes(self.categories_general.CATEGORY_INFO, "content-desc")
+        name1, color1, image1 = categories[0].split('/')
+        attributes1 = {
+            "name": name1,
+            "color": color1,
+            "image": image1
+        }
+        name2, color2, image2 = categories[1].split('/')
+        attributes2 = {
+            "name": name2,
+            "color": color2,
+            "image": image2
+        }
+        return (attributes1, attributes2)
