@@ -17,7 +17,8 @@ class CategoryActions:
         self.ew.wait_and_tap_element(self.ADD_CATEGORY_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.category_detail.CATEGORY_HEADER, 10)
 
-    def create_category(self, name, color):
+    def create_category(self, name, color, image):
         self.open_category_create_screen()
         self.category_detail.set_name(name)
         self.category_detail.set_color(color)
+        self.category_detail.set_image(image)

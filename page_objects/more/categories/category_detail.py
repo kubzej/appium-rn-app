@@ -49,3 +49,16 @@ class CategoryDetail:
         name, color, image = self.ew.get_attribute(self.SELECTED_ATTRIBUTES, 'content-desc').split('/')
         return color
 
+    def set_image(self, image):
+        if image == "random":
+            image = random.randrange(1, 20)
+
+        self.ew.wait_and_tap_element(image, 5)
+
+        vr.validate_input_against_output(str(image), self.get_image())
+
+    def get_image(self):
+        self.ew.wait_till_element_is_visible(self.SELECTED_ATTRIBUTES, 5)
+        name, color, image = self.ew.get_attribute(self.SELECTED_ATTRIBUTES, 'content-desc').split('/')
+        return image
+
