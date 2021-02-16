@@ -22,6 +22,8 @@ def get_list_of_parameters_for_testing(json_file):
 first_name = names.get_first_name()
 last_name = names.get_last_name()
 
+fake_bank_simple = "Fake Bank Simple"
+
 default_set_of_categories = ["Food & Drink", "Shopping", "Transport", "Home", "Bills & Fees", "Entertainment",
                              "Car", "Travel", "Family & Personal", "Healthcare", "Education", "Groceries",
                              "Gifts", "Sport & Hobbies", "Beauty", "Work", "Other", "Salary", "Business", "Gifts",

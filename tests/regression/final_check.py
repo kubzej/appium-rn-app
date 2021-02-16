@@ -27,6 +27,7 @@ from page_objects.wallets.wallets_actions import WalletsActions
 from page_objects.wallets.wallet_validator import WalletValidator
 from page_objects.more.categories.category_actions import CategoryActions
 from page_objects.more.categories.category_validator import CategoryValidator
+from page_objects.more.bank_accounts.bank_accounts_actions import BankAccountsActions
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -114,6 +115,7 @@ class TestsWithoutReset:
 
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
+        self.bank_accounts_actions = BankAccountsActions(self.driver)
         self.budget_actions = BudgetActions(self.driver)
         self.budget_validator = BudgetValidator(self.driver)
         self.category_actions = CategoryActions(self.driver)
@@ -435,6 +437,12 @@ class TestsWithoutReset:
         assert self.category_validator.is_category_existing(remaining)
         assert self.category_validator.is_category_existing(deleted) is False
 
+    def test_connect_bank_account(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+        assert self.ew.is_element_present(vs.fake_bank_simple) is True
 
 
 
