@@ -464,6 +464,22 @@ class TestsWithoutReset:
         self.bank_account_detail.open_consent()
         assert self.ew.is_element_present(self.bank_account_detail.CONSENT_WEBVIEW)
 
+    def test_disconnect_bank_account(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        if self.ew.is_element_present(self.bank_accounts_general.BANK_ITEM):
+            v_input = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
+            self.bank_accounts_general.open_bank_account()
+        else:
+            self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+            v_input = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
+            self.bank_accounts_general.open_bank_account()
+        self.bank_account_detail.disconnect_bank_account()
+        v_output = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
+        assert v_input - v_output == 1
+
+
 
 
 
