@@ -479,6 +479,21 @@ class TestsWithoutReset:
         v_output = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
         assert v_input - v_output == 1
 
+    def test_hide_bank_wallets(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        if self.ew.is_element_present(self.bank_accounts_general.BANK_ITEM):
+            self.bank_accounts_general.open_bank_account()
+        else:
+            self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+            self.bank_accounts_general.open_bank_account()
+        number_of_changes = vs.random_number_from_1_to_3
+        v_input = len(self.ew.get_elements(self.bank_account_detail.EYE_ICON))
+        self.bank_account_detail.hide_bank_wallets(number_of_changes)
+        self.ew.wait_and_tap_element(self.bank_account_detail.BACK_BUTTON, 5)
+        self.bank_accounts_general.open_bank_account()
+        assert v_input - len(self.ew.get_elements(self.bank_account_detail.EYE_ICON)) == number_of_changes
 
 
 
