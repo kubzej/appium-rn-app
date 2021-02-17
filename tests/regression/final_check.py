@@ -40,6 +40,7 @@ class TestsWithReset:
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
         self.authentication_actions = AuthenticationActions(self.driver)
+        self.budget_actions = BudgetActions(self.driver)
         self.email_password = EmailPassword(self.driver)
         self.marketing_dialog = MarketingDialog(self.driver)
         self.purchase_screen = PurchaseScreen(self.driver)
@@ -135,6 +136,18 @@ class TestsWithReset:
             check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
         if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
             self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+
+        # More Budgets
+        self.budget_actions.create_budget(name="random", amount="random", currency=None, wallets=None, categories=None,
+                                          recurrence=None, start_date=None, end_date=None)
+        self.budget_actions.save_budget()
+        if type_of_user == "free":
+            check.is_true(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        else:
+            check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
+            self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+
 
 
 
