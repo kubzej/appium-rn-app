@@ -96,5 +96,8 @@ class WalletsActions:
         self.ew.wait_and_tap_element(self.wallet_detail.DELETE_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.wallets_general.WALLETS_ANIMATED_HEADER, 10)
 
+    def invite_user_to_wallet(self):
+        self.open_wallet()
+        self.wallet_detail.invite_user()
 
 

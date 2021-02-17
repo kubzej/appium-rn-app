@@ -55,6 +55,13 @@ class WalletDetail:
         CATEGORIES = 'label == "Categories"'
         EYE_ICON = 'label == "Eye Icon"'
 
+    # SHARING
+    SHARE_WALLET_BUTTON = "Share Wallet Button"
+    if PLATFORM == "Android":
+        DENY_BUTTON = 'com.android.packageinstaller:id/permission_deny_button'
+    else:
+        DENY_BUTTON = 'Don’t Allow'
+
 
     def __init__(self, driver):
         self.driver = driver
@@ -153,4 +160,8 @@ class WalletDetail:
             return result
         else:
             return self.ew.get_attribute(self.CATEGORIES, "name")
+
+    def invite_user(self):
+        self.ew.wait_and_tap_element(self.SHARE_WALLET_BUTTON, 15)
+
 

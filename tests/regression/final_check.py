@@ -148,6 +148,18 @@ class TestsWithReset:
         if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
             self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
 
+        # Share Wallet
+        self.wallets_actions.invite_user_to_wallet()
+        if type_of_user == "free":
+            check.is_true(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        else:
+            check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
+            self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+        if self.ew.is_element_present(self.wallets_actions.wallet_detail.DENY_BUTTON):
+            self.ew.tap_element(self.wallets_actions.wallet_detail.DENY_BUTTON)
+            self.ew.wait_and_tap_element(self.wallets_actions.wallet_detail.BACK_BUTTON, 10)
+            self.ew.wait_and_tap_element(self.wallets_actions.wallet_detail.SAVE_WALLET_BUTTON, 10)
 
 
 
