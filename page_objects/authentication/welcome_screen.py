@@ -23,7 +23,7 @@ class WelcomeScreen:
         self.ew.wait_and_tap_element(self.SIGN_UP_WITH_EMAIL_BUTTON, 20)
 
     def open_login_by_email_screen(self):
-        self.ew.wait_and_tap_element(self.LOGIN_WITH_EMAIL_BUTTON, 20)
+        self.ew.wait_and_tap_element(self.LOGIN_WITH_EMAIL_BUTTON, 30)
 
     def skip_notifications_alert(self):
         try:

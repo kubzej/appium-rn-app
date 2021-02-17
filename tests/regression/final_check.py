@@ -1,4 +1,5 @@
 import pytest
+import pytest_check as check
 from selenium.common.exceptions import NoSuchElementException
 
 import variables as vs
@@ -30,6 +31,7 @@ from page_objects.more.categories.category_validator import CategoryValidator
 from page_objects.more.bank_accounts.bank_accounts_actions import BankAccountsActions
 from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
 from page_objects.more.bank_accounts.bank_account_detail import BankAccountDetail
+from page_objects.more.subscription.purchase_screen import PurchaseScreen
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -40,8 +42,10 @@ class TestsWithReset:
         self.authentication_actions = AuthenticationActions(self.driver)
         self.email_password = EmailPassword(self.driver)
         self.marketing_dialog = MarketingDialog(self.driver)
+        self.purchase_screen = PurchaseScreen(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
         self.user_profile = UserProfile(self.driver)
+        self.wallets_actions = WalletsActions(self.driver)
         self.welcome_screen = WelcomeScreen(self.driver)
 
         self.welcome_screen.skip_notifications_alert()
@@ -110,6 +114,29 @@ class TestsWithReset:
         except NoSuchElementException:
             pass
         assert self.ew.is_element_present(self.welcome_screen.WELCOME_SCREEN) is True
+
+    @pytest.mark.parametrize("email, type_of_user", [
+        (s.email_free_user, "free"),
+        (s.email_plus_user, "plus"),
+        (s.email_premium_user, "premium"),
+        (s.email_lifetime_user, "lifetime")
+    ])
+    def test_operations_per_type_of_subscription(self, email, type_of_user):
+        self.set_up()
+        self.authentication_actions.login_by_email(email, s.password)
+        self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
+
+        # More Wallets
+        self.wallets_actions.create_wallet(name="random", amount=None, currency=None, categories=None)
+        self.wallets_actions.save_wallet()
+        if type_of_user == "free":
+            check.is_true(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        else:
+            check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
+            self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+
+
 
 
 @pytest.mark.usefixtures('driver_without_reset')
