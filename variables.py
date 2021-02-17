@@ -2,6 +2,7 @@ import names
 import os
 import json
 import random
+import string
 
 def PATH(p):
     return os.path.abspath(
@@ -20,6 +21,7 @@ def get_list_of_parameters_for_testing(json_file):
         return l
 
 random_number_from_1_to_3 = random.randint(1, 3)
+random_string = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(8)])
 
 first_name = names.get_first_name()
 last_name = names.get_last_name()

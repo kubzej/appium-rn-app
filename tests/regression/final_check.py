@@ -45,6 +45,8 @@ class TestsWithReset:
         self.marketing_dialog = MarketingDialog(self.driver)
         self.purchase_screen = PurchaseScreen(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
+        self.transactions_actions = TransactionActions(self.driver)
+        self.transaction_detail = TransactionDetail(self.driver)
         self.user_profile = UserProfile(self.driver)
         self.wallets_actions = WalletsActions(self.driver)
         self.welcome_screen = WelcomeScreen(self.driver)
@@ -160,6 +162,17 @@ class TestsWithReset:
             self.ew.tap_element(self.wallets_actions.wallet_detail.DENY_BUTTON)
             self.ew.wait_and_tap_element(self.wallets_actions.wallet_detail.BACK_BUTTON, 10)
             self.ew.wait_and_tap_element(self.wallets_actions.wallet_detail.SAVE_WALLET_BUTTON, 10)
+
+        # More Labels
+        self.transactions_actions.open_transaction()
+        self.transaction_detail.fast_select_labels(2)
+        if type_of_user == "free":
+            check.is_true(self.ew.is_element_present(self.transaction_detail.PREMIUM_LABEL_ALERT))
+            self.ew.wait_and_tap_element(self.transaction_detail.NOT_NOW_BUTTON, 10)
+        else:
+            check.is_false(self.ew.is_element_present(self.transaction_detail.PREMIUM_LABEL_ALERT))
+        self.ew.wait_and_tap_element(self.transaction_detail.BACK_BUTTON, 10)
+
 
 
 

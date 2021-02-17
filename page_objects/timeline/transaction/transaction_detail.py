@@ -117,6 +117,8 @@ class TransactionDetail:
     VISIBLE_LABELS_ANDROID = "//android.view.ViewGroup[@content-desc='Label Item']/android.widget.TextView"
     VISIBLE_LABELS_IOS = "//XCUIElementTypeOther[@name='Label Item']/XCUIElementTypeOther"
     SELECTED_LABELS_ANDROID = "//android.view.ViewGroup[@content-desc='Check Mark']/android.view.ViewGroup/ancestor::*[1]/following-sibling::*[1]"
+    PREMIUM_LABEL_ALERT = "Premium Label Alert"
+    NOT_NOW_BUTTON = "Now now"
 
     # PHOTO
     PHOTO = "Photo"
@@ -571,6 +573,22 @@ class TransactionDetail:
                     vr.validate_input_against_more_outputs(label, self.get_labels(True))
                 else:
                     self.create_label(label)
+
+    def fast_select_labels(self, number):
+        self.ew.wait_till_element_is_visible(self.LABELS, 5)
+        if self.ew.is_element_present(self.LABEL_ITEM):
+            labels = self.get_labels(False)
+            x = 0
+            for i in labels:
+                x = x + 1
+                if x <= number:
+                    if PLATFORM == "Android":
+                        self.ew.tap_element(i)
+                        time.sleep(0.5)
+                    else:
+                        label = labels.index(i)
+                        self.action.tap(self.ew.get_elements(self.LABEL_ITEM)[label]).perform()
+
 
     def create_label(self, name):
         if name == "random":
