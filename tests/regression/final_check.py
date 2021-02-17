@@ -27,6 +27,9 @@ from page_objects.wallets.wallets_actions import WalletsActions
 from page_objects.wallets.wallet_validator import WalletValidator
 from page_objects.more.categories.category_actions import CategoryActions
 from page_objects.more.categories.category_validator import CategoryValidator
+from page_objects.more.bank_accounts.bank_accounts_actions import BankAccountsActions
+from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
+from page_objects.more.bank_accounts.bank_account_detail import BankAccountDetail
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -114,6 +117,9 @@ class TestsWithoutReset:
 
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
+        self.bank_accounts_actions = BankAccountsActions(self.driver)
+        self.bank_account_detail = BankAccountDetail(self.driver)
+        self.bank_accounts_general = BankAccountsGeneral(self.driver)
         self.budget_actions = BudgetActions(self.driver)
         self.budget_validator = BudgetValidator(self.driver)
         self.category_actions = CategoryActions(self.driver)
@@ -434,6 +440,61 @@ class TestsWithoutReset:
         self.category_actions.confirm_merge()
         assert self.category_validator.is_category_existing(remaining)
         assert self.category_validator.is_category_existing(deleted) is False
+
+    def test_connect_bank_account(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+        if PLATFORM == "Android":
+            visible_banks = self.ew.get_text_of_elements(self.bank_accounts_actions.bank_accounts_general.BANK_ITEM_NAME)
+            assert vs.fake_bank_simple in visible_banks
+        else:
+            assert self.ew.is_element_present(vs.fake_bank_simple) is True
+
+    def test_bank_account_consent(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        if self.ew.is_element_present(self.bank_accounts_general.BANK_ITEM):
+            self.bank_accounts_general.open_bank_account()
+        else:
+            self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+            self.bank_accounts_general.open_bank_account()
+        self.bank_account_detail.open_consent()
+        assert self.ew.is_element_present(self.bank_account_detail.CONSENT_WEBVIEW)
+
+    def test_disconnect_bank_account(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        if self.ew.is_element_present(self.bank_accounts_general.BANK_ITEM):
+            v_input = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
+            self.bank_accounts_general.open_bank_account()
+        else:
+            self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+            v_input = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
+            self.bank_accounts_general.open_bank_account()
+        self.bank_account_detail.disconnect_bank_account()
+        v_output = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
+        assert v_input - v_output == 1
+
+    def test_hide_bank_wallets(self):
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        if self.ew.is_element_present(self.bank_accounts_general.BANK_ITEM):
+            self.bank_accounts_general.open_bank_account()
+        else:
+            self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
+            self.bank_accounts_general.open_bank_account()
+        number_of_changes = vs.random_number_from_1_to_3
+        v_input = len(self.ew.get_elements(self.bank_account_detail.EYE_ICON))
+        self.bank_account_detail.hide_bank_wallets(number_of_changes)
+        self.ew.wait_and_tap_element(self.bank_account_detail.BACK_BUTTON, 5)
+        self.bank_accounts_general.open_bank_account()
+        assert v_input - len(self.ew.get_elements(self.bank_account_detail.EYE_ICON)) == number_of_changes
+
 
 
 
