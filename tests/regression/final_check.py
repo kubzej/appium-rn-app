@@ -32,6 +32,7 @@ from page_objects.more.bank_accounts.bank_accounts_actions import BankAccountsAc
 from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
 from page_objects.more.bank_accounts.bank_account_detail import BankAccountDetail
 from page_objects.more.subscription.purchase_screen import PurchaseScreen
+from page_objects.more.bank_accounts.bank_search_screen import BankSearchScreen
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -40,9 +41,12 @@ class TestsWithReset:
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
         self.authentication_actions = AuthenticationActions(self.driver)
+        self.bank_accounts_general = BankAccountsGeneral(self.driver)
+        self.bank_search_screen = BankSearchScreen(self.driver)
         self.budget_actions = BudgetActions(self.driver)
         self.email_password = EmailPassword(self.driver)
         self.marketing_dialog = MarketingDialog(self.driver)
+        self.more_general = MoreGeneral(self.driver)
         self.purchase_screen = PurchaseScreen(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
         self.transactions_actions = TransactionActions(self.driver)
@@ -172,6 +176,21 @@ class TestsWithReset:
         else:
             check.is_false(self.ew.is_element_present(self.transaction_detail.PREMIUM_LABEL_ALERT))
         self.ew.wait_and_tap_element(self.transaction_detail.BACK_BUTTON, 10)
+
+        # Connect Bank Account
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_bank_accounts()
+        self.ew.wait_and_tap_element(self.bank_accounts_general.CONNECT_BANK_ACCOUNT_BUTTON, 10)
+        self.ew.wait_till_element_is_visible(self.bank_search_screen.SEARCH_INPUT, 30)
+        self.bank_search_screen.search_bank_by_search_box("random")
+        if type_of_user in ["free", "plus"]:
+            check.is_true(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        else:
+            check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
+        if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
+            self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+        self.ew.wait_and_tap_element(self.bank_search_screen.BACK_BUTTON, 10)
+        self.ew.wait_and_tap_element(self.bank_accounts_general.BACK_BUTTON, 10)
 
 
 
