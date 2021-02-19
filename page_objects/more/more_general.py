@@ -28,6 +28,10 @@ class MoreGeneral:
     BANK_ACCOUNTS = "Bank Accounts"
     BANK_ACCOUNTS_HEADER = "Bank Accounts Header"
 
+    # ADVANCED
+    ADVANCED = "Advanced"
+    ADVANCED_HEADER = "Advanced Header"
+
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
@@ -53,3 +57,7 @@ class MoreGeneral:
     def go_to_bank_accounts(self):
         self.ew.wait_and_tap_element(self.BANK_ACCOUNTS, 10)
         self.ew.wait_till_element_is_visible(self.BANK_ACCOUNTS_HEADER, 10)
+
+    def go_to_advanced(self):
+        self.ew.wait_and_tap_element(self.ADVANCED, 10)
+        self.ew.wait_till_element_is_visible(self.ADVANCED_HEADER, 10)

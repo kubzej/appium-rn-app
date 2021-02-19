@@ -2,6 +2,7 @@ import names
 import os
 import json
 import random
+import string
 
 def PATH(p):
     return os.path.abspath(
@@ -20,6 +21,7 @@ def get_list_of_parameters_for_testing(json_file):
         return l
 
 random_number_from_1_to_3 = random.randint(1, 3)
+random_string = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(8)])
 
 first_name = names.get_first_name()
 last_name = names.get_last_name()
@@ -43,6 +45,10 @@ budget_recurrences = ["Custom (Once)", "Daily", "Weekly", "Biweekly", "Monthly",
 
 reminders = ["current day", "1 day in advance", "2 days in advance", "3 days in advance", "4 days in advance",
              "5 days in advance", "6 days on advance", "7 days in advance"]
+
+export_periods = ["Custom Period", "All Time", "Last 30 days", "Last 90 days", "Last 365 days"]
+
+export_formats = ["XLSX", "CSV"]
 
 accessible_colors = ['#f5534b', '#b55a42', '#b47b55', '#d35e00', '#de8135', '#df8c29', '#b9965e', '#ffa200']
 

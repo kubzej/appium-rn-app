@@ -5,6 +5,7 @@ from conftest import PLATFORM
 class BankAccountsGeneral():
 
     CONNECT_BANK_ACCOUNT_BUTTON = "Connect Bank Account Button"
+    BACK_BUTTON = "Back Button"
 
     if PLATFORM == "Android":
         BANK_ITEM = "Bank Item"

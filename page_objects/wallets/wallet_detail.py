@@ -14,6 +14,10 @@ class WalletDetail:
     SAVE_WALLET_BUTTON = "Save Wallet Button"
     TRASH_ICON = "Trash Icon"
     DELETE_BUTTON = "Delete"
+    if PLATFORM == "Android":
+        DISCARD_CHANGES = "android:id/button1"
+    else:
+        DISCARD_CHANGES = "Discard changes"
 
     # NAME
     NAME_INPUT = "Name Input"
@@ -54,6 +58,13 @@ class WalletDetail:
     else:
         CATEGORIES = 'label == "Categories"'
         EYE_ICON = 'label == "Eye Icon"'
+
+    # SHARING
+    SHARE_WALLET_BUTTON = "Share Wallet Button"
+    if PLATFORM == "Android":
+        DENY_BUTTON = 'com.android.packageinstaller:id/permission_deny_button'
+    else:
+        DENY_BUTTON = 'Don’t Allow'
 
 
     def __init__(self, driver):
@@ -153,4 +164,8 @@ class WalletDetail:
             return result
         else:
             return self.ew.get_attribute(self.CATEGORIES, "name")
+
+    def invite_user(self):
+        self.ew.wait_and_tap_element(self.SHARE_WALLET_BUTTON, 15)
+
 

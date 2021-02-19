@@ -21,4 +21,5 @@ class MarketingDialog:
         self.ew.wait_and_tap_element(self.DISAGREE_BUTTON, 5)
 
     def agree_with_ios_notifications(self):
-        self.ew.wait_and_tap_element(self.ALLOW_BUTTON, 30)
+        if self.ew.is_element_present(self.ALLOW_BUTTON):
+            self.ew.wait_and_tap_element(self.ALLOW_BUTTON, 30)
