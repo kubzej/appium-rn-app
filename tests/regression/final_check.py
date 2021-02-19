@@ -1,6 +1,7 @@
 import pytest
 import pytest_check as check
 from selenium.common.exceptions import NoSuchElementException
+import time
 
 import variables as vs
 import secrets as s
@@ -33,6 +34,10 @@ from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGe
 from page_objects.more.bank_accounts.bank_account_detail import BankAccountDetail
 from page_objects.more.subscription.purchase_screen import PurchaseScreen
 from page_objects.more.bank_accounts.bank_search_screen import BankSearchScreen
+from page_objects.more.advanced.advanced_general import AdvancedGeneral
+from page_objects.more.advanced.export.export_actions import ExportActions
+from page_objects.wallets.wallet_detail import WalletDetail
+from page_objects.budgets.budget_detail import BudgetDetail
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -40,11 +45,14 @@ class TestsWithReset:
 
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
+        self.advanced_general = AdvancedGeneral(self.driver)
         self.authentication_actions = AuthenticationActions(self.driver)
         self.bank_accounts_general = BankAccountsGeneral(self.driver)
         self.bank_search_screen = BankSearchScreen(self.driver)
         self.budget_actions = BudgetActions(self.driver)
+        self.budget_detail = BudgetDetail(self.driver)
         self.email_password = EmailPassword(self.driver)
+        self.export_actions = ExportActions(self.driver)
         self.marketing_dialog = MarketingDialog(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.purchase_screen = PurchaseScreen(self.driver)
@@ -53,6 +61,7 @@ class TestsWithReset:
         self.transaction_detail = TransactionDetail(self.driver)
         self.user_profile = UserProfile(self.driver)
         self.wallets_actions = WalletsActions(self.driver)
+        self.wallet_detail = WalletDetail(self.driver)
         self.welcome_screen = WelcomeScreen(self.driver)
 
         self.welcome_screen.skip_notifications_alert()
@@ -142,6 +151,10 @@ class TestsWithReset:
             check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
         if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
             self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+            self.ew.wait_till_element_is_not_visible(self.purchase_screen.SUBSCRIPTION_HEADER, 10)
+        if self.ew.is_element_present(self.wallet_detail.WALLET_HEADER):
+            self.ew.wait_and_tap_element(self.wallet_detail.BACK_BUTTON, 5)
+            self.ew.wait_and_tap_element(self.wallet_detail.DISCARD_CHANGES, 10)
 
         # More Budgets
         self.budget_actions.create_budget(name="random", amount="random", currency=None, wallets=None, categories=None,
@@ -153,6 +166,10 @@ class TestsWithReset:
             check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
         if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
             self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
+            self.ew.wait_till_element_is_not_visible(self.purchase_screen.SUBSCRIPTION_HEADER, 10)
+        if self.ew.is_element_present(self.budget_detail.BUDGET_HEADER):
+            self.ew.wait_and_tap_element(self.budget_detail.BACK_BUTTON, 5)
+            self.ew.wait_and_tap_element(self.budget_detail.DISCARD_CHANGES, 10)
 
         # Share Wallet
         self.wallets_actions.invite_user_to_wallet()
@@ -162,12 +179,15 @@ class TestsWithReset:
             check.is_false(self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER))
         if self.ew.is_element_present(self.purchase_screen.BACK_BUTTON):
             self.ew.tap_element(self.purchase_screen.BACK_BUTTON)
-        if self.ew.is_element_present(self.wallets_actions.wallet_detail.DENY_BUTTON):
-            self.ew.tap_element(self.wallets_actions.wallet_detail.DENY_BUTTON)
-            self.ew.wait_and_tap_element(self.wallets_actions.wallet_detail.BACK_BUTTON, 10)
-            self.ew.wait_and_tap_element(self.wallets_actions.wallet_detail.SAVE_WALLET_BUTTON, 10)
+        if self.ew.is_element_present(self.wallet_detail.DENY_BUTTON):
+            self.ew.tap_element(self.wallet_detail.DENY_BUTTON)
+            self.ew.wait_and_tap_element(self.wallet_detail.BACK_BUTTON, 10)
+        self.ew.wait_till_element_is_visible(self.wallet_detail.WALLET_HEADER, 10)
+        self.ew.wait_and_tap_element(self.wallet_detail.BACK_BUTTON, 5)
+        self.ew.wait_and_tap_element(self.wallet_detail.DISCARD_CHANGES, 10)
 
         # More Labels
+        self.timeline_general.go_to_timeline()
         self.transactions_actions.open_transaction()
         self.transaction_detail.fast_select_labels(2)
         if type_of_user == "free":
@@ -192,8 +212,39 @@ class TestsWithReset:
         self.ew.wait_and_tap_element(self.bank_search_screen.BACK_BUTTON, 10)
         self.ew.wait_and_tap_element(self.bank_accounts_general.BACK_BUTTON, 10)
 
+        # Export Custom Period
+        self.more_general.go_to_advanced()
+        self.advanced_general.go_to_export()
+        self.export_actions.set_period("Custom Period")
+        try:
+            self.ew.wait_till_element_is_visible(self.export_actions.SELECT_DATE_RANGE_PICKER, 5)
+        except NoSuchElementException:
+            pass
+        if type_of_user == "free":
+            check.is_true(self.ew.is_element_present(self.export_actions.PERIOD_SIZE_PICKER))
+        else:
+            check.is_false(self.ew.is_element_present(self.export_actions.PERIOD_SIZE_PICKER))
+        if self.ew.is_element_present(self.export_actions.PERIOD_SIZE_PICKER):
+            self.ew.tap_element(self.export_actions.BACKDROP)
+        if self.ew.is_element_present(self.export_actions.SELECT_DATE_RANGE_PICKER):
+            self.ew.wait_and_tap_element(self.export_actions.BACKDROP, 5)
+            self.ew.wait_till_element_is_not_visible(self.export_actions.SELECT_DATE_RANGE_PICKER, 10)
 
+        # Export All Time Period
+        self.export_actions.set_period("All Time")
+        if type_of_user == "free":
+            check.is_true(self.ew.is_element_present(self.export_actions.PERIOD_SIZE_PICKER))
+        else:
+            check.is_false(self.ew.is_element_present(self.export_actions.PERIOD_SIZE_PICKER))
+        if self.ew.is_element_present(self.export_actions.PERIOD_SIZE_PICKER):
+            self.ew.tap_element(self.export_actions.BACKDROP)
 
+        # Export XLSX Format
+        self.export_actions.set_format("XLSX")
+        if type_of_user == "free":
+            check.is_false(self.ew.is_element_present(self.export_actions.XLSX_TRUE))
+        else:
+            check.is_true(self.ew.is_element_present(self.export_actions.XLSX_TRUE))
 
 
 @pytest.mark.usefixtures('driver_without_reset')

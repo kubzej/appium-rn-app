@@ -14,6 +14,10 @@ class WalletDetail:
     SAVE_WALLET_BUTTON = "Save Wallet Button"
     TRASH_ICON = "Trash Icon"
     DELETE_BUTTON = "Delete"
+    if PLATFORM == "Android":
+        DISCARD_CHANGES = "android:id/button1"
+    else:
+        DISCARD_CHANGES = "Discard changes"
 
     # NAME
     NAME_INPUT = "Name Input"

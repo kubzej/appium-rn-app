@@ -46,6 +46,10 @@ budget_recurrences = ["Custom (Once)", "Daily", "Weekly", "Biweekly", "Monthly",
 reminders = ["current day", "1 day in advance", "2 days in advance", "3 days in advance", "4 days in advance",
              "5 days in advance", "6 days on advance", "7 days in advance"]
 
+export_periods = ["Custom Period", "All Time", "Last 30 days", "Last 90 days", "Last 365 days"]
+
+export_formats = ["XLSX", "CSV"]
+
 accessible_colors = ['#f5534b', '#b55a42', '#b47b55', '#d35e00', '#de8135', '#df8c29', '#b9965e', '#ffa200']
 
 
