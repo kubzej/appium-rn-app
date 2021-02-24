@@ -344,6 +344,17 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
 
+    def test_change_1way_transfer_to_2way(self):
+        self.set_up()
+        self.transfer_actions.create_transfer(amount="random", outgoing_wallet="oos", incoming_wallet="not_oos",
+                                              start_date=None, note=None, recurrence=None, end_date=None, reminder=None)
+        self.transaction_actions.save_transaction()
+        self.transfer_actions.open_transfer()
+        self.transaction_detail.set_wallet('not_oos', "transfer_outgoing")
+        attributes = self.transfer_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transfer_validator.is_transfer_on_timeline(attributes)
+
     @pytest.mark.parametrize(
         "type_of_test, outgoing_wallet, incoming_wallet, transaction_type",
         [
