@@ -31,6 +31,11 @@ class WelcomeScreen:
         if PLATFORM == "iOS":
             self.ew.wait_and_tap_element(self.ALLOW_FB_LOGIN_BUTTON, 15)
 
+    def open_login_by_google(self):
+        self.ew.wait_and_tap_element(self.SIGN_IN_WITH_GOOGLE_BUTTON, 30)
+        if PLATFORM == "iOS":
+            self.ew.wait_and_tap_element(self.ALLOW_FB_LOGIN_BUTTON, 15)
+
     def skip_notifications_alert(self):
         try:
             self.ew.wait_till_element_is_visible(self.WELCOME_SCREEN, 1)

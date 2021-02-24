@@ -11,6 +11,7 @@ from page_objects.more.more_general import MoreGeneral
 from page_objects.more.user_profile import UserProfile
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.authentication.facebook import Facebook
+from page_objects.authentication.google import Google
 
 
 class AuthenticationActions:
@@ -20,6 +21,7 @@ class AuthenticationActions:
         self.ew = ElementWrapper(self.driver)
         self.email_password = EmailPassword(self.driver)
         self.facebook = Facebook(self.driver)
+        self.google = Google(self.driver)
         self.marketing_dialog = MarketingDialog(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
@@ -54,6 +56,10 @@ class AuthenticationActions:
         self.ew.tap_element(self.email_password.LOGIN_BUTTON)
         if PLATFORM == "iOS":
             self.marketing_dialog.agree_with_ios_notifications()
+
+    def login_by_google(self):
+        self.welcome_screen.open_login_by_google()
+        self.ew.wait_and_tap_element(self.google.EMAIL_TO_SELECT, 20)
 
     def logout(self):
         self.more_general.go_to_more_section()

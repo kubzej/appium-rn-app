@@ -151,6 +151,16 @@ class TestsWithReset:
 
         assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
 
+    def test_login_by_google(self):
+        self.set_up()
+        self.authentication_actions.login_by_google()
+        try:
+            self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
+        except NoSuchElementException:
+            pass
+
+        assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
+
     def test_logout(self):
         self.set_up()
         self.authentication_actions.login_by_email(s.email_login, s.password)

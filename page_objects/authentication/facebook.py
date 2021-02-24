@@ -23,10 +23,6 @@ class Facebook():
         LOGIN_BUTTON = '//XCUIElementTypeButton[@name="Log In"]'
         CONTINUE_BUTTON = '(//XCUIElementTypeButton)[5]'
 
-
-
-
-
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
