@@ -330,6 +330,15 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
+    def test_change_transaction_to_transfer(self):
+        self.set_up()
+        self.transaction_actions.open_transaction()
+        self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
+        self.transaction_detail.set_type_to_transfer()
+        attributes = self.transfer_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transfer_validator.is_transfer_on_timeline(attributes)
+
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder",
         [
