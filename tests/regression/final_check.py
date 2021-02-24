@@ -431,6 +431,27 @@ class TestsWithoutReset:
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
 
     @pytest.mark.parametrize(
+        "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder, transaction_type", [
+            # ("Test", "random", None, None, None, None, "random", None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_change_transfer_template_to_transaction_template)
+        ])
+    def test_change_transfer_template_to_transaction_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                                              end_date, reminder, transaction_type):
+        self.set_up()
+        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                                              end_date, reminder)
+        self.transaction_actions.save_transaction()
+        self.transfer_actions.open_transfer_template()
+        attributes_transfer = self.transfer_template_validator.get_all_attributes()
+        self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
+        self.transaction_detail.set_type_of_transaction(transaction_type)
+        self.transaction_detail.set_category("random")
+        attributes_transaction = self.transaction_template_validator.get_all_attributes()
+        self.transaction_actions.save_transaction()
+        assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes_transfer) is False
+        assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes_transaction) is True
+
+    @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
             # ("Test", "random", "random", "random", None, None, None, "random", None, None, "random", None, None)

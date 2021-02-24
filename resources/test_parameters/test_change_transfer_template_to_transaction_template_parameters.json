@@ -1,0 +1,26 @@
+[
+  {
+    "type_of_test": "1 way outgoing to expense",
+    "amount": "random",
+    "outgoing_wallet": "not_oos",
+    "incoming_wallet": "oos",
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null,
+    "transaction_type": "expenses"
+  },
+  {
+    "type_of_test": "1 way incoming to income",
+    "amount": "random",
+    "outgoing_wallet": "oos",
+    "incoming_wallet": "not_oos",
+    "start_date": null,
+    "note": null,
+    "recurrence": "random",
+    "end_date": null,
+    "reminder": null,
+    "transaction_type": "income"
+  }
+]
