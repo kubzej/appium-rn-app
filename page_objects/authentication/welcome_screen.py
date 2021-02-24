@@ -14,16 +14,22 @@ class WelcomeScreen:
     SIGN_IN_WITH_APPLE = "Sign In With Apple"
     NOTIFICATIONS_ALERT = '“Spendee” Would Like to Send You Notifications'
     ALLOW_NOTIFICATIONS_BUTTON = "Allow"
+    ALLOW_FB_LOGIN_BUTTON = 'label == "Continue"'
 
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
 
     def open_sign_up_email_screen(self):
-        self.ew.wait_and_tap_element(self.SIGN_UP_WITH_EMAIL_BUTTON, 20)
+        self.ew.wait_and_tap_element(self.SIGN_UP_WITH_EMAIL_BUTTON, 30)
 
     def open_login_by_email_screen(self):
         self.ew.wait_and_tap_element(self.LOGIN_WITH_EMAIL_BUTTON, 30)
+
+    def open_login_by_facebook(self):
+        self.ew.wait_and_tap_element(self.SIGN_IN_WITH_FACEBOOK, 30)
+        if PLATFORM == "iOS":
+            self.ew.wait_and_tap_element(self.ALLOW_FB_LOGIN_BUTTON, 15)
 
     def skip_notifications_alert(self):
         try:

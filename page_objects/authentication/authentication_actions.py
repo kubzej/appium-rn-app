@@ -10,6 +10,7 @@ from page_objects.authentication.welcome_screen import WelcomeScreen
 from page_objects.more.more_general import MoreGeneral
 from page_objects.more.user_profile import UserProfile
 from page_objects.timeline.timeline_general import TimelineGeneral
+from page_objects.authentication.facebook import Facebook
 
 
 class AuthenticationActions:
@@ -18,6 +19,7 @@ class AuthenticationActions:
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
         self.email_password = EmailPassword(self.driver)
+        self.facebook = Facebook(self.driver)
         self.marketing_dialog = MarketingDialog(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
@@ -32,6 +34,19 @@ class AuthenticationActions:
         time.sleep(0.5)
         if PLATFORM == "iOS":
             self.marketing_dialog.agree_with_ios_notifications()
+
+    def register_by_facebook(self, email, password):
+        self.welcome_screen.open_login_by_facebook()
+        self.ew.wait_till_element_is_visible(self.facebook.FACEBOOK_HEADER, 30)
+        if self.ew.is_element_present(self.facebook.COOKIES_ACCEPT_BUTTON):
+            self.ew.tap_element(self.facebook.COOKIES_ACCEPT_BUTTON)
+        self.ew.get_element(self.facebook.EMAIL_TEXT_BOX).send_keys(email)
+        self.ew.get_element(self.facebook.PASSWORD_TEXT_BOX).send_keys(password)
+        self.ew.wait_and_tap_element(self.facebook.LOGIN_BUTTON, 10)
+        self.ew.wait_and_tap_element(self.facebook.CONTINUE_BUTTON, 20)
+        if PLATFORM == "iOS":
+            self.marketing_dialog.agree_with_ios_notifications()
+
 
     def login_by_email(self, email, password):
         self.welcome_screen.open_login_by_email_screen()

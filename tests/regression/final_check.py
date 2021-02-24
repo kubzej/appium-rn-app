@@ -1,11 +1,11 @@
 import pytest
 import pytest_check as check
 from selenium.common.exceptions import NoSuchElementException
-import time
 
 import variables as vs
 import secrets as s
 from conftest import PLATFORM
+from facebook_api import FacebookAPI
 from element_wrapper import ElementWrapper
 from page_objects.authentication.authentication_actions import AuthenticationActions
 from page_objects.authentication.email_password import EmailPassword
@@ -53,6 +53,7 @@ class TestsWithReset:
         self.budget_detail = BudgetDetail(self.driver)
         self.email_password = EmailPassword(self.driver)
         self.export_actions = ExportActions(self.driver)
+        self.facebook_api = FacebookAPI()
         self.marketing_dialog = MarketingDialog(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.purchase_screen = PurchaseScreen(self.driver)
@@ -83,10 +84,10 @@ class TestsWithReset:
             self.ew.tap_element(self.user_profile.CONTINUE_BUTTON)
             self.marketing_dialog.agree_with_marketing()
             try:
-                self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
+                self.ew.wait_till_element_is_visible(self.purchase_screen.SUBSCRIPTION_HEADER, 30)
             except NoSuchElementException:
                 pass
-            assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
+            assert self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER) is True
 
         elif type_of_test == "existing email":
             try:
@@ -96,6 +97,29 @@ class TestsWithReset:
             assert self.ew.is_element_present(self.email_password.EXISTING_EMAIL_DIALOG) is True
         else:
             assert self.ew.is_element_present(self.email_password.VALIDATION_ERROR_WARNING) is True
+
+    def test_register_by_facebook(self):
+        self.set_up()
+
+        user = self.facebook_api.create_test_user()
+        email = user.get("email")
+        password = user.get("password")
+
+        print(email)
+        print(password)
+
+        self.authentication_actions.register_by_facebook(email, password)
+        self.ew.wait_till_element_is_visible(self.user_profile.MORE_ABOUT_YOU_HEADER, 30)
+        self.user_profile.set_first_name(vs.first_name)
+        self.user_profile.set_last_name(vs.last_name)
+        self.ew.tap_element(self.user_profile.CONTINUE_BUTTON)
+        self.marketing_dialog.agree_with_marketing()
+        try:
+            self.ew.wait_till_element_is_visible(self.purchase_screen.SUBSCRIPTION_HEADER, 30)
+        except NoSuchElementException:
+            pass
+        self.facebook_api.delete_test_user(user)
+        assert self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER) is True
 
     @pytest.mark.parametrize("email, password, type_of_test", [
         (s.email_login, s.password, "positive"),
