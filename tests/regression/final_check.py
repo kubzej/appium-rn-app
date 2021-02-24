@@ -105,10 +105,7 @@ class TestsWithReset:
         email = user.get("email")
         password = user.get("password")
 
-        print(email)
-        print(password)
-
-        self.authentication_actions.register_by_facebook(email, password)
+        self.authentication_actions.login_by_facebook(email, password)
         self.ew.wait_till_element_is_visible(self.user_profile.MORE_ABOUT_YOU_HEADER, 30)
         self.user_profile.set_first_name(vs.first_name)
         self.user_profile.set_last_name(vs.last_name)
@@ -143,6 +140,16 @@ class TestsWithReset:
             except NoSuchElementException:
                 pass
             assert self.ew.is_element_present(self.email_password.INVALID_CREDENTIALS_DIALOG) is True
+
+    def test_login_by_facebook(self):
+        self.set_up()
+        self.authentication_actions.login_by_facebook(s.email_login_facebook, s.password)
+        try:
+            self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
+        except NoSuchElementException:
+            pass
+
+        assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
 
     def test_logout(self):
         self.set_up()

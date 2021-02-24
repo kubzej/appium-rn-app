@@ -35,7 +35,7 @@ class AuthenticationActions:
         if PLATFORM == "iOS":
             self.marketing_dialog.agree_with_ios_notifications()
 
-    def register_by_facebook(self, email, password):
+    def login_by_facebook(self, email, password):
         self.welcome_screen.open_login_by_facebook()
         self.ew.wait_till_element_is_visible(self.facebook.FACEBOOK_HEADER, 30)
         if self.ew.is_element_present(self.facebook.COOKIES_ACCEPT_BUTTON):
@@ -46,7 +46,6 @@ class AuthenticationActions:
         self.ew.wait_and_tap_element(self.facebook.CONTINUE_BUTTON, 20)
         if PLATFORM == "iOS":
             self.marketing_dialog.agree_with_ios_notifications()
-
 
     def login_by_email(self, email, password):
         self.welcome_screen.open_login_by_email_screen()
