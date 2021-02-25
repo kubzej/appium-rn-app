@@ -1,13 +1,13 @@
-from element_wrapper import ElementWrapper
 import random
 import string
+
 import validator as vr
 import variables as vs
 from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class CategoryDetail:
-
     CATEGORY_HEADER = "Category Header"
     SELECTED_ATTRIBUTES = '//android.view.ViewGroup[@content-desc="Category Icon"]/android.view.ViewGroup'
     SAVE_CATEGORY_BUTTON = "Save Category Button"
@@ -64,4 +64,3 @@ class CategoryDetail:
         self.ew.wait_till_element_is_visible(self.SELECTED_ATTRIBUTES, 5)
         name, color, image = self.ew.get_attribute(self.SELECTED_ATTRIBUTES, 'content-desc').split('/')
         return image
-

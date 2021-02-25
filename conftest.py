@@ -1,6 +1,7 @@
-import desired_capabilities
 import pytest
 from appium import webdriver
+
+import desired_capabilities
 
 PLATFORM = "Android"
 # PLATFORM = "iOS"

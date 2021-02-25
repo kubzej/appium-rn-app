@@ -2,12 +2,11 @@ from element_wrapper import ElementWrapper
 
 
 class EmailPassword:
-
     EMAIL_INPUT = "Email Input"
     PASSWORD_INPUT = "Password Input"
+    EXISTING_EMAIL_DIALOG = "Email Already In Use Dialog"
     LOGIN_BUTTON = "Login Button"
     SIGN_UP_BUTTON = "Sign Up Button"
-    EXISTING_EMAIL_DIALOG = "Email Already In Use Dialog"
     INVALID_CREDENTIALS_DIALOG = "Invalid Credentials Dialog"
     VALIDATION_ERROR_WARNING = "Validation Error Warning"
 

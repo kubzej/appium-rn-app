@@ -1,8 +1,9 @@
+import json
 import names
 import os
-import json
 import random
 import string
+
 
 def PATH(p):
     return os.path.abspath(
@@ -19,6 +20,7 @@ def get_list_of_parameters_for_testing(json_file):
             # tuple_of_values = tuple_of_values[1:]
             l.append(tuple_of_values)
         return l
+
 
 random_number_from_1_to_3 = random.randint(1, 3)
 random_string = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(8)])
@@ -51,8 +53,6 @@ export_periods = ["Custom Period", "All Time", "Last 30 days", "Last 90 days", "
 export_formats = ["XLSX", "CSV"]
 
 accessible_colors = ['#f5534b', '#b55a42', '#b47b55', '#d35e00', '#de8135', '#df8c29', '#b9965e', '#ffa200']
-
-
 
 # JSONs FOR TESTS
 json_test_create_transaction = r'../../resources/test_parameters/test_create_transaction_parameters.json'

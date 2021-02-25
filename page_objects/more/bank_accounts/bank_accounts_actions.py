@@ -1,12 +1,11 @@
+import secrets as s
+from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
 from page_objects.more.bank_accounts.bank_search_screen import BankSearchScreen
-import secrets as s
-from conftest import PLATFORM
 
 
 class BankAccountsActions():
-
     if PLATFORM == "Android":
         LOGIN_INPUT = '//android.webkit.WebView[@content-desc="Spendee"]/android.view.View[2]/android.view.View[2]/android.widget.EditText'
         PASSWORD_INPUT = '//android.webkit.WebView[@content-desc="Spendee"]/android.view.View[2]/android.view.View[3]/android.widget.EditText'

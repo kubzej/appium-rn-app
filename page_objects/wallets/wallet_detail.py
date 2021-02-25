@@ -1,14 +1,14 @@
-from element_wrapper import ElementWrapper
 import random
 import string
-from conftest import PLATFORM
+import time
+
 import validator as vr
 import variables as vs
-import time
+from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class WalletDetail:
-
     # OTHER
     WALLET_HEADER = "Wallet Header"
     SAVE_WALLET_BUTTON = "Save Wallet Button"
@@ -65,7 +65,6 @@ class WalletDetail:
         DENY_BUTTON = 'com.android.packageinstaller:id/permission_deny_button'
     else:
         DENY_BUTTON = 'Don’t Allow'
-
 
     def __init__(self, driver):
         self.driver = driver
@@ -167,5 +166,3 @@ class WalletDetail:
 
     def invite_user(self):
         self.ew.wait_and_tap_element(self.SHARE_WALLET_BUTTON, 15)
-
-

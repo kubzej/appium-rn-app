@@ -7,8 +7,8 @@ from element_wrapper import ElementWrapper
 from page_objects.timeline.filters.period_filter import PeriodFilter
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
-from resolutions import Resolutions
 from page_objects.timeline.transaction.transaction_validator import TransactionValidator
+from resolutions import Resolutions
 
 
 class TransactionTemplateValidator:
@@ -56,7 +56,8 @@ class TransactionTemplateValidator:
 
         print(f'LOCATOR: {transaction_locator}')
 
-        self.transaction_validator.prepare_timeline(attributes['start_date'], self.adjust_recurrence(attributes['recurrence']))
+        self.transaction_validator.prepare_timeline(attributes['start_date'],
+                                                    self.adjust_recurrence(attributes['recurrence']))
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5
@@ -86,4 +87,3 @@ class TransactionTemplateValidator:
             return "undefined"
         else:
             return end_date
-

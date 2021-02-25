@@ -2,42 +2,42 @@ import pytest
 import pytest_check as check
 from selenium.common.exceptions import NoSuchElementException
 
-import variables as vs
 import secrets as s
+import variables as vs
 from conftest import PLATFORM
-from facebook_api import FacebookAPI
 from element_wrapper import ElementWrapper
+from facebook_api import FacebookAPI
 from page_objects.authentication.authentication_actions import AuthenticationActions
 from page_objects.authentication.email_password import EmailPassword
+from page_objects.authentication.marketing_dialog import MarketingDialog
 from page_objects.authentication.welcome_screen import WelcomeScreen
+from page_objects.budgets.budget_actions import BudgetActions
+from page_objects.budgets.budget_detail import BudgetDetail
+from page_objects.budgets.budget_validator import BudgetValidator
+from page_objects.more.advanced.advanced_general import AdvancedGeneral
+from page_objects.more.advanced.export.export_actions import ExportActions
+from page_objects.more.bank_accounts.bank_account_detail import BankAccountDetail
+from page_objects.more.bank_accounts.bank_accounts_actions import BankAccountsActions
+from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
+from page_objects.more.bank_accounts.bank_search_screen import BankSearchScreen
+from page_objects.more.categories.category_actions import CategoryActions
+from page_objects.more.categories.category_validator import CategoryValidator
 from page_objects.more.more_general import MoreGeneral
+from page_objects.more.subscription.purchase_screen import PurchaseScreen
+from page_objects.more.user_profile import UserProfile
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.timeline.transaction.transaction_actions import TransactionActions
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
 from page_objects.timeline.transaction.transaction_validator import TransactionValidator
+from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
 from page_objects.timeline.transfer.origination_destination_modal import TransferDestinationModal
 from page_objects.timeline.transfer.origination_destination_modal import TransferOriginationModal
 from page_objects.timeline.transfer.transfer_actions import TransferActions
 from page_objects.timeline.transfer.transfer_validator import TransferValidator
-from page_objects.more.user_profile import UserProfile
-from page_objects.authentication.marketing_dialog import MarketingDialog
-from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
 from page_objects.timeline.transfer_template.transfer_template_validator import TransferTemplateValidator
-from page_objects.budgets.budget_actions import BudgetActions
-from page_objects.budgets.budget_validator import BudgetValidator
-from page_objects.wallets.wallets_actions import WalletsActions
-from page_objects.wallets.wallet_validator import WalletValidator
-from page_objects.more.categories.category_actions import CategoryActions
-from page_objects.more.categories.category_validator import CategoryValidator
-from page_objects.more.bank_accounts.bank_accounts_actions import BankAccountsActions
-from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
-from page_objects.more.bank_accounts.bank_account_detail import BankAccountDetail
-from page_objects.more.subscription.purchase_screen import PurchaseScreen
-from page_objects.more.bank_accounts.bank_search_screen import BankSearchScreen
-from page_objects.more.advanced.advanced_general import AdvancedGeneral
-from page_objects.more.advanced.export.export_actions import ExportActions
 from page_objects.wallets.wallet_detail import WalletDetail
-from page_objects.budgets.budget_detail import BudgetDetail
+from page_objects.wallets.wallet_validator import WalletValidator
+from page_objects.wallets.wallets_actions import WalletsActions
 
 
 @pytest.mark.usefixtures('driver_with_reset')
@@ -122,7 +122,7 @@ class TestsWithReset:
         (s.email_login, s.password, "positive"),
         (s.email_not_existing, s.password, "existing_email"),
         (s.email_login, s.password_invalid, "invalid_password")
-        ])
+    ])
     def test_login_by_email(self, email, password, type_of_test):
         self.set_up()
         self.authentication_actions.login_by_email(email, password)
@@ -344,13 +344,16 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
-    @pytest.mark.parametrize("type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
-        # ("Test", "random", None, "oos", None, None, None, None, None)
-        i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer)
-    ])
-    def test_create_transfer(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    @pytest.mark.parametrize(
+        "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
+            # ("Test", "random", None, "oos", None, None, None, None, None)
+            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer)
+        ])
+    def test_create_transfer(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                             end_date, reminder):
         self.set_up()
-        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
+        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                                              end_date, reminder)
         attributes = self.transfer_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         if self.transfer_origination_modal.is_origination_modal_present() or self.transfer_destination_modal.is_destination_modal_present():
@@ -363,10 +366,12 @@ class TestsWithoutReset:
             # ("Test", None, None, None, None, None, None, None, None, None, None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_transaction)
         ])
-    def test_edit_transaction(self, type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
+    def test_edit_transaction(self, type_of_test, transaction_type, category, amount, wallet, start_date, note, label,
+                              photo, recurrence, end_date, reminder):
         self.set_up()
         self.transaction_actions.open_transaction()
-        self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label, photo,  recurrence, end_date, reminder)
+        self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label,
+                                                  photo, recurrence, end_date, reminder)
         attributes = self.transaction_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
@@ -386,10 +391,12 @@ class TestsWithoutReset:
             # ("Test", None, None, None, None, None, None, None, None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_transfer)
         ])
-    def test_edit_transfer(self, type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    def test_edit_transfer(self, type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date,
+                           note, recurrence, end_date, reminder):
         self.set_up()
         self.transfer_actions.open_transfer()
-        self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
+        self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date,
+                                            note, recurrence, end_date, reminder)
         attributes = self.transfer_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
@@ -413,10 +420,14 @@ class TestsWithoutReset:
         ])
     def test_change_transfer_to_transaction(self, type_of_test, outgoing_wallet, incoming_wallet, transaction_type):
         self.set_up()
-        self.transfer_actions.create_transfer(amount="random", outgoing_wallet=outgoing_wallet, incoming_wallet=incoming_wallet, start_date=None, note=None, recurrence=None, end_date=None,  reminder=None)
+        self.transfer_actions.create_transfer(amount="random", outgoing_wallet=outgoing_wallet,
+                                              incoming_wallet=incoming_wallet, start_date=None, note=None,
+                                              recurrence=None, end_date=None, reminder=None)
         self.transaction_actions.save_transaction()
         self.transfer_actions.open_transfer()
-        self.transfer_actions.edit_transfer(transaction_type=transaction_type, amount=None, outgoing_wallet=None, incoming_wallet=None, start_date=None, note=None, recurrence=None, end_date=None, reminder=None)
+        self.transfer_actions.edit_transfer(transaction_type=transaction_type, amount=None, outgoing_wallet=None,
+                                            incoming_wallet=None, start_date=None, note=None, recurrence=None,
+                                            end_date=None, reminder=None)
         attributes = self.transaction_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes)
@@ -442,9 +453,10 @@ class TestsWithoutReset:
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transaction_template)
         ])
     def test_create_transaction_template(self, type_of_test, transaction_type, category, amount, currency, wallet,
-                                          start_date, note, label, photo, recurrence, end_date, reminder):
+                                         start_date, note, label, photo, recurrence, end_date, reminder):
         self.set_up()
-        self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date, note, label,
+        self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date,
+                                                    note, label,
                                                     photo, recurrence, end_date, reminder)
         attributes = self.transaction_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
@@ -457,10 +469,11 @@ class TestsWithoutReset:
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_transaction_template)
         ])
     def test_edit_transaction_template(self, type_of_test, transaction_type, category, amount, wallet,
-                                          start_date, note, label, photo, recurrence, end_date, reminder):
+                                       start_date, note, label, photo, recurrence, end_date, reminder):
         self.set_up()
         self.transaction_actions.open_transaction_template()
-        self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder)
+        self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label,
+                                                  photo, recurrence, end_date, reminder)
         attributes = self.transaction_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes) is True
@@ -481,9 +494,11 @@ class TestsWithoutReset:
             # ("Test", "random", None, None, None, None, "random", None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_transfer_template)
         ])
-    def test_create_transfer_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    def test_create_transfer_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note,
+                                      recurrence, end_date, reminder):
         self.set_up()
-        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
+        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                                              end_date, reminder)
         attributes = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
@@ -494,21 +509,26 @@ class TestsWithoutReset:
             # ("Test", None, None, None, None, None, None, None, None, "random")
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_transfer_template)
         ])
-    def test_edit_transfer_template(self, type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    def test_edit_transfer_template(self, type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet,
+                                    start_date, note, recurrence, end_date, reminder):
         self.set_up()
         self.transfer_actions.open_transfer_template()
-        self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
+        self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date,
+                                            note, recurrence, end_date, reminder)
         attributes = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
 
     @pytest.mark.parametrize(
-        "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder, transaction_type", [
+        "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder, transaction_type",
+        [
             # ("Test", "random", None, None, None, None, "random", None, None)
-            i for i in vs.get_list_of_parameters_for_testing(vs.json_test_change_transfer_template_to_transaction_template)
+            i for i in
+            vs.get_list_of_parameters_for_testing(vs.json_test_change_transfer_template_to_transaction_template)
         ])
-    def test_change_transfer_template_to_transaction_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
-                                              end_date, reminder, transaction_type):
+    def test_change_transfer_template_to_transaction_template(self, type_of_test, amount, outgoing_wallet,
+                                                              incoming_wallet, start_date, note, recurrence,
+                                                              end_date, reminder, transaction_type):
         self.set_up()
         self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                                               end_date, reminder)
@@ -526,7 +546,8 @@ class TestsWithoutReset:
     def test_change_1_way_transfer_template_to_2_way(self):
         self.set_up()
         self.transfer_actions.create_transfer(amount="random", outgoing_wallet="oos", incoming_wallet="not_oos",
-                                              start_date=None, note=None, recurrence="random", end_date=None, reminder=None)
+                                              start_date=None, note=None, recurrence="random", end_date=None,
+                                              reminder=None)
         self.transaction_actions.save_transaction()
         self.transfer_actions.open_transfer_template()
         attributes_1way = self.transfer_template_validator.get_all_attributes()
@@ -542,9 +563,11 @@ class TestsWithoutReset:
             # ("Test", "random", "random", "random", None, None, None, "random", None, None, "random", None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_generate_transaction_from_template)
         ])
-    def test_generate_transaction_from_template(self, type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
+    def test_generate_transaction_from_template(self, type_of_test, transaction_type, category, amount, currency,
+                                                wallet, start_date, note, label, photo, recurrence, end_date, reminder):
         self.set_up()
-        self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder)
+        self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date,
+                                                    note, label, photo, recurrence, end_date, reminder)
         attributes = self.transaction_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
 
@@ -558,9 +581,11 @@ class TestsWithoutReset:
             # ("Test", "random", None, None, None, None, "random", None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_generate_transfer_from_template)
         ])
-    def test_generate_transfer_from_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    def test_generate_transfer_from_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date,
+                                             note, recurrence, end_date, reminder):
         self.set_up()
-        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder)
+        self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                                              end_date, reminder)
         attributes = self.transfer_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
 
@@ -588,7 +613,8 @@ class TestsWithoutReset:
             # ("Test", "random", "random", None, None, None, None, None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_budget)
         ])
-    def test_create_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+    def test_create_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date,
+                           end_date):
         self.set_up()
         self.budget_actions.create_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
         attributes = self.budget_validator.get_all_attributes()
@@ -600,7 +626,8 @@ class TestsWithoutReset:
             # ("Test", "random", "random", None, None, None, None, None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_budget)
         ])
-    def test_edit_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+    def test_edit_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date,
+                         end_date):
         self.set_up()
         self.budget_actions.edit_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
         attributes = self.budget_validator.get_all_attributes()
@@ -628,7 +655,7 @@ class TestsWithoutReset:
 
     @pytest.mark.parametrize(
         "type_of_test, name, amount, currency, categories", [
-        #     ("Test", None, "random", None, None)
+            #     ("Test", None, "random", None, None)
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_wallet)
         ])
     def test_edit_wallet(self, type_of_test, name, amount, currency, categories):
@@ -688,7 +715,8 @@ class TestsWithoutReset:
         self.more_general.go_to_bank_accounts()
         self.bank_accounts_actions.connect_bank_account(vs.fake_bank_simple)
         if PLATFORM == "Android":
-            visible_banks = self.ew.get_text_of_elements(self.bank_accounts_actions.bank_accounts_general.BANK_ITEM_NAME)
+            visible_banks = self.ew.get_text_of_elements(
+                self.bank_accounts_actions.bank_accounts_general.BANK_ITEM_NAME)
             assert vs.fake_bank_simple in visible_banks
         else:
             assert self.ew.is_element_present(vs.fake_bank_simple) is True
@@ -735,10 +763,3 @@ class TestsWithoutReset:
         self.ew.wait_and_tap_element(self.bank_account_detail.BACK_BUTTON, 5)
         self.bank_accounts_general.open_bank_account()
         assert v_input - len(self.ew.get_elements(self.bank_account_detail.EYE_ICON)) == number_of_changes
-
-
-
-
-
-
-

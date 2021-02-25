@@ -1,28 +1,29 @@
+from selenium.common.exceptions import NoSuchElementException
+
 from element_wrapper import ElementWrapper
 from page_objects.timeline.timeline_general import TimelineGeneral
-from page_objects.timeline.transaction.transaction_detail import TransactionDetail
 from page_objects.timeline.transaction.transaction_actions import TransactionActions
-from selenium.common.exceptions import NoSuchElementException
+from page_objects.timeline.transaction.transaction_detail import TransactionDetail
 
 
 class TransferActions():
-
     EXISTING_TRANSFER = "Existing Item: transfer-undefined"
     EXISTING_TRANSFER_TEMPLATES = ["Existing Item: transfer-every day", "Existing Item: transfer-every 2 days",
-                                      "Existing Item: transfer-every working day", "Existing Item: transfer-every week",
-                                      "Existing Item: transfer-every 2 weeks", "Existing Item: transfer-every 4 weeks",
-                                      "Existing Item: transfer-every month", "Existing Item: transfer-every 2 months",
-                                      "Existing Item: transfer-every 3 months", "Existing Item: transfer-every 6 months",
-                                      "Existing Item: transfer-every year"]
+                                   "Existing Item: transfer-every working day", "Existing Item: transfer-every week",
+                                   "Existing Item: transfer-every 2 weeks", "Existing Item: transfer-every 4 weeks",
+                                   "Existing Item: transfer-every month", "Existing Item: transfer-every 2 months",
+                                   "Existing Item: transfer-every 3 months", "Existing Item: transfer-every 6 months",
+                                   "Existing Item: transfer-every year"]
 
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
+        self.timeline_general = TimelineGeneral(self.driver)
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
-        self.timeline_general = TimelineGeneral(self.driver)
 
-    def create_transfer(self, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    def create_transfer(self, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date,
+                        reminder):
         self.timeline_general.open_transaction_create_screen()
         self.transaction_detail.set_type_to_transfer()
         self.transaction_detail.set_amount(amount)
@@ -47,7 +48,8 @@ class TransferActions():
         self.ew.wait_till_element_is_visible(self.timeline_general.ADD_TRANSACTION_BUTTON, 30)
         print(self.ew.is_element_present(self.EXISTING_TRANSFER))
         if self.ew.is_element_present(self.EXISTING_TRANSFER) is False:
-            self.create_transfer(amount="random", outgoing_wallet=None, incoming_wallet=None, start_date=None, note=None, recurrence=None, end_date=None, reminder=None)
+            self.create_transfer(amount="random", outgoing_wallet=None, incoming_wallet=None, start_date=None,
+                                 note=None, recurrence=None, end_date=None, reminder=None)
             self.transaction_actions.save_transaction()
             self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         self.ew.wait_and_tap_element(self.EXISTING_TRANSFER, 15)
@@ -78,7 +80,8 @@ class TransferActions():
                 if self.ew.is_element_present(i):
                     self.ew.tap_element(i)
 
-    def edit_transfer(self, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder):
+    def edit_transfer(self, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
+                      end_date, reminder):
         if transaction_type is not None:
             self.ew.tap_element(self.transaction_detail.CATEGORY_ICON)
             if transaction_type == "transfer":

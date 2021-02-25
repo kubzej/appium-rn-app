@@ -3,7 +3,6 @@ import os
 
 
 class FacebookAPI:
-
     app_id = os.environ.get("FACEBOOK_APP_ID")
     secret = os.environ.get("FACEBOOK_SECRET")
     token = facebook.GraphAPI().get_app_access_token(app_id, secret, True)

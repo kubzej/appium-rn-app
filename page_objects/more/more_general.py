@@ -1,9 +1,8 @@
-from element_wrapper import ElementWrapper
 from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class MoreGeneral:
-
     NAVIGATION_MORE = "Navigation More"
     MORE_HEADER = "More Header"
     LOGOUT_BUTTON = "Logout Button"

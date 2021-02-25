@@ -1,7 +1,7 @@
 from element_wrapper import ElementWrapper
 
-class WalletOverview:
 
+class WalletOverview:
     BACK_BUTTON = "Back Button"
     EDIT_BUTTON = "Edit Button"
 

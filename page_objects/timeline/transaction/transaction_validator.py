@@ -133,4 +133,3 @@ class TransactionValidator:
             .move_to(None, self.rs.all_resolutions[f"{resolution}"]["x"],
                      self.rs.all_resolutions[f"{resolution}"]["transaction_timeline_up_y_end"]) \
             .release().perform()
-

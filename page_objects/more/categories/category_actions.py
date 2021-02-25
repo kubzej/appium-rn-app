@@ -1,7 +1,7 @@
 from element_wrapper import ElementWrapper
+from page_objects.more.categories.categories_general import CategoriesGeneral
 from page_objects.more.categories.category_detail import CategoryDetail
 from page_objects.more.more_general import MoreGeneral
-from page_objects.more.categories.categories_general import CategoriesGeneral
 
 
 class CategoryActions:
@@ -61,8 +61,3 @@ class CategoryActions:
         all_visible_categories = self.ew.get_attributes(self.categories_general.CATEGORY_INFO, "content-desc")
         self.ew.tap_element(all_visible_categories[0])
         self.ew.tap_element(all_visible_categories[1])
-
-
-
-
-

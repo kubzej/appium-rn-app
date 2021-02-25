@@ -6,15 +6,14 @@ import time
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.common.exceptions import NoSuchElementException
 
+import validator as vr
 import variables as vs
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from resolutions import Resolutions
-import validator as vr
 
 
 class TransactionDetail:
-
     # OTHER
     BACK_BUTTON = "Back Button"
     if PLATFORM == "Android":
@@ -589,7 +588,6 @@ class TransactionDetail:
                         label = labels.index(i)
                         self.action.tap(self.ew.get_elements(self.LABEL_ITEM)[label]).perform()
 
-
     def create_label(self, name):
         if name == "random":
             name = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(0, 8)])
@@ -685,7 +683,8 @@ class TransactionDetail:
 
             if recurrence != "never" and PLATFORM == "Android":
                 recurrences_in_app = ["every day", "every 2 days", "every work day", "every week", "every 2 weeks",
-                                      "every 4 weeks", "every month", "every 2 months", "every 3 months", "every 6 months", "every year"]
+                                      "every 4 weeks", "every month", "every 2 months", "every 3 months",
+                                      "every 6 months", "every year"]
                 recurrence = vs.recurrences[recurrences_in_app.index(recurrence)]
             return recurrence
         except (AttributeError, NoSuchElementException):

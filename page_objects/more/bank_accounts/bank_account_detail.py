@@ -1,9 +1,9 @@
-from element_wrapper import ElementWrapper
 import random
+
+from element_wrapper import ElementWrapper
 
 
 class BankAccountDetail():
-
     CONSENT = "Consent"
     CONSENT_WEBVIEW = "Spendee"
     REMOVE_BUTTON = "Remove Button"
@@ -34,5 +34,3 @@ class BankAccountDetail():
             x = x + 1
             if x <= wallets:
                 i.click()
-
-

@@ -2,7 +2,6 @@ from element_wrapper import ElementWrapper
 
 
 class MarketingDialog:
-
     MARKETING_DIALOG = "Marketing Dialog"
     AGREE_BUTTON = "Agree"
     DISAGREE_BUTTON = "Don't Agree"

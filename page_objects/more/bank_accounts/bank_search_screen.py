@@ -1,9 +1,8 @@
-from element_wrapper import ElementWrapper
 from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class BankSearchScreen():
-
     SEARCH_INPUT = "Search Input"
     if PLATFORM == "Android":
         BANK_ITEM = "Bank Item"
@@ -28,5 +27,3 @@ class BankSearchScreen():
             if self.driver.is_keyboard_shown():
                 self.driver.hide_keyboard()
         self.ew.wait_and_tap_element(self.BANK_ITEM, 15)
-
-

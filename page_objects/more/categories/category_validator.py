@@ -1,19 +1,21 @@
+import time
+
 from appium.webdriver.common.touch_action import TouchAction
+
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
-from resolutions import Resolutions
-from page_objects.more.categories.category_detail import CategoryDetail
 from page_objects.more.categories.categories_general import CategoriesGeneral
-import time
+from page_objects.more.categories.category_detail import CategoryDetail
+from resolutions import Resolutions
 
 
 class CategoryValidator:
 
     def __init__(self, driver):
         self.driver = driver
-        self.category_detail = CategoryDetail(self.driver)
-        self.categories_general = CategoriesGeneral(self.driver)
         self.action = TouchAction(self.driver)
+        self.categories_general = CategoriesGeneral(self.driver)
+        self.category_detail = CategoryDetail(self.driver)
         self.ew = ElementWrapper(self.driver)
         self.rs = Resolutions(self.driver)
 

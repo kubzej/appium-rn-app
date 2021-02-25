@@ -1,18 +1,18 @@
-from element_wrapper import ElementWrapper
-from conftest import PLATFORM
-import string
+import datetime
 import random
-import time
+import string
+
+from appium.webdriver.common.touch_action import TouchAction
+
 import validator as vr
 import variables as vs
-from resolutions import Resolutions
-from appium.webdriver.common.touch_action import TouchAction
-import datetime
+from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
+from resolutions import Resolutions
 
 
 class BudgetDetail():
-
     # OTHER
     BUDGET_HEADER = "Budget Header"
     SAVE_BUDGET_BUTTON = "Save Budget Button"

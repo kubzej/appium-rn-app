@@ -1,11 +1,13 @@
+import time
+
 from appium.webdriver.common.touch_action import TouchAction
+
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.wallets.wallet_detail import WalletDetail
 from page_objects.wallets.wallet_overview import WalletOverview
 from page_objects.wallets.wallets_general import WalletsGeneral
 from resolutions import Resolutions
-import time
 
 
 class WalletValidator:

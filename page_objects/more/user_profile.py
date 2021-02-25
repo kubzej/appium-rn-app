@@ -4,7 +4,6 @@ from page_objects.more.more_general import MoreGeneral
 
 
 class UserProfile:
-
     # More About You
     CONTINUE_BUTTON = "Continue Button"
     MORE_ABOUT_YOU_HEADER = "More About You Header"
@@ -50,5 +49,3 @@ class UserProfile:
     def save_user_profile(self):
         self.ew.tap_element(self.BACK_BUTTON)
         self.ew.wait_till_element_is_visible(self.more_general.MORE_HEADER, 10)
-
-

@@ -1,9 +1,8 @@
-from element_wrapper import ElementWrapper
 from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class WalletsGeneral:
-
     NAVIGATION_WALLETS = "Navigation Wallets"
     WALLETS_ANIMATED_HEADER = "Wallets Animated Header"
     ADD_WALLET_BUTTON = "Add Wallet Button"

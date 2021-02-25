@@ -1,4 +1,3 @@
-
 def validate_input_against_output(input, output):
     if input != output:
         raise Exception(f"Validation of INPUT:{input} against OUTPUT:{output} failed")

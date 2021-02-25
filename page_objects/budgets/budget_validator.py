@@ -1,15 +1,16 @@
+import datetime
+import time
+
 from appium.webdriver.common.touch_action import TouchAction
 
+import variables as vs
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.budgets.budget_detail import BudgetDetail
+from page_objects.budgets.budget_overview import BudgetOverview
 from page_objects.budgets.budgets_general import BudgetsGeneral
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
-from page_objects.budgets.budget_overview import BudgetOverview
 from resolutions import Resolutions
-import time
-import variables as vs
-import datetime
 
 
 class BudgetValidator:

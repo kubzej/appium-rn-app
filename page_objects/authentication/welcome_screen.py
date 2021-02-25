@@ -5,7 +5,6 @@ from element_wrapper import ElementWrapper
 
 
 class WelcomeScreen:
-
     WELCOME_SCREEN = "Welcome Screen"
     SIGN_UP_WITH_EMAIL_BUTTON = "Sign Up With Email"
     LOGIN_WITH_EMAIL_BUTTON = "Login With Email"

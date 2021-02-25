@@ -1,17 +1,15 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException
-
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.authentication.email_password import EmailPassword
+from page_objects.authentication.facebook import Facebook
+from page_objects.authentication.google import Google
 from page_objects.authentication.marketing_dialog import MarketingDialog
 from page_objects.authentication.welcome_screen import WelcomeScreen
 from page_objects.more.more_general import MoreGeneral
 from page_objects.more.user_profile import UserProfile
 from page_objects.timeline.timeline_general import TimelineGeneral
-from page_objects.authentication.facebook import Facebook
-from page_objects.authentication.google import Google
 
 
 class AuthenticationActions:
@@ -65,6 +63,3 @@ class AuthenticationActions:
         self.more_general.go_to_more_section()
         self.ew.swipe_if_element_not_present(self.more_general.LOGOUT_BUTTON)
         self.ew.tap_element(self.more_general.LOGOUT_BUTTON)
-
-
-

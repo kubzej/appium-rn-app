@@ -1,11 +1,12 @@
+from selenium.common.exceptions import NoSuchElementException
+
 from element_wrapper import ElementWrapper
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
 from page_objects.timeline.transfer.origination_destination_modal import TransferDestinationModal
-from selenium.common.exceptions import NoSuchElementException
+
 
 class TransactionActions:
-
     EXISTING_TRANSACTION = "Existing Item: regular-undefined"
     EXISTING_TRANSACTION_TEMPLATES = ["Existing Item: regular-every day", "Existing Item: regular-every 2 days",
                                       "Existing Item: regular-every working day", "Existing Item: regular-every week",
@@ -17,11 +18,13 @@ class TransactionActions:
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
+        self.timeline_general = TimelineGeneral(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
         self.transfer_destination_modal = TransferDestinationModal(self.driver)
-        self.timeline_general = TimelineGeneral(self.driver)
 
-    def create_transaction(self, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
+
+    def create_transaction(self, transaction_type, category, amount, currency, wallet, start_date, note, label, photo,
+                           recurrence, end_date, reminder):
         self.timeline_general.open_transaction_create_screen()
         if transaction_type is not None:
             self.transaction_detail.set_type_of_transaction(transaction_type)
@@ -63,7 +66,9 @@ class TransactionActions:
         self.ew.wait_till_element_is_visible(self.timeline_general.OVERVIEW_BUTTON, 30)
         self.timeline_general.go_to_timeline()
         if self.ew.is_element_present(self.EXISTING_TRANSACTION) is False:
-            self.create_transaction(transaction_type="random", category="random", amount="random", currency=None, wallet=None, start_date=None, note=None, label=None, photo=None, recurrence=None, end_date=None, reminder=None)
+            self.create_transaction(transaction_type="random", category="random", amount="random", currency=None,
+                                    wallet=None, start_date=None, note=None, label=None, photo=None, recurrence=None,
+                                    end_date=None, reminder=None)
             self.save_transaction()
             self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         self.ew.wait_and_tap_element(self.EXISTING_TRANSACTION, 15)
@@ -78,8 +83,10 @@ class TransactionActions:
                     self.ew.tap_element(i)
                     break
                 elif i == "Existing Item: regular-every year":
-                    self.create_transaction(transaction_type="random", category="random", amount="random", currency=None,
-                                            wallet=None, start_date=None, note=None, label=None, photo=None, recurrence="random", end_date=None, reminder=None)
+                    self.create_transaction(transaction_type="random", category="random", amount="random",
+                                            currency=None,
+                                            wallet=None, start_date=None, note=None, label=None, photo=None,
+                                            recurrence="random", end_date=None, reminder=None)
                     self.save_transaction()
                     self.timeline_general.open_scheduled_section()
                     for i in self.EXISTING_TRANSACTION_TEMPLATES:
@@ -95,7 +102,8 @@ class TransactionActions:
                 if self.ew.is_element_present(i):
                     self.ew.tap_element(i)
 
-    def edit_transaction(self, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder):
+    def edit_transaction(self, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence,
+                         end_date, reminder):
         if transaction_type is not None:
             self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
             if transaction_type == "transfer":

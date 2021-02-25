@@ -3,7 +3,6 @@ from page_objects.timeline.transaction.transaction_detail import TransactionDeta
 
 
 class TransferOriginationModal():
-
     ORIGINATION_MODAL = "Transfer Origination"
     DESTINATION_MODAL = "Transfer Destination"
     CONFIRM_BUTTON = "Confirm Button"

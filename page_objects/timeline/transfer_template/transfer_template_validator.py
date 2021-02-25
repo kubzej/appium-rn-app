@@ -7,11 +7,10 @@ from element_wrapper import ElementWrapper
 from page_objects.timeline.filters.period_filter import PeriodFilter
 from page_objects.timeline.timeline_general import TimelineGeneral
 from page_objects.timeline.transaction.transaction_detail import TransactionDetail
+from page_objects.timeline.transaction.transaction_validator import TransactionValidator
 from page_objects.timeline.transaction_template.transaction_template_validator import TransactionTemplateValidator
 from page_objects.timeline.transfer.transfer_validator import TransferValidator
-from page_objects.timeline.transaction.transaction_validator import TransactionValidator
 from resolutions import Resolutions
-
 
 
 class TransferTemplateValidator:
@@ -24,9 +23,9 @@ class TransferTemplateValidator:
         self.rs = Resolutions(self.driver)
         self.timeline_general = TimelineGeneral(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
-        self.transfer_validator = TransferValidator(self.driver)
-        self.transaction_validator = TransactionValidator(self.driver)
         self.transaction_template_validator = TransactionTemplateValidator(self.driver)
+        self.transaction_validator = TransactionValidator(self.driver)
+        self.transfer_validator = TransferValidator(self.driver)
 
     def get_all_attributes(self):
         all_attributes = {"amount": self.transaction_detail.get_amount(),
@@ -66,8 +65,8 @@ class TransferTemplateValidator:
 
         if is_two_way_transfer:
             _, _, amount, wallet_amount, outgoing_wallet, incoming_wallet, _, _, _, recurrence, _, _ = (str(x) for x in
-                                                                                               transfer_locator.split(
-                                                                                                   '/'))
+                                                                                                        transfer_locator.split(
+                                                                                                            '/'))
             s_out = transfer_locator.split("/")
             s_in = transfer_locator.split("/")
 
@@ -85,7 +84,9 @@ class TransferTemplateValidator:
             print(f'OUTGOING LOCATOR: {transfer_outgoing_locator}')
             print(f'INCOMING LOCATOR: {transfer_incoming_locator}')
 
-        self.transaction_validator.prepare_timeline(attributes['start_date'], self.transaction_template_validator.adjust_recurrence(attributes['recurrence']))
+        self.transaction_validator.prepare_timeline(attributes['start_date'],
+                                                    self.transaction_template_validator.adjust_recurrence(
+                                                        attributes['recurrence']))
 
         android_timeout = time.time() + 60
         ios_timeout = time.time() + 5

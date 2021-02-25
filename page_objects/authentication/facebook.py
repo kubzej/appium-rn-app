@@ -1,9 +1,8 @@
-from element_wrapper import ElementWrapper
 from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class Facebook():
-
     if PLATFORM == "Android":
         FACEBOOK_HEADER = "facebook"
         COOKIES_ACCEPT_BUTTON = "Accept All Accept All"

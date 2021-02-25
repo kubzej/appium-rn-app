@@ -1,9 +1,8 @@
-from element_wrapper import ElementWrapper
 from conftest import PLATFORM
+from element_wrapper import ElementWrapper
 
 
 class BankAccountsGeneral():
-
     CONNECT_BANK_ACCOUNT_BUTTON = "Connect Bank Account Button"
     BACK_BUTTON = "Back Button"
 
@@ -19,5 +18,3 @@ class BankAccountsGeneral():
 
     def open_bank_account(self):
         self.ew.wait_and_tap_element(self.BANK_ITEM, 15)
-
-

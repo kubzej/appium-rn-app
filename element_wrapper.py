@@ -1,10 +1,12 @@
 import logging
 import time
+
 from appium.webdriver.common.mobileby import MobileBy
 from appium.webdriver.common.touch_action import TouchAction
+from selenium.common.exceptions import NoSuchElementException
+
 from conftest import PLATFORM
 from resolutions import Resolutions
-from selenium.common.exceptions import NoSuchElementException
 
 
 class ElementWrapper:

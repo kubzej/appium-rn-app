@@ -1,10 +1,11 @@
+from appium.webdriver.common.touch_action import TouchAction
+
+from conftest import PLATFORM
 from element_wrapper import ElementWrapper
-from page_objects.wallets.wallets_general import WalletsGeneral
 from page_objects.wallets.wallet_detail import WalletDetail
 from page_objects.wallets.wallet_overview import WalletOverview
-from conftest import PLATFORM
+from page_objects.wallets.wallets_general import WalletsGeneral
 from resolutions import Resolutions
-from appium.webdriver.common.touch_action import TouchAction
 
 
 class WalletsActions:
@@ -99,5 +100,3 @@ class WalletsActions:
     def invite_user_to_wallet(self):
         self.open_wallet()
         self.wallet_detail.invite_user()
-
-

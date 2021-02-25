@@ -1,22 +1,22 @@
-from element_wrapper import ElementWrapper
-from page_objects.budgets.budgets_general import BudgetsGeneral
-from page_objects.budgets.budget_detail import BudgetDetail
-from page_objects.budgets.budget_overview import BudgetOverview
-from conftest import PLATFORM
-from resolutions import Resolutions
 from appium.webdriver.common.touch_action import TouchAction
 
+from conftest import PLATFORM
+from element_wrapper import ElementWrapper
+from page_objects.budgets.budget_detail import BudgetDetail
+from page_objects.budgets.budget_overview import BudgetOverview
+from page_objects.budgets.budgets_general import BudgetsGeneral
+from resolutions import Resolutions
 
 
 class BudgetActions():
     def __init__(self, driver):
         self.driver = driver
-        self.ew = ElementWrapper(self.driver)
+        self.action = TouchAction(self.driver)
         self.budgets_general = BudgetsGeneral(self.driver)
         self.budget_detail = BudgetDetail(self.driver)
         self.budget_overview = BudgetOverview(self.driver)
+        self.ew = ElementWrapper(self.driver)
         self.rs = Resolutions(self.driver)
-        self.action = TouchAction(self.driver)
 
     def create_budget(self, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
         self.budgets_general.go_to_budgets()
@@ -77,7 +77,7 @@ class BudgetActions():
         self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 5)
         if self.ew.is_element_present(self.budgets_general.BUDGET_ITEM) is False:
             self.create_budget(name="random", amount="random", currency=None, wallets=None, categories=None,
-                                              recurrence=None, start_date=None, end_date=None)
+                               recurrence=None, start_date=None, end_date=None)
             self.save_budget()
             self.budgets_general.go_to_budgets()
         self.ew.wait_and_tap_element(self.budgets_general.BUDGET_ITEM, 5)
@@ -116,5 +116,3 @@ class BudgetActions():
         self.ew.wait_and_tap_element(self.budget_detail.TRASH_ICON, 10)
         self.ew.wait_and_tap_element(self.budget_detail.DELETE_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 10)
-
-

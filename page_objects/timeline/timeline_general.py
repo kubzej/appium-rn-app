@@ -2,7 +2,6 @@ from element_wrapper import ElementWrapper
 
 
 class TimelineGeneral:
-
     ADD_TRANSACTION_BUTTON = "Add Transaction Button"
     OVERVIEW_BUTTON = "Overview Button"
     NAVIGATION_TIMELINE = "Navigation Timeline"

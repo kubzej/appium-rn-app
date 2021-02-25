@@ -1,13 +1,14 @@
-from element_wrapper import ElementWrapper
 import random
-import variables as vs
-from resolutions import Resolutions
-from conftest import PLATFORM
+
 from appium.webdriver.common.touch_action import TouchAction
+
+import variables as vs
+from conftest import PLATFORM
+from element_wrapper import ElementWrapper
+from resolutions import Resolutions
 
 
 class ExportActions:
-
     BACKDROP = "Backdrop"
 
     # WALLETS

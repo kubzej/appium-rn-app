@@ -3,7 +3,6 @@ from page_objects.more.advanced.export.export_general import ExportGeneral
 
 
 class AdvancedGeneral:
-
     ADVANCED_HEADER = "Advanced Header"
     EXPORT = "Export"
 

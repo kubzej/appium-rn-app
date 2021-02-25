@@ -59,8 +59,8 @@ class TransferValidator:
 
         if is_two_way_transfer:
             _, _, amount, wallet_amount, outgoing_wallet, incoming_wallet, _, _, _, recurrence, _, _ = (str(x) for x in
-                                                                                               transfer_locator.split(
-                                                                                                   '/'))
+                                                                                                        transfer_locator.split(
+                                                                                                            '/'))
             s_out = transfer_locator.split("/")
             s_in = transfer_locator.split("/")
 

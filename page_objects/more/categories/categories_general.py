@@ -1,9 +1,9 @@
-from element_wrapper import ElementWrapper
 import random
+
+from element_wrapper import ElementWrapper
 
 
 class CategoriesGeneral():
-
     ADD_CATEGORY_BUTTON = "Add Category Button"
     MERGE_CATEGORIES_BUTTON = "Merge Categories Button"
     CATEGORY_ITEM = "Category Item"
