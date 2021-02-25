@@ -108,6 +108,9 @@ class BudgetDetail():
         self.transaction_detail = TransactionDetail(self.driver)
 
     def set_name(self, name):
+        """ Insert name into name input
+        :param name: str
+        """
         if name == "random":
             name = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(0, 8)])
 
@@ -117,6 +120,9 @@ class BudgetDetail():
         vr.validate_input_against_output(name, self.get_name())
 
     def get_name(self):
+        """ Gets name of budget from name input
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.NAME_INPUT, 5)
 
         if PLATFORM == "Android":
@@ -125,6 +131,9 @@ class BudgetDetail():
             return self.ew.get_text_of_element(self.SELECTED_NAME_IOS)
 
     def set_amount(self, amount):
+        """ Insert amount into amount input
+        :param amount: str
+        """
         if amount == "random":
             amount = str(random.randint(1, 99))
 
@@ -138,6 +147,9 @@ class BudgetDetail():
         vr.validate_input_against_output(amount, self.get_amount())
 
     def get_amount(self):
+        """ Gets amount of budget from amount input
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.AMOUNT_INPUT, 5)
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.SELECTED_AMOUNT)
@@ -145,6 +157,9 @@ class BudgetDetail():
             return self.ew.get_attribute(self.AMOUNT_INPUT, "name")
 
     def set_currency(self, currency):
+        """ Selects currency of budget
+        :param currency: str
+        """
         if currency == "random":
             currency = random.choice(vs.accessible_currencies)
 
@@ -155,6 +170,9 @@ class BudgetDetail():
         vr.validate_input_against_output(currency, self.get_currency())
 
     def get_currency(self):
+        """ Gets selected currency of budget
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.CURRENCY, 5)
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.SELECTED_CURRENCY)
@@ -162,6 +180,9 @@ class BudgetDetail():
             return self.ew.get_attribute(self.SELECTED_CURRENCY, "name")
 
     def set_wallets(self, wallets):
+        """ Selects wallets from wallets picker
+        :param wallets: str or int
+        """
 
         self.ew.wait_and_tap_element(self.WALLETS, 5)
         self.ew.wait_till_element_is_visible(self.WALLET_PICKER, 5)
@@ -221,6 +242,9 @@ class BudgetDetail():
         vr.validate_input_against_output(v_input, self.get_wallets())
 
     def count_wallets(self):
+        """ Gets all visible wallets, currently selected wallets and not_selected wallets from wallets picker
+        :return: tuple of lists
+        """
         if PLATFORM == "Android":
             all_visible_wallets = self.ew.get_attributes(self.WALLET_ITEM, "content-desc")
         else:
@@ -236,6 +260,9 @@ class BudgetDetail():
         return (all_visible_wallets, selected_wallets, non_selected_wallets)
 
     def get_wallets(self):
+        """ Gets selected wallets (number, name or 'All Wallets')
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.WALLETS, 5)
 
         if PLATFORM == "Android":
@@ -247,6 +274,9 @@ class BudgetDetail():
         return result
 
     def set_categories(self, categories):
+        """ Selects requested number of categories
+        :param categories: str
+        """
 
         self.ew.wait_and_tap_element(self.CATEGORIES, 5)
         self.ew.wait_till_element_is_visible(self.HEADER_BUDGET_FOR, 5)
@@ -288,6 +318,9 @@ class BudgetDetail():
         vr.validate_input_against_output(v_input, self.get_categories())
 
     def count_categories(self):
+        """ Gets all visible, currently selected and non selected categories inside category picker
+        :return: tuple of lists
+        """
         if PLATFORM == "Android":
             all_visible_categories = self.ew.get_attributes(self.CATEGORY_ITEM, "content-desc")
         else:
@@ -307,6 +340,9 @@ class BudgetDetail():
         return (all_visible_categories, selected_categories, non_selected_categories)
 
     def get_categories(self):
+        """ Gets number of selected categories
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.CATEGORIES, 5)
 
         if PLATFORM == "Android":
@@ -319,6 +355,9 @@ class BudgetDetail():
             return self.ew.get_attribute(self.CATEGORIES, "name")
 
     def set_recurrence(self, recurrence):
+        """ Selects requested recurrence of budget
+        :param recurrence: str
+        """
         self.ew.wait_and_tap_element(self.RECURRENCE, 5)
         self.ew.wait_till_element_is_visible(self.RECURRENCE_PICKER, 5)
 
@@ -351,6 +390,9 @@ class BudgetDetail():
         vr.validate_input_against_output(recurrence, self.get_recurrence())
 
     def get_recurrence(self):
+        """ Gets selected recurrence
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.RECURRENCE, 5)
         if PLATFORM == "Android":
             recurrence = self.ew.get_text_of_element(self.SELECTED_RECURRENCE_ANDROID)
@@ -361,6 +403,9 @@ class BudgetDetail():
         return recurrence
 
     def set_start_date(self, start_date):
+        """ Selects start date of budget
+        :param start_date: str
+        """
         if start_date == "random":
             start_date = str(
                 datetime.date(int(datetime.date.today().year), random.randint(1, 12), random.randint(1, 28)))
@@ -380,6 +425,9 @@ class BudgetDetail():
         vr.validate_input_against_output(start_date, self.transaction_detail.get_date("start"))
 
     def set_end_date(self, end_date):
+        """ Selects end date of budget
+        :param end_date: str
+        """
         start_date = self.transaction_detail.get_date("start")
         year_start, month_start, day_start = (int(x) for x in start_date.split('-'))
         start_date = datetime.date(year_start, month_start, day_start)

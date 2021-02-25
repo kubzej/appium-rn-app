@@ -21,9 +21,13 @@ class PeriodFilter:
         self.ew = ElementWrapper(self.driver)
 
     def open_period_filter(self):
+        """Opens period filter picker"""
         self.ew.wait_and_tap_element(self.PERIOD_FILTER_BUTTON, 20)
 
     def set_filter_period(self, period):
+        """ Selects requested period on picker
+        :param period: str
+        """
         self.open_period_filter()
         self.ew.wait_till_element_is_visible(period, 10)
         if PLATFORM == "Android":

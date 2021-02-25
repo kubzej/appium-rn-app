@@ -16,15 +16,21 @@ class BankAccountDetail():
         self.ew = ElementWrapper(self.driver)
 
     def open_consent(self):
+        """Opens consent screen"""
         self.ew.wait_and_tap_element(self.CONSENT, 15)
         self.ew.wait_till_element_is_not_visible(self.CONSENT, 10)
 
     def disconnect_bank_account(self):
+        """Removes bank connection"""
         self.ew.wait_and_tap_element(self.REMOVE_BUTTON, 15)
         self.ew.wait_and_tap_element(self.REMOVE_CONFIRM, 5)
         self.ew.wait_till_element_is_not_visible(self.REMOVE_CONFIRM, 10)
 
     def hide_bank_wallets(self, wallets):
+        """ Hides requested number of bank wallets of 1 bank connection
+        :param wallets: int
+        :return:
+        """
         if wallets == "random":
             wallets = random.randint(1, 3)
 

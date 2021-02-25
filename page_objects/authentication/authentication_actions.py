@@ -27,6 +27,10 @@ class AuthenticationActions:
         self.welcome_screen = WelcomeScreen(self.driver)
 
     def register_by_email(self, email, password):
+        """ Goes through registration process by email and password
+        :param email: str
+        :param password: str
+        """
         self.welcome_screen.open_sign_up_email_screen()
         self.email_password.set_email(email)
         self.email_password.set_password(password)
@@ -36,6 +40,10 @@ class AuthenticationActions:
             self.marketing_dialog.agree_with_ios_notifications()
 
     def login_by_facebook(self, email, password):
+        """ Goes through sign in process by Facebook
+        :param email: str
+        :param password: str
+        """
         self.welcome_screen.open_login_by_facebook()
         self.ew.wait_till_element_is_visible(self.facebook.FACEBOOK_HEADER, 30)
         if self.ew.is_element_present(self.facebook.COOKIES_ACCEPT_BUTTON):
@@ -48,6 +56,10 @@ class AuthenticationActions:
             self.marketing_dialog.agree_with_ios_notifications()
 
     def login_by_email(self, email, password):
+        """ Goes through login process by email and password
+        :param email: str
+        :param password: str
+        """
         self.welcome_screen.open_login_by_email_screen()
         self.email_password.set_email(email)
         self.email_password.set_password(password)
@@ -56,10 +68,12 @@ class AuthenticationActions:
             self.marketing_dialog.agree_with_ios_notifications()
 
     def login_by_google(self):
+        """Goes through sign in process by Google, when user was previously logged on device"""
         self.welcome_screen.open_login_by_google()
         self.ew.wait_and_tap_element(self.google.EMAIL_TO_SELECT, 20)
 
     def logout(self):
+        """Logouts user from the application"""
         self.more_general.go_to_more_section()
         self.ew.swipe_if_element_not_present(self.more_general.LOGOUT_BUTTON)
         self.ew.tap_element(self.more_general.LOGOUT_BUTTON)

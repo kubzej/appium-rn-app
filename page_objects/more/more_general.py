@@ -36,27 +36,35 @@ class MoreGeneral:
         self.ew = ElementWrapper(self.driver)
 
     def go_to_more_section(self):
+        """Opens More section"""
         self.ew.wait_and_tap_element(self.NAVIGATION_MORE, 60)
         self.ew.wait_till_element_is_visible(self.MORE_HEADER, 10)
 
     def go_to_user_profile(self):
+        """Opens User Profile section"""
         self.ew.wait_and_tap_element(self.USER_PROFILE, 10)
         self.ew.wait_till_element_is_visible(self.PROFILE_HEADER, 10)
 
     def get_full_name_on_more_section(self):
+        """ Gets full name visible inside More section
+        :return: str
+        """
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.USER_NAME_ANDROID)
         else:
             return self.ew.get_attribute(self.USER_PROFILE, "name")
 
     def go_to_categories(self):
+        """Opens Categories section"""
         self.ew.wait_and_tap_element(self.CATEGORIES, 10)
         self.ew.wait_till_element_is_visible(self.CATEGORIES_HEADER, 10)
 
     def go_to_bank_accounts(self):
+        """Opens Bank Accounts section"""
         self.ew.wait_and_tap_element(self.BANK_ACCOUNTS, 10)
         self.ew.wait_till_element_is_visible(self.BANK_ACCOUNTS_HEADER, 10)
 
     def go_to_advanced(self):
+        """Opens Advanced section"""
         self.ew.wait_and_tap_element(self.ADVANCED, 10)
         self.ew.wait_till_element_is_visible(self.ADVANCED_HEADER, 10)

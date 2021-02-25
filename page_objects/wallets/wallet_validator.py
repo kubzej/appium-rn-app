@@ -22,6 +22,9 @@ class WalletValidator:
         self.wallets_general = WalletsGeneral(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of wallet
+        :return: dict
+        """
         all_attributes = {"name": self.wallet_detail.get_name(),
                           "amount": self.wallet_detail.get_amount(),
                           "currency": self.wallet_detail.get_currency(),
@@ -31,6 +34,10 @@ class WalletValidator:
         return all_attributes
 
     def is_wallet_existing(self, attributes):
+        """ Checking if wallet is visible inside Wallets section
+        :param attributes: dict
+        :return: bool
+        """
         wallet_locator = f"cash/" \
                          f"{attributes['name']}/" \
                          f"{attributes['amount']}/" \
@@ -66,6 +73,10 @@ class WalletValidator:
         return True
 
     def adjust_currency(self, currency):
+        """ Adjusting currency for wallet locator
+        :param currency: str
+        :return:
+        """
         if currency == "USD":
             return [currency, "undefined"]
         else:

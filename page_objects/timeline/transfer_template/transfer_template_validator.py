@@ -28,6 +28,9 @@ class TransferTemplateValidator:
         self.transfer_validator = TransferValidator(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of transfer template
+        :return: dict
+        """
         all_attributes = {"amount": self.transaction_detail.get_amount(),
                           "currency": self.transaction_detail.get_currency(),
                           "wallet_amount": self.transaction_detail.get_wallet_amount(),
@@ -43,6 +46,10 @@ class TransferTemplateValidator:
         return all_attributes
 
     def is_transfer_template_on_timeline(self, attributes):
+        """ Checking if transfer template is visible inside Scheduled section
+        :param attributes: dict
+        :return: bool
+        """
         if "Out of Spendee" not in [attributes['outgoing_wallet'], attributes['incoming_wallet']]:
             is_two_way_transfer = True
         else:

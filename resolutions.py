@@ -58,6 +58,9 @@ class Resolutions:
         self.driver = driver
 
     def get_resolution(self):
+        """ Gets width and height of phone screen
+        :return: str
+        """
         d = self.driver.get_window_size()
         res = f"{d['width']}_{d['height']}"
         if res in self.all_resolutions:

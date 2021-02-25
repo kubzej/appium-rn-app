@@ -34,6 +34,9 @@ class ExportActions:
         self.rs = Resolutions(self.driver)
 
     def set_period(self, period):
+        """ Selects period from period picker
+        :param period: str
+        """
 
         self.ew.wait_and_tap_element(self.PERIOD, 10)
         self.ew.wait_till_element_is_visible(self.PERIOD_SIZE_PICKER, 10)
@@ -65,6 +68,9 @@ class ExportActions:
             self.driver.execute_script("mobile: tap", {"x": 100, "y": 50, "element": self.ew.get_element(period)})
 
     def set_format(self, format):
+        """ Selects format of file from format picker
+        :param format: str
+        """
 
         self.ew.wait_and_tap_element(self.FORMAT, 10)
         self.ew.wait_till_element_is_visible(self.FORMAT_PICKER, 10)

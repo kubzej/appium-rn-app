@@ -13,9 +13,13 @@ class TransferOriginationModal():
         self.transaction_detail = TransactionDetail(self.driver)
 
     def create_as_new_transaction(self):
+        """Clicking on button 'Create as new transaction'"""
         self.ew.tap_element(self.CONFIRM_BUTTON)
 
     def is_origination_modal_present(self):
+        """ Check if modal is present
+        :return: bool
+        """
         self.ew.wait_till_element_is_not_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 10)
         if self.ew.is_element_present(self.ORIGINATION_MODAL):
             return True
@@ -26,6 +30,9 @@ class TransferOriginationModal():
 class TransferDestinationModal(TransferOriginationModal):
 
     def is_destination_modal_present(self):
+        """ Check if modal is present
+        :return: bool
+        """
         self.ew.wait_till_element_is_not_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 10)
         if self.ew.is_element_present(self.DESTINATION_MODAL):
             return True

@@ -22,6 +22,9 @@ class BankAccountsActions():
         self.ew = ElementWrapper(self.driver)
 
     def connect_bank_account(self, bank):
+        """ Connects bank account
+        :param bank: str
+        """
         self.ew.wait_and_tap_element(self.bank_accounts_general.CONNECT_BANK_ACCOUNT_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.bank_search_screen.SEARCH_INPUT, 30)
         self.bank_search_screen.search_bank_by_search_box(bank)

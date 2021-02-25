@@ -15,14 +15,17 @@ class TimelineGeneral:
         self.ew = ElementWrapper(self.driver)
 
     def go_to_timeline(self):
+        """Opens Timeline section"""
         self.ew.wait_and_tap_element(self.NAVIGATION_TIMELINE, 30)
         self.ew.wait_till_element_is_visible(self.ADD_TRANSACTION_BUTTON, 10)
 
     def open_transaction_create_screen(self):
+        """Opens transaction create screen"""
         self.ew.wait_and_tap_element(self.NAVIGATION_TIMELINE, 30)
         self.ew.wait_and_tap_element(self.ADD_TRANSACTION_BUTTON, 30)
         self.ew.wait_till_element_is_visible(self.TRANSACTION_CATEGORY_PICKER, 15)
 
     def open_scheduled_section(self):
+        """Opens Scheduled section"""
         self.ew.wait_and_tap_element(self.SCHEDULED, 30)
         self.ew.wait_till_element_is_visible(self.SCHEDULED_SCREEN, 5)

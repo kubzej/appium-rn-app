@@ -15,9 +15,15 @@ class EmailPassword:
         self.ew = ElementWrapper(self.driver)
 
     def set_email(self, email):
+        """ Inserts email of user into email input
+        :param email: str
+        """
         self.ew.wait_till_element_is_visible(self.EMAIL_INPUT, 5)
         self.ew.get_element(self.EMAIL_INPUT).send_keys(email)
 
     def set_password(self, password):
+        """ Inserts password of user into password input
+        :param password: str
+        """
         self.ew.wait_till_element_is_visible(self.PASSWORD_INPUT, 5)
         self.ew.get_element(self.PASSWORD_INPUT).send_keys(password)

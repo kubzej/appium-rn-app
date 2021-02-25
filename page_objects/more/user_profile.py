@@ -28,24 +28,36 @@ class UserProfile:
         self.more_general = MoreGeneral(self.driver)
 
     def set_first_name(self, first_name):
+        """ Inserts first name into name input
+        :param first_name: str
+        """
         self.ew.wait_till_element_is_visible(self.FIRST_NAME, 5)
         self.ew.get_element(self.FIRST_NAME).send_keys(first_name)
 
     def set_last_name(self, last_name):
+        """ Inserts last name into name input
+        :param last_name: str
+        """
         self.ew.wait_till_element_is_visible(self.LAST_NAME, 5)
         self.ew.get_element(self.LAST_NAME).send_keys(last_name)
 
     def clear_first_name(self):
+        """Deletes first name"""
         self.ew.get_element(self.FIRST_NAME).clear()
 
     def clear_last_name(self):
+        """Deletes last name"""
         self.ew.get_element(self.LAST_NAME).clear()
 
     def get_full_name(self):
+        """ Gets first and last name as full name
+        :return: str
+        """
         first_name = self.ew.get_text_of_element(self.FIRST_NAME)
         last_name = self.ew.get_text_of_element(self.LAST_NAME)
         return f"{first_name} {last_name}"
 
     def save_user_profile(self):
+        """Goes back to More section"""
         self.ew.tap_element(self.BACK_BUTTON)
         self.ew.wait_till_element_is_visible(self.more_general.MORE_HEADER, 10)

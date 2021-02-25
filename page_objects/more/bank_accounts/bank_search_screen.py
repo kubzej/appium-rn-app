@@ -16,6 +16,9 @@ class BankSearchScreen():
         self.ew = ElementWrapper(self.driver)
 
     def search_bank_by_search_box(self, bank):
+        """ Searches for a bank via search textbox
+        :param bank: str
+        """
         if bank == "random":
             bank = "Fake Bank Simple"
 

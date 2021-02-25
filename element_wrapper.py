@@ -18,6 +18,10 @@ class ElementWrapper:
         self.rs = Resolutions(self.driver)
 
     def get_by_type(self, locator):
+        """
+        :param locator: str
+        :return: selecting method
+        """
         if str(locator).startswith("//") or str(locator).startswith("(//"):
             return MobileBy.XPATH
         elif str(locator).startswith("com.android"):
@@ -32,11 +36,19 @@ class ElementWrapper:
             return MobileBy.ACCESSIBILITY_ID
 
     def get_element(self, locator):
+        """
+        :param locator: str
+        :return: element
+        """
         by_type = self.get_by_type(locator)
         element = self.driver.find_element(by_type, locator)
         return element
 
     def get_elements(self, locator):
+        """
+        :param locator: str
+        :return: list of elements
+        """
         by_type = self.get_by_type(locator)
         element_list = self.driver.find_elements(by_type, locator)
         if len(element_list) < 1 or element_list is None:
@@ -44,6 +56,10 @@ class ElementWrapper:
         return element_list
 
     def is_element_present(self, locator):
+        """ Checking if element is present in DOM
+        :param locator: str
+        :return: bool
+        """
         try:
             element = self.get_element(locator)
             if element is not None:
@@ -56,6 +72,10 @@ class ElementWrapper:
             return False
 
     def are_elements_present(self, locator):
+        """Checking if elements are present in DOM
+        :param locator: str
+        :return: bool
+        """
         element_list = self.get_elements(locator)
         if len(element_list) > 0:
             self.log.info(f"element_list {locator} found")
@@ -65,6 +85,10 @@ class ElementWrapper:
             return False
 
     def get_text_of_element(self, locator):
+        """ Getting text of selected element
+        :param locator: str
+        :return: str
+        """
         try:
             element = self.get_element(locator)
             return element.text
@@ -72,6 +96,10 @@ class ElementWrapper:
             self.log.info(f"element {locator} NOT found, can't get the text of element")
 
     def get_text_of_elements(self, locator):
+        """ Getting texts of selected elements
+        :param locator: str
+        :return: list of str
+        """
         try:
             element_list = self.get_elements(locator)
             texts = []
@@ -82,6 +110,10 @@ class ElementWrapper:
             self.log.info(f"elements {locator} NOT found, can't get the text of elements")
 
     def wait_till_element_is_visible(self, locator, timeout_seconds):
+        """ Methods waits till element is visible in DOM
+        :param locator: str
+        :param timeout_seconds: int
+        """
         timeout = time.time() + timeout_seconds
         visibility_of_element = self.is_element_present(locator)
         while visibility_of_element is False:
@@ -91,6 +123,10 @@ class ElementWrapper:
                 raise NoSuchElementException(f"element {locator} NOT found")
 
     def wait_till_element_is_not_visible(self, locator, timeout_seconds):
+        """ Method waits till element is no more visible in DOM
+        :param locator: str
+        :param timeout_seconds: int
+        """
         timeout = time.time() + timeout_seconds
         visibility_of_element = self.is_element_present(locator)
         while visibility_of_element is True:
@@ -100,17 +136,34 @@ class ElementWrapper:
                 raise NoSuchElementException(f"element {locator} dont't disappeared")
 
     def tap_element(self, locator):
+        """ Method taps on element
+        :param locator: str
+        """
         self.action.tap(self.get_element(locator)).perform()
 
     def wait_and_tap_element(self, locator, timeout_seconds):
+        """ Method waits till element is visible in DOM and taps on it
+        :param locator: str
+        :param timeout_seconds: int
+        """
         self.wait_till_element_is_visible(locator, timeout_seconds)
         self.action.tap(self.get_element(locator)).perform()
 
     def get_attribute(self, locator, attribute):
+        """ Getting attribute of selected element
+        :param locator: str
+        :param attribute:  str
+        :return: str
+        """
         byType = self.get_by_type(locator)
         return self.driver.find_element(byType, locator).get_attribute(attribute)
 
     def get_attributes(self, locator, attribute):
+        """ Getting attributes of selected element
+        :param locator: str
+        :param attribute:  str
+        :return: list of str
+        """
         by_type = self.get_by_type(locator)
         element_list = self.driver.find_elements(by_type, locator)
         attributes = []
@@ -119,6 +172,9 @@ class ElementWrapper:
         return attributes
 
     def swipe_if_element_not_present(self, locator):
+        """ If the element is not present in DOM, it will swipe to it
+        :param locator: str
+        """
         element_present = self.is_element_present(locator)
         timeout = time.time() + 30
         while element_present is False:

@@ -71,6 +71,9 @@ class WalletDetail:
         self.ew = ElementWrapper(self.driver)
 
     def set_name(self, name):
+        """ Inserting name into name input
+        :param name: str
+        """
         if name == "random":
             name = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(0, 8)])
 
@@ -83,6 +86,9 @@ class WalletDetail:
         vr.validate_input_against_output(name, self.get_name())
 
     def get_name(self):
+        """ Getting name from name input
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.NAME_INPUT, 5)
 
         if PLATFORM == "Android":
@@ -91,6 +97,9 @@ class WalletDetail:
             return self.ew.get_text_of_element(self.SELECTED_NAME_IOS)
 
     def set_amount(self, amount):
+        """ Inserting amount into balance input
+        :param amount: str
+        """
         if amount == "random":
             amount = str(random.randint(-99, 99))
         elif amount == "random_positive":
@@ -109,6 +118,9 @@ class WalletDetail:
         vr.validate_input_against_output(amount, self.get_amount())
 
     def get_amount(self):
+        """ Getting amount from balance input
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.AMOUNT_INPUT, 5)
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.SELECTED_AMOUNT)
@@ -116,6 +128,9 @@ class WalletDetail:
             return self.ew.get_attribute(self.AMOUNT_INPUT, "name")
 
     def set_currency(self, currency):
+        """ Selecting currency of wallet
+        :param currency: str
+        """
         if currency == "random":
             currency = random.choice(vs.accessible_currencies)
 
@@ -126,6 +141,9 @@ class WalletDetail:
         vr.validate_input_against_output(currency, self.get_currency())
 
     def get_currency(self):
+        """ Getting selected currency of wallet
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.CURRENCY, 5)
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.SELECTED_CURRENCY)
@@ -133,6 +151,9 @@ class WalletDetail:
             return self.ew.get_attribute(self.SELECTED_CURRENCY, "name")
 
     def set_categories(self, categories):
+        """ Selecting visible categories of wallet
+        :param categories: "random" or int
+        """
         if PLATFORM == "Android":
             v_input = self.get_categories()
 
@@ -153,6 +174,9 @@ class WalletDetail:
             vr.validate_input_against_output(int(v_input) - categories, int(self.get_categories()))
 
     def get_categories(self):
+        """ Getting number of visible categories of wallet
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.CATEGORIES, 5)
         time.sleep(1)
 
@@ -165,4 +189,5 @@ class WalletDetail:
             return self.ew.get_attribute(self.CATEGORIES, "name")
 
     def invite_user(self):
+        """Opening invitation screen"""
         self.ew.wait_and_tap_element(self.SHARE_WALLET_BUTTON, 15)

@@ -24,6 +24,9 @@ class TransferValidator:
         self.transaction_validator = TransactionValidator(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of transfer
+        :return: dict
+        """
         all_attributes = {"amount": self.transaction_detail.get_amount(),
                           "currency": self.transaction_detail.get_currency(),
                           "wallet_amount": self.transaction_detail.get_wallet_amount(),
@@ -37,6 +40,10 @@ class TransferValidator:
         return all_attributes
 
     def is_transfer_on_timeline(self, attributes):
+        """ Checking if transfer is visible inside Timeline or Scheduled section
+        :param attributes: dict
+        :return: bool
+        """
         if "Out of Spendee" not in [attributes['outgoing_wallet'], attributes['incoming_wallet']]:
             is_two_way_transfer = True
         else:
@@ -104,6 +111,14 @@ class TransferValidator:
         return True
 
     def adjust_amounts(self, amount, wallet_amount, currency, outgoing_wallet, incoming_wallet):
+        """ Adjusting amounts for transfer locator
+        :param amount: str
+        :param wallet_amount: str
+        :param currency: str
+        :param outgoing_wallet: str
+        :param incoming_wallet: str
+        :return: list of str
+        """
         if "Out of Spendee" in [outgoing_wallet, incoming_wallet]:
             oos_present = True
         else:
@@ -122,6 +137,11 @@ class TransferValidator:
         return ["{:.2f}".format(float(amount_final)), wallet_amount_final]
 
     def adjust_wallets(self, outgoing_wallet, incoming_wallet):
+        """ Adjusting wallets for transfer locator
+        :param outgoing_wallet:
+        :param incoming_wallet:
+        :return: list of str
+        """
         p = [outgoing_wallet, incoming_wallet]
         wallets = [i if i != "Out of Spendee" else "undefined" for i in p]
 

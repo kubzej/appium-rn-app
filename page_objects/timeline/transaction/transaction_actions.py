@@ -25,6 +25,21 @@ class TransactionActions:
 
     def create_transaction(self, transaction_type, category, amount, currency, wallet, start_date, note, label, photo,
                            recurrence, end_date, reminder):
+        """
+        Opens create transaction screen and sets requested attributes
+        :param transaction_type: str or None
+        :param category: str or None
+        :param amount: str or None
+        :param currency: str or None
+        :param wallet: str or None
+        :param start_date: str or None
+        :param note: str or None
+        :param label: str or None
+        :param photo: bool
+        :param recurrence: str or None
+        :param end_date: str or None
+        :param reminder: str or None
+        """
         self.timeline_general.open_transaction_create_screen()
         if transaction_type is not None:
             self.transaction_detail.set_type_of_transaction(transaction_type)
@@ -57,12 +72,13 @@ class TransactionActions:
         self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
 
     def save_transaction(self):
+        """Clicks on save transaction button"""
         self.ew.wait_and_tap_element(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
         if self.transfer_destination_modal.is_destination_modal_present() or self.transfer_destination_modal.is_origination_modal_present():
             self.transfer_destination_modal.create_as_new_transaction()
 
     def open_transaction(self):
-
+        """Opens existing transaction, if there is no one, it creates transaction"""
         self.ew.wait_till_element_is_visible(self.timeline_general.OVERVIEW_BUTTON, 30)
         self.timeline_general.go_to_timeline()
         if self.ew.is_element_present(self.EXISTING_TRANSACTION) is False:
@@ -75,6 +91,7 @@ class TransactionActions:
         self.ew.wait_till_element_is_visible(self.transaction_detail.TRANSACTION_HEADER_TITLE, 15)
 
     def open_transaction_template(self):
+        """Opens existing transaction template, if there is no one, it creates transaction"""
         self.ew.wait_till_element_is_visible(self.timeline_general.TRANSACTION_SECTION, 60)
         if self.ew.is_element_present(self.timeline_general.SCHEDULED) is True:
             self.timeline_general.open_scheduled_section()
@@ -104,6 +121,19 @@ class TransactionActions:
 
     def edit_transaction(self, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence,
                          end_date, reminder):
+        """Edits requested attributes on transaction detail screen
+        :param transaction_type: str or None
+        :param category: str or None
+        :param amount: str or None
+        :param wallet: str or None
+        :param start_date: str or None
+        :param note: str or None
+        :param label: str or None
+        :param photo: bool
+        :param recurrence: str or None
+        :param end_date: str or None
+        :param reminder: str or None
+        """
         if transaction_type is not None:
             self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
             if transaction_type == "transfer":
@@ -150,5 +180,6 @@ class TransactionActions:
         self.ew.wait_till_element_is_visible(self.transaction_detail.SAVE_TRANSACTION_BUTTON, 5)
 
     def delete_transaction(self):
+        """Deletes transaction from transaction detail screen"""
         self.ew.wait_and_tap_element(self.transaction_detail.TRASH_ICON, 10)
         self.ew.wait_and_tap_element(self.transaction_detail.DELETE_BUTTON, 10)

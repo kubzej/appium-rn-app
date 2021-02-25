@@ -14,10 +14,12 @@ class CategoryActions:
         self.more_general = MoreGeneral(self.driver)
 
     def open_category_create_screen(self):
+        """Opens category create screen"""
         self.ew.wait_and_tap_element(self.categories_general.ADD_CATEGORY_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.category_detail.CATEGORY_HEADER, 10)
 
     def open_category(self):
+        """Opens detail of category"""
         if self.ew.is_element_present(self.categories_general.CATEGORY_ITEM) is False:
             self.create_category(type_of_category="random", name="random", color="random", image="random")
             self.save_category()
@@ -26,6 +28,13 @@ class CategoryActions:
         self.ew.wait_till_element_is_visible(self.category_detail.CATEGORY_HEADER, 10)
 
     def create_category(self, type_of_category, name, color, image):
+        """ Sets requested parameters of category inside category detail
+        :param type_of_category: str
+        :param name: str
+        :param color: str
+        :param image: str or int
+        :return:
+        """
         self.categories_general.set_type(type_of_category)
         self.open_category_create_screen()
         self.category_detail.set_name(name)
@@ -33,15 +42,23 @@ class CategoryActions:
         self.category_detail.set_image(image)
 
     def save_category(self):
+        """Clicks on save category button"""
         self.ew.wait_and_tap_element(self.category_detail.SAVE_CATEGORY_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.more_general.CATEGORIES_HEADER, 10)
 
     def confirm_merge(self):
+        """Confirms merge of categories"""
         self.ew.wait_and_tap_element(self.categories_general.MERGE_CATEGORIES_BUTTON, 10)
         self.ew.wait_and_tap_element(self.categories_general.CONFIRM_MERGE_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.more_general.CATEGORIES_HEADER, 10)
 
     def edit_category(self, type_of_category, name, color, image):
+        """ Sets requested attributes inside category detail
+        :param type_of_category: str or None
+        :param name: str or None
+        :param color: str or None
+        :param image: str or int or None
+        """
         self.categories_general.set_type(type_of_category)
         self.open_category()
         if name is not None:
@@ -52,11 +69,13 @@ class CategoryActions:
             self.category_detail.set_image(image)
 
     def delete_category(self):
+        """Deletes category"""
         self.ew.wait_and_tap_element(self.category_detail.TRASH_ICON, 10)
         self.ew.wait_and_tap_element(self.category_detail.DELETE_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.more_general.CATEGORIES_HEADER, 10)
 
     def merge_categories(self):
+        """Selects 2 visible categories"""
         self.ew.wait_and_tap_element(self.categories_general.MERGE_CATEGORIES_BUTTON, 10)
         all_visible_categories = self.ew.get_attributes(self.categories_general.CATEGORY_INFO, "content-desc")
         self.ew.tap_element(all_visible_categories[0])

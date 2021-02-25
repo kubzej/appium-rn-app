@@ -19,6 +19,9 @@ class CategoriesGeneral():
         self.ew = ElementWrapper(self.driver)
 
     def set_type(self, type_of_category):
+        """ Selects income or expense set of categories
+        :param type_of_category: str
+        """
         if type_of_category == "random":
             type_of_category = random.choice([self.EXPENSES, self.INCOME])
         elif type_of_category == "expenses":

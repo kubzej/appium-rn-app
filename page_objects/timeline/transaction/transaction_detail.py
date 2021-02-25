@@ -162,6 +162,9 @@ class TransactionDetail:
         self.rs = Resolutions(self.driver)
 
     def set_type_of_transaction(self, transaction_type):
+        """ Selects type of transaction
+        :param transaction_type: str
+        """
         if transaction_type == "random":
             transaction_type = random.choice([self.EXPENSES_PICKER, self.INCOME_PICKER])
         elif transaction_type == "opposite":
@@ -187,6 +190,9 @@ class TransactionDetail:
         vr.validate_input_against_output(v_input, self.get_type_of_transaction())
 
     def get_type_of_transaction(self):
+        """ Gets type of transaction
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.SELECTED_TYPE, 5)
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.SELECTED_TYPE)
@@ -194,6 +200,7 @@ class TransactionDetail:
             return self.ew.get_attribute(self.SELECTED_TYPE, "name")
 
     def set_type_to_transfer(self):
+        """Will select type as transfer"""
         self.ew.wait_and_tap_element(self.TRANSFER_PICKER, 5)
 
         self.ew.wait_till_element_is_not_visible(self.TRANSFER_PICKER, 5)
@@ -203,9 +210,13 @@ class TransactionDetail:
             vr.validate_input_against_output("Transfer", self.get_category())
 
     def open_type_picker(self):
-        self.ew.wait_and_tap_element(self.CATEGORY_ICON, 5)
+        """Opens type picker"""
+        self.ew.wait_and_tap_element(self.CATEGORY_ICON, 10)
 
     def set_category(self, category):
+        """ Selects category from category picker
+        :param category: str
+        """
         self.ew.wait_till_element_is_visible(self.TRANSACTION_PICKER, 5)
         if category == "random":
             category_visible = False
@@ -225,6 +236,9 @@ class TransactionDetail:
             vr.validate_input_against_output(category, self.get_category())
 
     def get_category(self):
+        """ Gets selected category
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.TRANSACTION_HEADER_TITLE, 5)
         if PLATFORM == "Android":
             category = self.ew.get_text_of_element(self.TRANSACTION_HEADER_TITLE).split(" ")[1:]
@@ -233,6 +247,9 @@ class TransactionDetail:
         return ' '.join(category)
 
     def set_amount(self, amount):
+        """ Insert amount into amount input
+        :param amount: str
+        """
         if amount == "random":
             amount = str(random.randint(1, 99))
 
@@ -248,6 +265,9 @@ class TransactionDetail:
         vr.validate_input_against_output(''.join(str(i) for i in amount_list), v_output)
 
     def get_amount(self):
+        """ Gets amount from amount picker
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.AMOUNT_INPUT, 5)
         if PLATFORM == "Android":
             return self.ew.get_text_of_element(self.AMOUNT_INPUT)
@@ -258,6 +278,9 @@ class TransactionDetail:
             return amount
 
     def get_wallet_amount(self):
+        """ Gets wallet's amount when category has different currency
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.AMOUNT_INPUT, 5)
         try:
             if PLATFORM == "Android":
@@ -268,6 +291,9 @@ class TransactionDetail:
             return None
 
     def set_currency(self, currency):
+        """ Selects currency
+        :param currency: str
+        """
         if currency == "random":
             currency = random.choice(vs.accessible_currencies)
         self.ew.wait_and_tap_element(self.CURRENCY, 5)
@@ -277,6 +303,9 @@ class TransactionDetail:
         vr.validate_input_against_output(currency, self.get_currency())
 
     def get_currency(self):
+        """ Gets selected currency
+        :return: str
+        """
         self.ew.wait_till_element_is_visible(self.CURRENCY, 5)
         if PLATFORM == "Android":
             return self.ew.get_attribute(self.SELECTED_CURRENCY_ANDROID, "content-desc")
@@ -287,6 +316,10 @@ class TransactionDetail:
         self.ew.wait_and_tap_element(self.CONFIRM_BUTTON, 10)
 
     def set_wallet(self, wallet, type_of_wallet):
+        """ Selects requested wallet from requested wallet picker
+        :param wallet: str
+        :param type_of_wallet: str
+        """
         selected_wallet = self.get_wallet(type_of_wallet)
         if type_of_wallet == "transaction":
             self.ew.wait_and_tap_element(self.WALLET, 5)
@@ -346,6 +379,10 @@ class TransactionDetail:
         vr.validate_input_against_output(v_input, self.get_wallet(type_of_wallet))
 
     def get_wallet(self, type_of_wallet):
+        """ Gets wallet name from requested wallet picker
+        :param type_of_wallet: str
+        :return: str
+        """
 
         if PLATFORM == "Android":
             if type_of_wallet == "transaction":
@@ -369,12 +406,18 @@ class TransactionDetail:
                 return self.ew.get_attribute(self.INCOMING_WALLET, "name")
 
     def get_wallets_in_picker(self):
+        """ Gets wallets names visible inside picker
+        :return: list of str
+        """
         if PLATFORM == "Android":
             return self.ew.get_attributes(self.WALLET_ITEM, "content-desc")
         else:
             return self.ew.get_attributes(self.WALLET_ITEM, "label")
 
     def set_start_date(self, start_date):
+        """ Sets start date
+        :param start_date: str
+        """
         if start_date == "random":
             start_date = str(
                 datetime.date(int(datetime.date.today().year), random.randint(1, 12), random.randint(1, 28)))
@@ -397,6 +440,9 @@ class TransactionDetail:
         vr.validate_input_against_output(start_date, self.get_date("start"))
 
     def set_calendar_month_year(self, date):
+        """ Swipes to requested month and year inside date picker
+        :param date: str
+        """
         year, month, day = (int(x) for x in date.split('-'))
         if PLATFORM == "Android":
             month_in_app = vs.calendar_months[self.ew.get_text_of_element(self.ACTUAL_MONTH_YEAR).split(" ")[0]]
@@ -451,6 +497,9 @@ class TransactionDetail:
                                                 "toY": self.rs.all_resolutions[f"{res}"]["calendar_picker_down_y_end"]})
 
     def set_calendar_day(self, date):
+        """ Selects requested day inside date picker
+        :param date: str
+        """
         if PLATFORM == "Android":
             year, month, day = (int(x) for x in date.split('-'))
             if date == str(datetime.date.today()):
@@ -464,6 +513,9 @@ class TransactionDetail:
             self.ew.wait_and_tap_element(f"native.calendar.SELECT_DATE_SLOT-{date}", 10)
 
     def get_date(self, type_of_date):
+        """ Gets selected date
+        :param type_of_date: str
+        """
         is_transaction = self.ew.is_element_present(self.TRANSACTION_HEADER_TITLE)
         if type_of_date == "start":
             date_ios = self.START_DATE
@@ -520,6 +572,9 @@ class TransactionDetail:
         return date
 
     def set_note(self, note):
+        """ Insert note into note input
+        :param note: str
+        """
         if note == "random":
             note = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(0, 8)])
         self.ew.wait_till_element_is_visible(self.NOTE_ELEMENT, 5)
@@ -530,6 +585,9 @@ class TransactionDetail:
         vr.validate_input_against_output(note, self.get_note())
 
     def get_note(self):
+        """ Gets note from note picker
+        :return: str
+        """
         try:
             if PLATFORM == "Android":
                 note = self.ew.get_text_of_element(self.NOTE)
@@ -542,6 +600,9 @@ class TransactionDetail:
             return None
 
     def set_label(self, label):
+        """ Selects label from visible labels, if there is no requested label, it creates one
+        :param label: str
+        """
         self.ew.wait_till_element_is_visible(self.LABELS, 5)
         if label == "random":
             if self.ew.is_element_present(self.LABEL_ITEM):
@@ -574,6 +635,9 @@ class TransactionDetail:
                     self.create_label(label)
 
     def fast_select_labels(self, number):
+        """ Selects more labels on transaction detail screen
+        :param number: int
+        """
         self.ew.wait_till_element_is_visible(self.LABELS, 5)
         if self.ew.is_element_present(self.LABEL_ITEM):
             labels = self.get_labels(False)
@@ -589,6 +653,10 @@ class TransactionDetail:
                         self.action.tap(self.ew.get_elements(self.LABEL_ITEM)[label]).perform()
 
     def create_label(self, name):
+        """ Creates labels on label picker
+        :param name: str
+        :return:
+        """
         if name == "random":
             name = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(0, 8)])
 
@@ -601,6 +669,10 @@ class TransactionDetail:
         vr.validate_input_against_more_outputs(name, self.get_labels(True))
 
     def get_labels(self, only_selected):
+        """ Returns all visible or only selected labels
+        :param only_selected: bool
+        :return: list of str
+        """
         self.ew.wait_till_element_is_visible(self.LABELS, 5)
         if PLATFORM == "Android":
             if only_selected:
@@ -620,6 +692,7 @@ class TransactionDetail:
         return labels
 
     def set_photo(self):
+        """Selects photo"""
         self.ew.wait_and_tap_element(self.PHOTO, 5)
         self.ew.wait_and_tap_element(self.CHOOSE_PHOTO, 5)
         if self.ew.is_element_present(self.ALLOW_PHOTO_ACCESS_ANDROID):
@@ -631,6 +704,9 @@ class TransactionDetail:
         vr.validate_input_against_output(True, self.get_photo())
 
     def get_photo(self):
+        """ Returns true if photo is selected
+        :return: bool
+        """
         try:
             self.ew.wait_till_element_is_visible(self.PHOTO, 5)
             self.ew.wait_till_element_is_visible(self.SELECTED_PHOTO, 3)
@@ -639,6 +715,9 @@ class TransactionDetail:
         return self.ew.is_element_present(self.SELECTED_PHOTO)
 
     def set_recurrence(self, recurrence):
+        """ Swipes to and selects requested recurrence
+        :param recurrence: string
+        """
         if recurrence == "random":
             recurrence = random.choice(vs.recurrences)
 
@@ -671,6 +750,9 @@ class TransactionDetail:
         vr.validate_input_against_output(recurrence, self.get_recurrence())
 
     def get_recurrence(self):
+        """ Gets selected recurrence
+        :return: str
+        """
         try:
             self.ew.wait_till_element_is_visible(self.RECURRENCE, 5)
             if PLATFORM == "Android":
@@ -691,6 +773,9 @@ class TransactionDetail:
             return None
 
     def set_end_date(self, end_date):
+        """ Selects end date from date picker
+        :param end_date: str
+        """
         start_date = self.get_date("start")
         year_start, month_start, day_start = (int(x) for x in start_date.split('-'))
         start_date = datetime.date(year_start, month_start, day_start)
@@ -715,6 +800,9 @@ class TransactionDetail:
         vr.validate_input_against_output(end_date, self.get_date("end"))
 
     def set_reminder(self, reminder):
+        """ Swipes to and selects requested reminder
+        :param reminder: str
+        """
         if reminder == "random":
             reminder = random.choice(vs.reminders)
 
@@ -747,6 +835,9 @@ class TransactionDetail:
         vr.validate_input_against_output(reminder, self.get_reminder())
 
     def get_reminder(self):
+        """ Gets selected reminder
+        :return: str
+        """
         try:
             self.ew.wait_till_element_is_visible(self.REMINDER, 5)
             if PLATFORM == "Android":

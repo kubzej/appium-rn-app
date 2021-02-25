@@ -17,4 +17,5 @@ class BankAccountsGeneral():
         self.ew = ElementWrapper(self.driver)
 
     def open_bank_account(self):
+        """Opens bank account settings"""
         self.ew.wait_and_tap_element(self.BANK_ITEM, 15)

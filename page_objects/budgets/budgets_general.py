@@ -14,5 +14,6 @@ class BudgetsGeneral():
         self.ew = ElementWrapper(self.driver)
 
     def go_to_budgets(self):
+        """Opens Budgets section"""
         self.ew.wait_and_tap_element(self.NAVIGATION_BUDGETS, 30)
         self.ew.wait_till_element_is_visible(self.BUDGETS_HEADER, 10)

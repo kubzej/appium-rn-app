@@ -23,6 +23,9 @@ class TransactionValidator:
         self.transaction_detail = TransactionDetail(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of transaction
+        :return: dict
+        """
         all_attributes = {"category": self.transaction_detail.get_category(),
                           "amount": self.transaction_detail.get_amount(),
                           "wallet_amount": self.transaction_detail.get_wallet_amount(),
@@ -38,6 +41,10 @@ class TransactionValidator:
         return all_attributes
 
     def is_transaction_on_timeline(self, attributes):
+        """ Checking if transaction is visible inside Timeline or Scheduled section
+        :param attributes: dict
+        :return: bool
+        """
         transaction_locator = f"regular/" \
                               f"{attributes['category']}/" \
                               f"{self.adjust_amounts(attributes['amount'], attributes['wallet_amount'])[0]}/" \
@@ -73,6 +80,11 @@ class TransactionValidator:
         return True
 
     def adjust_amounts(self, amount, wallet_amount):
+        """ Adjusting amount for transaction locator
+        :param amount: str
+        :param wallet_amount: str
+        :return: list of str
+        """
         if wallet_amount is None:
             amount_final = amount
             wallet_amount_final = "undefined"
@@ -86,11 +98,19 @@ class TransactionValidator:
         return ["{:.2f}".format(float(amount_final)), wallet_amount_final]
 
     def adjust_note(self, note):
+        """ Adjusting note for transaction locator
+        :param note: str
+        :return: str
+        """
         if note is None:
             note = ""
         return note
 
     def adjust_labels(self, labels):
+        """ Adjusting labels for transaction locator
+        :param labels: list of str
+        :return: list of str
+        """
         if len(labels) > 0:
             labels_final = ""
             for i in labels:
@@ -102,12 +122,20 @@ class TransactionValidator:
         return labels_final
 
     def adjust_reminder(self, reminder):
+        """ Adjusting reminder for transaction locator
+        :param reminder: str
+        :return: str
+        """
         if reminder is None or reminder == "Never":
             return "undefined"
         else:
             return reminder
 
     def prepare_timeline(self, start_date, recurrence):
+        """ Prepares timeline for transaction search. Opening scheduled screen if transaction has future date.
+        :param start_date: str
+        :param recurrence: str
+        """
         self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         year, month, day = (int(x) for x in start_date.split('-'))
         date = datetime.date(year, month, day)
@@ -128,6 +156,10 @@ class TransactionValidator:
             self.period_filter.set_filter_period(self.period_filter.ALL_TIME_PERIOD)
 
     def swipe_android(self, resolution):
+        """ Looks into past by swiping on android phones
+        :param resolution: str
+        :return:
+        """
         self.action.long_press(None, self.rs.all_resolutions[f"{resolution}"]["x"],
                                self.rs.all_resolutions[f"{resolution}"]["transaction_timeline_up_y_start"]) \
             .move_to(None, self.rs.all_resolutions[f"{resolution}"]["x"],

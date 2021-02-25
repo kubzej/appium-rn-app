@@ -24,6 +24,9 @@ class TransactionTemplateValidator:
         self.transaction_validator = TransactionValidator(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of transaction template
+        :return: dict
+        """
         all_attributes = {"category": self.transaction_detail.get_category(),
                           "amount": self.transaction_detail.get_amount(),
                           "wallet_amount": self.transaction_detail.get_wallet_amount(),
@@ -41,6 +44,10 @@ class TransactionTemplateValidator:
         return all_attributes
 
     def is_transaction_template_on_timeline(self, attributes):
+        """ Checking if template is visible inside Scheduled section
+        :param attributes: dict
+        :return: bool
+        """
         transaction_locator = f"regular/" \
                               f"{attributes['category']}/" \
                               f"{self.transaction_validator.adjust_amounts(attributes['amount'], attributes['wallet_amount'])[0]}/" \
@@ -77,12 +84,20 @@ class TransactionTemplateValidator:
         return True
 
     def adjust_recurrence(self, recurrence):
+        """ Adjusting recurrence for template locator
+        :param recurrence: str
+        :return: str
+        """
         if recurrence is None or recurrence == "never":
             return "undefined"
         else:
             return recurrence
 
     def adjust_end_date(self, end_date):
+        """ Adjusting end date for template locator
+        :param end_date: str
+        :return: str
+        """
         if end_date is None:
             return "undefined"
         else:

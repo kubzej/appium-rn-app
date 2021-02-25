@@ -19,12 +19,20 @@ class BudgetActions():
         self.rs = Resolutions(self.driver)
 
     def create_budget(self, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+        """ Opens budget create screen and sets requested attributes of budget
+        :param name: str
+        :param amount: str
+        :param currency: str or None
+        :param wallets: str or int or None
+        :param categories: str or int or None
+        :param recurrence: str or None
+        :param start_date: str or None
+        :param end_date: str or None
+        """
         self.budgets_general.go_to_budgets()
         self.open_budget_create_screen()
-        if name is not None:
-            self.budget_detail.set_name(name)
-        if amount is not None:
-            self.budget_detail.set_amount(amount)
+        self.budget_detail.set_name(name)
+        self.budget_detail.set_amount(amount)
         if currency is not None:
             self.budget_detail.set_currency(currency)
         if wallets is not None:
@@ -39,12 +47,14 @@ class BudgetActions():
             self.budget_detail.set_end_date(end_date)
 
     def save_budget(self):
+        """Clicks on save budget button"""
         if self.driver.is_keyboard_shown():
             self.driver.hide_keyboard()
         self.ew.wait_and_tap_element(self.budget_detail.SAVE_BUDGET_BUTTON, 10)
         self.ew.wait_till_element_is_not_visible(self.budget_detail.SAVE_BUDGET_BUTTON, 10)
 
     def open_budget_create_screen(self):
+        """Opens budget create screen, if button is not visible it swipes to it"""
         self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 10)
         if PLATFORM == "Android":
             add_button_visible = self.ew.is_element_present(self.budgets_general.ADD_BUDGET_BUTTON)
@@ -73,6 +83,7 @@ class BudgetActions():
         self.ew.wait_till_element_is_visible(self.budget_detail.BUDGET_HEADER, 10)
 
     def open_budget(self):
+        """Opens existing budget detail screen, if there is no budget created yet, it creates one"""
         self.budgets_general.go_to_budgets()
         self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 5)
         if self.ew.is_element_present(self.budgets_general.BUDGET_ITEM) is False:
@@ -85,6 +96,16 @@ class BudgetActions():
         self.ew.wait_till_element_is_visible(self.budget_detail.BUDGET_HEADER, 5)
 
     def edit_budget(self, name, amount, currency, wallets, categories, recurrence, start_date, end_date):
+        """ Opens budget edit screen and sets requested attributes of budget
+        :param name: str or None
+        :param amount: str or None
+        :param currency: str or None
+        :param wallets: str or int or None
+        :param categories:  str or int or None
+        :param recurrence: str or None
+        :param start_date: str or None
+        :param end_date: str or None
+        """
         self.open_budget()
         if name is not None:
             if PLATFORM == "Android":
@@ -113,6 +134,7 @@ class BudgetActions():
             self.budget_detail.set_end_date(end_date)
 
     def delete_budget(self):
+        """Deletes existing budget from budget detail screen"""
         self.ew.wait_and_tap_element(self.budget_detail.TRASH_ICON, 10)
         self.ew.wait_and_tap_element(self.budget_detail.DELETE_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.budgets_general.BUDGETS_HEADER, 10)

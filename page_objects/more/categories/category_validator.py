@@ -20,6 +20,9 @@ class CategoryValidator:
         self.rs = Resolutions(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of category
+        :return: dict
+        """
         all_attributes = {"name": self.category_detail.get_name(),
                           "color": self.category_detail.get_color(),
                           "image": self.category_detail.get_image()
@@ -28,6 +31,10 @@ class CategoryValidator:
         return all_attributes
 
     def is_category_existing(self, attributes):
+        """ Checking if category is visible in category list
+        :param attributes: dict
+        :return: bool
+        """
         category_locator = f"{attributes['name']}/" \
                            f"{attributes['color']}/" \
                            f"{attributes['image']}"
@@ -56,6 +63,9 @@ class CategoryValidator:
         return True
 
     def get_selected_categories(self):
+        """ Gets all values of selected categories in merge process
+        :return: tuple
+        """
         categories = self.ew.get_attributes(self.categories_general.CATEGORY_INFO, "content-desc")
         name1, color1, image1 = categories[0].split('/')
         attributes1 = {

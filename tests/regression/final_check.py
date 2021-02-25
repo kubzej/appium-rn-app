@@ -74,6 +74,7 @@ class TestsWithReset:
         (s.email_login, s.password, "existing email")
     ])
     def test_register_by_email(self, email, password, type_of_test):
+        """Happy and negative test cases of registration by email and password"""
         self.set_up()
         self.authentication_actions.register_by_email(email, password)
 
@@ -99,6 +100,7 @@ class TestsWithReset:
             assert self.ew.is_element_present(self.email_password.VALIDATION_ERROR_WARNING) is True
 
     def test_register_by_facebook(self):
+        """Happy test case of registration via Facebook OAuth"""
         self.set_up()
 
         user = self.facebook_api.create_test_user()
@@ -124,6 +126,7 @@ class TestsWithReset:
         (s.email_login, s.password_invalid, "invalid_password")
     ])
     def test_login_by_email(self, email, password, type_of_test):
+        """Happy and negative test cases of login by email and password"""
         self.set_up()
         self.authentication_actions.login_by_email(email, password)
 
@@ -142,6 +145,7 @@ class TestsWithReset:
             assert self.ew.is_element_present(self.email_password.INVALID_CREDENTIALS_DIALOG) is True
 
     def test_login_by_facebook(self):
+        """Happy test case of login by Facebook OAuth"""
         self.set_up()
         self.authentication_actions.login_by_facebook(s.email_login_facebook, s.password)
         try:
@@ -152,6 +156,7 @@ class TestsWithReset:
         assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
 
     def test_login_by_google(self):
+        """Happy test case of login by Google OAuth"""
         self.set_up()
         self.authentication_actions.login_by_google()
         try:
@@ -162,6 +167,7 @@ class TestsWithReset:
         assert self.ew.is_element_present(self.timeline_general.NAVIGATION_TIMELINE) is True
 
     def test_logout(self):
+        """Happy test case of logout"""
         self.set_up()
         self.authentication_actions.login_by_email(s.email_login, s.password)
         self.authentication_actions.logout()
@@ -179,6 +185,19 @@ class TestsWithReset:
         (s.email_lifetime_user, "lifetime")
     ])
     def test_operations_per_type_of_subscription(self, email, type_of_user):
+        """Checking the execution of operations that are only allowed to subscribers.
+        Free users are checked that they cannot perform these operations.
+
+        1: add more than 1 wallet
+        2: add more than 1 budget
+        3: share wallet to other users
+        4: assign more labels to transaction
+        5: connect bank account
+        6: export transactions using custom period filter
+        7: export transactions using all time period filter
+        8: export in .xlsx format
+
+        """
         self.set_up()
         self.authentication_actions.login_by_email(email, s.password)
         self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
@@ -315,6 +334,7 @@ class TestsWithoutReset:
         self.wallet_validator = WalletValidator(self.driver)
 
     def test_edit_profile_name(self):
+        """Change of user's first and last name"""
         self.set_up()
 
         first_name = vs.first_name
@@ -337,6 +357,7 @@ class TestsWithoutReset:
         ])
     def test_create_transaction(self, type_of_test, transaction_type, category, amount, currency, wallet, start_date,
                                 note, label, photo, recurrence, end_date, reminder):
+        """Checking that a transaction can be added based on the required parameters"""
         self.set_up()
         self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date,
                                                     note, label, photo, recurrence, end_date, reminder)
@@ -351,6 +372,7 @@ class TestsWithoutReset:
         ])
     def test_create_transfer(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                              end_date, reminder):
+        """Checking that a transfer can be added based on the required parameters"""
         self.set_up()
         self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                                               end_date, reminder)
@@ -368,6 +390,7 @@ class TestsWithoutReset:
         ])
     def test_edit_transaction(self, type_of_test, transaction_type, category, amount, wallet, start_date, note, label,
                               photo, recurrence, end_date, reminder):
+        """Checking that a transaction can be edited based on the required parameters"""
         self.set_up()
         self.transaction_actions.open_transaction()
         self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label,
@@ -377,9 +400,10 @@ class TestsWithoutReset:
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
     def test_change_transaction_to_transfer(self):
+        """Checking that a transaction can be changed to transfer"""
         self.set_up()
         self.transaction_actions.open_transaction()
-        self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
+        self.transaction_detail.open_type_picker()
         self.transaction_detail.set_type_to_transfer()
         attributes = self.transfer_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
@@ -393,6 +417,7 @@ class TestsWithoutReset:
         ])
     def test_edit_transfer(self, type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date,
                            note, recurrence, end_date, reminder):
+        """Checking that a transfer can be edited based on the required parameters"""
         self.set_up()
         self.transfer_actions.open_transfer()
         self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date,
@@ -402,6 +427,7 @@ class TestsWithoutReset:
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
 
     def test_change_1way_transfer_to_2way(self):
+        """Checking that 1-way transfer can be changed to 2-way"""
         self.set_up()
         self.transfer_actions.create_transfer(amount="random", outgoing_wallet="oos", incoming_wallet="not_oos",
                                               start_date=None, note=None, recurrence=None, end_date=None, reminder=None)
@@ -419,6 +445,7 @@ class TestsWithoutReset:
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_change_transfer_to_transaction)
         ])
     def test_change_transfer_to_transaction(self, type_of_test, outgoing_wallet, incoming_wallet, transaction_type):
+        """Checking that transfer can be changed to transaction"""
         self.set_up()
         self.transfer_actions.create_transfer(amount="random", outgoing_wallet=outgoing_wallet,
                                               incoming_wallet=incoming_wallet, start_date=None, note=None,
@@ -433,6 +460,7 @@ class TestsWithoutReset:
         assert self.transaction_validator.is_transaction_on_timeline(attributes)
 
     def test_delete_transaction(self):
+        """Checking that transaction can be deleted"""
         self.set_up()
         self.transaction_actions.open_transaction()
         attributes = self.transaction_validator.get_all_attributes()
@@ -440,6 +468,7 @@ class TestsWithoutReset:
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is False
 
     def test_delete_transfer(self):
+        """Checking that transfer can be deleted"""
         self.set_up()
         self.transfer_actions.open_transfer()
         attributes = self.transfer_validator.get_all_attributes()
@@ -454,6 +483,7 @@ class TestsWithoutReset:
         ])
     def test_create_transaction_template(self, type_of_test, transaction_type, category, amount, currency, wallet,
                                          start_date, note, label, photo, recurrence, end_date, reminder):
+        """Checking that a transaction template can be created based on the required parameters"""
         self.set_up()
         self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date,
                                                     note, label,
@@ -470,6 +500,7 @@ class TestsWithoutReset:
         ])
     def test_edit_transaction_template(self, type_of_test, transaction_type, category, amount, wallet,
                                        start_date, note, label, photo, recurrence, end_date, reminder):
+        """Checking that a transaction template can be edited based on the required parameters"""
         self.set_up()
         self.transaction_actions.open_transaction_template()
         self.transaction_actions.edit_transaction(transaction_type, category, amount, wallet, start_date, note, label,
@@ -479,10 +510,11 @@ class TestsWithoutReset:
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes) is True
 
     def test_change_transaction_template_to_transfer_template(self):
+        """Checking that transaction template can be changed to transfer template"""
         self.set_up()
         self.transaction_actions.open_transaction_template()
         attributes_transaction = self.transaction_template_validator.get_all_attributes()
-        self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
+        self.transaction_detail.open_type_picker()
         self.transaction_detail.set_type_to_transfer()
         attributes_transfer = self.transfer_template_validator.get_all_attributes()
         self.transaction_actions.save_transaction()
@@ -496,6 +528,7 @@ class TestsWithoutReset:
         ])
     def test_create_transfer_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note,
                                       recurrence, end_date, reminder):
+        """Checking that a transfer template can be created based on the required parameters"""
         self.set_up()
         self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                                               end_date, reminder)
@@ -511,6 +544,7 @@ class TestsWithoutReset:
         ])
     def test_edit_transfer_template(self, type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet,
                                     start_date, note, recurrence, end_date, reminder):
+        """Checking that a transfer template can be edited based on the required parameters"""
         self.set_up()
         self.transfer_actions.open_transfer_template()
         self.transfer_actions.edit_transfer(transaction_type, amount, outgoing_wallet, incoming_wallet, start_date,
@@ -529,13 +563,14 @@ class TestsWithoutReset:
     def test_change_transfer_template_to_transaction_template(self, type_of_test, amount, outgoing_wallet,
                                                               incoming_wallet, start_date, note, recurrence,
                                                               end_date, reminder, transaction_type):
+        """Checking that transfer template can be changed to transaction template"""
         self.set_up()
         self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                                               end_date, reminder)
         self.transaction_actions.save_transaction()
         self.transfer_actions.open_transfer_template()
         attributes_transfer = self.transfer_template_validator.get_all_attributes()
-        self.ew.wait_and_tap_element(self.transaction_detail.CATEGORY_ICON, 10)
+        self.transaction_detail.open_type_picker()
         self.transaction_detail.set_type_of_transaction(transaction_type)
         self.transaction_detail.set_category("random")
         attributes_transaction = self.transaction_template_validator.get_all_attributes()
@@ -544,6 +579,7 @@ class TestsWithoutReset:
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes_transaction) is True
 
     def test_change_1_way_transfer_template_to_2_way(self):
+        """Checking that 1-way transfer template can be changed to 2-way transfer template"""
         self.set_up()
         self.transfer_actions.create_transfer(amount="random", outgoing_wallet="oos", incoming_wallet="not_oos",
                                               start_date=None, note=None, recurrence="random", end_date=None,
@@ -565,6 +601,7 @@ class TestsWithoutReset:
         ])
     def test_generate_transaction_from_template(self, type_of_test, transaction_type, category, amount, currency,
                                                 wallet, start_date, note, label, photo, recurrence, end_date, reminder):
+        """Checking that transactions are generated correctly from template based"""
         self.set_up()
         self.transaction_actions.create_transaction(transaction_type, category, amount, currency, wallet, start_date,
                                                     note, label, photo, recurrence, end_date, reminder)
@@ -583,6 +620,7 @@ class TestsWithoutReset:
         ])
     def test_generate_transfer_from_template(self, type_of_test, amount, outgoing_wallet, incoming_wallet, start_date,
                                              note, recurrence, end_date, reminder):
+        """Checking that transfers are generated correctly from template"""
         self.set_up()
         self.transfer_actions.create_transfer(amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                                               end_date, reminder)
@@ -595,6 +633,7 @@ class TestsWithoutReset:
             assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
 
     def test_delete_transaction_template(self):
+        """Checking correct deletion of transaction template"""
         self.set_up()
         self.transaction_actions.open_transaction_template()
         attributes = self.transaction_template_validator.get_all_attributes()
@@ -602,6 +641,7 @@ class TestsWithoutReset:
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes) is False
 
     def test_delete_transfer_template(self):
+        """Checking correct deletion of transfer template"""
         self.set_up()
         self.transfer_actions.open_transfer_template()
         attributes = self.transfer_template_validator.get_all_attributes()
@@ -615,6 +655,7 @@ class TestsWithoutReset:
         ])
     def test_create_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date,
                            end_date):
+        """Checking that a budget can be created based on the required parameters"""
         self.set_up()
         self.budget_actions.create_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
         attributes = self.budget_validator.get_all_attributes()
@@ -628,6 +669,7 @@ class TestsWithoutReset:
         ])
     def test_edit_budget(self, type_of_test, name, amount, currency, wallets, categories, recurrence, start_date,
                          end_date):
+        """Checking that a budget can be edited based on the required parameters"""
         self.set_up()
         self.budget_actions.edit_budget(name, amount, currency, wallets, categories, recurrence, start_date, end_date)
         attributes = self.budget_validator.get_all_attributes()
@@ -635,6 +677,7 @@ class TestsWithoutReset:
         assert self.budget_validator.is_budget_existing(attributes) is True
 
     def test_delete_budget(self):
+        """Checking correct deletion of budget"""
         self.set_up()
         self.budget_actions.open_budget()
         attributes = self.budget_validator.get_all_attributes()
@@ -647,6 +690,7 @@ class TestsWithoutReset:
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_create_wallet)
         ])
     def test_create_wallet(self, type_of_test, name, amount, currency, categories):
+        """Checking that a wallet can be created based on the required parameters"""
         self.set_up()
         self.wallets_actions.create_wallet(name, amount, currency, categories)
         attributes = self.wallet_validator.get_all_attributes()
@@ -659,6 +703,7 @@ class TestsWithoutReset:
             i for i in vs.get_list_of_parameters_for_testing(vs.json_test_edit_wallet)
         ])
     def test_edit_wallet(self, type_of_test, name, amount, currency, categories):
+        """Checking that a wallet can be edited based on the required parameters"""
         self.set_up()
         self.wallets_actions.edit_wallet(name, amount, currency, categories)
         attributes = self.wallet_validator.get_all_attributes()
@@ -666,6 +711,7 @@ class TestsWithoutReset:
         assert self.wallet_validator.is_wallet_existing(attributes)
 
     def test_delete_wallet(self):
+        """Checking correct deletion of wallet"""
         self.set_up()
         self.wallets_actions.open_wallet()
         attributes = self.wallet_validator.get_all_attributes()
@@ -673,6 +719,7 @@ class TestsWithoutReset:
         assert self.wallet_validator.is_wallet_existing(attributes) is False
 
     def test_create_category(self):
+        """Checking that category is created correctly"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_categories()
@@ -682,6 +729,7 @@ class TestsWithoutReset:
         assert self.category_validator.is_category_existing(attributes) is True
 
     def test_edit_category(self):
+        """Checking that category is edited correctly"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_categories()
@@ -691,6 +739,7 @@ class TestsWithoutReset:
         assert self.category_validator.is_category_existing(attributes) is True
 
     def test_delete_category(self):
+        """Checking that category is deleted correctly"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_categories()
@@ -700,6 +749,7 @@ class TestsWithoutReset:
         assert self.category_validator.is_category_existing(attributes) is False
 
     def test_merge_categories(self):
+        """Checking that categories are merged correctly"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_categories()
@@ -710,6 +760,7 @@ class TestsWithoutReset:
         assert self.category_validator.is_category_existing(deleted) is False
 
     def test_connect_bank_account(self):
+        """Checking the bank account can be connected"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_bank_accounts()
@@ -722,6 +773,7 @@ class TestsWithoutReset:
             assert self.ew.is_element_present(vs.fake_bank_simple) is True
 
     def test_bank_account_consent(self):
+        """Checking if bank consent exists"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_bank_accounts()
@@ -734,6 +786,7 @@ class TestsWithoutReset:
         assert self.ew.is_element_present(self.bank_account_detail.CONSENT_WEBVIEW)
 
     def test_disconnect_bank_account(self):
+        """Checking that bank account can be disconnected"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_bank_accounts()
@@ -749,6 +802,7 @@ class TestsWithoutReset:
         assert v_input - v_output == 1
 
     def test_hide_bank_wallets(self):
+        """Checking that it's possible to hide bank wallet"""
         self.set_up()
         self.more_general.go_to_more_section()
         self.more_general.go_to_bank_accounts()

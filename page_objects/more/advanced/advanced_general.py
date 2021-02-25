@@ -12,5 +12,6 @@ class AdvancedGeneral:
         self.export_general = ExportGeneral(self.driver)
 
     def go_to_export(self):
+        """Opens export screen"""
         self.ew.wait_and_tap_element(self.EXPORT, 10)
         self.ew.wait_till_element_is_visible(self.export_general.EXPORT_HEADER, 10)

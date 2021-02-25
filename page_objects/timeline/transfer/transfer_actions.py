@@ -24,6 +24,16 @@ class TransferActions():
 
     def create_transfer(self, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date,
                         reminder):
+        """ Opens create transfer screen and sets requested attributes
+        :param amount: str or None
+        :param outgoing_wallet: str or None
+        :param incoming_wallet: str or None
+        :param start_date: str or None
+        :param note: str or None
+        :param recurrence: str or None
+        :param end_date: str or None
+        :param reminder: str or None
+        """
         self.timeline_general.open_transaction_create_screen()
         self.transaction_detail.set_type_to_transfer()
         self.transaction_detail.set_amount(amount)
@@ -43,7 +53,7 @@ class TransferActions():
             self.transaction_detail.set_reminder(reminder)
 
     def open_transfer(self):
-
+        """Opens existing transfer, if there is no one, it creates transfer"""
         self.timeline_general.go_to_timeline()
         self.ew.wait_till_element_is_visible(self.timeline_general.ADD_TRANSACTION_BUTTON, 30)
         print(self.ew.is_element_present(self.EXISTING_TRANSFER))
@@ -56,6 +66,7 @@ class TransferActions():
         self.ew.wait_till_element_is_visible(self.transaction_detail.TRANSACTION_HEADER_TITLE, 15)
 
     def open_transfer_template(self):
+        """Opens existing transfer template"""
         self.ew.wait_till_element_is_visible(self.timeline_general.TRANSACTION_SECTION, 60)
         if self.ew.is_element_present(self.timeline_general.SCHEDULED) is True:
             self.timeline_general.open_scheduled_section()
@@ -82,6 +93,17 @@ class TransferActions():
 
     def edit_transfer(self, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence,
                       end_date, reminder):
+        """ Edits requested attributes on transfer detail screen
+        :param transaction_type: str or None
+        :param amount: str or None
+        :param outgoing_wallet: str or None
+        :param incoming_wallet: str or None
+        :param start_date: str or None
+        :param note: str or None
+        :param recurrence: str or None
+        :param end_date: str or None
+        :param reminder: str or None
+        """
         if transaction_type is not None:
             self.ew.tap_element(self.transaction_detail.CATEGORY_ICON)
             if transaction_type == "transfer":

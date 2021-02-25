@@ -26,6 +26,9 @@ class BudgetValidator:
         self.transaction_detail = TransactionDetail(self.driver)
 
     def get_all_attributes(self):
+        """ Getting all attributes of budget
+        :return: dict
+        """
         all_attributes = {"name": self.budget_detail.get_name(),
                           "amount": self.budget_detail.get_amount(),
                           "currency": self.budget_detail.get_currency(),
@@ -39,6 +42,10 @@ class BudgetValidator:
         return all_attributes
 
     def is_budget_existing(self, attributes):
+        """ Checking if budget is visible inside Budgets section
+        :param attributes: dict
+        :return: bool
+        """
         budget_locator = f"{attributes['name']}/" \
                          f"{attributes['amount']}/" \
                          f"{attributes['currency']}/" \
@@ -76,6 +83,10 @@ class BudgetValidator:
         return True
 
     def adjust_wallets(self, wallets):
+        """ Adjusting wallets for budget locator
+        :param wallets: str
+        :return: str
+        """
         if wallets == "All Wallets":
             return "undefined"
         elif wallets in ["0", "2", "3", "4", "5", "6", "7", "8", "9", "10"]:
@@ -84,16 +95,30 @@ class BudgetValidator:
             return "1"
 
     def adjust_categories(self, categories):
+        """ Adjusting categories for budget locator
+        :param categories: str
+        :return: str
+        """
         if categories == "All Expenses":
             return "undefined"
         else:
             return categories
 
     def adjust_recurrence(self, recurrence):
+        """ Adjusting recurrence for recurrence locator
+        :param recurrence: str
+        :return: str
+        """
         recurrences_in_app = ["once", "day", "week", "every two weeks", "month", "year"]
         return recurrences_in_app[vs.budget_recurrences.index(recurrence)]
 
     def adjust_end_date(self, end_date, start_date, recurrence):
+        """ Adjusting end date for budget locator
+        :param end_date: str
+        :param start_date: str
+        :param recurrence: str
+        :return: str
+        """
         if end_date is None:
             year_start, month_start, day_start = (int(x) for x in start_date.split('-'))
             start_date = datetime.date(year_start, month_start, day_start)

@@ -20,6 +20,12 @@ class WalletsActions:
         self.wallets_overview = WalletOverview(self.driver)
 
     def create_wallet(self, name, amount, currency, categories):
+        """ Opens wallet create screen and sets requested attributes
+        :param name: str or None
+        :param amount: str or None
+        :param currency: str or None
+        :param categories: str or int or None
+        """
         self.wallets_general.go_to_wallets()
         self.open_wallet_create_screen()
         self.wallet_detail.set_name(name)
@@ -31,6 +37,7 @@ class WalletsActions:
             self.wallet_detail.set_categories(categories)
 
     def open_wallet_create_screen(self):
+        """Opens wallet create screen"""
         self.ew.wait_till_element_is_visible(self.wallets_general.WALLETS_ANIMATED_HEADER, 10)
 
         if PLATFORM == "Android":
@@ -60,12 +67,14 @@ class WalletsActions:
         self.ew.wait_till_element_is_visible(self.wallet_detail.WALLET_HEADER, 10)
 
     def save_wallet(self):
+        """Clicks on save wallet button"""
         if self.driver.is_keyboard_shown():
             self.driver.hide_keyboard()
         self.ew.wait_and_tap_element(self.wallet_detail.SAVE_WALLET_BUTTON, 10)
         self.ew.wait_till_element_is_not_visible(self.wallet_detail.SAVE_WALLET_BUTTON, 10)
 
     def open_wallet(self):
+        """Opens existing wallet"""
         self.wallets_general.go_to_wallets()
         self.ew.wait_till_element_is_visible(self.wallets_general.WALLETS_ANIMATED_HEADER, 10)
         self.ew.wait_and_tap_element(self.wallets_general.WALLET_ITEM, 5)
@@ -73,6 +82,12 @@ class WalletsActions:
         self.ew.wait_till_element_is_visible(self.wallet_detail.WALLET_HEADER, 5)
 
     def edit_wallet(self, name, amount, currency, categories):
+        """Changes requested attributes of wallet
+        :param name: str or None
+        :param amount: str or None
+        :param currency: str or None
+        :param categories: str or int or None
+        """
         self.open_wallet()
         if name is not None:
             if PLATFORM == "Android":
@@ -93,10 +108,12 @@ class WalletsActions:
             self.wallet_detail.set_categories(categories)
 
     def delete_wallet(self):
+        """Deletes wallet from wallet detail"""
         self.ew.wait_and_tap_element(self.wallet_detail.TRASH_ICON, 10)
         self.ew.wait_and_tap_element(self.wallet_detail.DELETE_BUTTON, 10)
         self.ew.wait_till_element_is_visible(self.wallets_general.WALLETS_ANIMATED_HEADER, 10)
 
     def invite_user_to_wallet(self):
+        """Opens wallet and invitation screen"""
         self.open_wallet()
         self.wallet_detail.invite_user()

@@ -17,5 +17,6 @@ class WalletsGeneral:
         self.ew = ElementWrapper(self.driver)
 
     def go_to_wallets(self):
+        """Opens Wallets navigation section"""
         self.ew.wait_and_tap_element(self.NAVIGATION_WALLETS, 30)
         self.ew.wait_till_element_is_visible(self.WALLETS_ANIMATED_HEADER, 30)
