@@ -31,6 +31,13 @@ class MoreGeneral:
     ADVANCED = "Advanced"
     ADVANCED_HEADER = "Advanced Header"
 
+    # MAIN CURRENCY
+    if PLATFORM == "Android":
+        MAIN_CURRENCY = "Main Currency"
+    else:
+        MAIN_CURRENCY = 'label == "Main Currency"'
+    CURRENCY_PICKER = "Select currency Picker"
+
     def __init__(self, driver):
         self.driver = driver
         self.ew = ElementWrapper(self.driver)
@@ -68,3 +75,8 @@ class MoreGeneral:
         """Opens Advanced section"""
         self.ew.wait_and_tap_element(self.ADVANCED, 10)
         self.ew.wait_till_element_is_visible(self.ADVANCED_HEADER, 10)
+
+    def go_to_main_currency(self):
+        """Opens main currency picker"""
+        self.ew.wait_and_tap_element(self.MAIN_CURRENCY, 10)
+        self.ew.wait_till_element_is_visible(self.CURRENCY_PICKER, 10)

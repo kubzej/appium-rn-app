@@ -1,5 +1,6 @@
 import pytest
 import pytest_check as check
+import random
 from selenium.common.exceptions import NoSuchElementException
 
 import secrets as s
@@ -22,6 +23,7 @@ from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGe
 from page_objects.more.bank_accounts.bank_search_screen import BankSearchScreen
 from page_objects.more.categories.category_actions import CategoryActions
 from page_objects.more.categories.category_validator import CategoryValidator
+from page_objects.more.main_currency import MainCurrency
 from page_objects.more.more_general import MoreGeneral
 from page_objects.more.subscription.purchase_screen import PurchaseScreen
 from page_objects.more.user_profile import UserProfile
@@ -319,6 +321,7 @@ class TestsWithoutReset:
         self.budget_validator = BudgetValidator(self.driver)
         self.category_actions = CategoryActions(self.driver)
         self.category_validator = CategoryValidator(self.driver)
+        self.main_currency = MainCurrency(self.driver)
         self.more_general = MoreGeneral(self.driver)
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
@@ -817,3 +820,15 @@ class TestsWithoutReset:
         self.ew.wait_and_tap_element(self.bank_account_detail.BACK_BUTTON, 5)
         self.bank_accounts_general.open_bank_account()
         assert v_input - len(self.ew.get_elements(self.bank_account_detail.EYE_ICON)) == number_of_changes
+
+    def test_change_main_currency(self):
+        """Checking that main currency can changed correctly"""
+        self.set_up()
+        self.more_general.go_to_more_section()
+        self.more_general.go_to_main_currency()
+
+        currency = random.choice(vs.accessible_currencies)
+        self.main_currency.set_currency(currency)
+        assert currency == self.main_currency.get_currency()
+
+
