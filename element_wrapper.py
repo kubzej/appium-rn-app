@@ -24,9 +24,7 @@ class ElementWrapper:
         """
         if str(locator).startswith("//") or str(locator).startswith("(//"):
             return MobileBy.XPATH
-        elif str(locator).startswith("com.android"):
-            return MobileBy.ID
-        elif str(locator).startswith("android:id"):
+        elif str(locator).startswith("com.android") or str(locator).startswith("android:id"):
             return MobileBy.ID
         elif str(locator).startswith('label'):
             return MobileBy.IOS_PREDICATE
@@ -159,7 +157,7 @@ class ElementWrapper:
         return self.driver.find_element(byType, locator).get_attribute(attribute)
 
     def get_attributes(self, locator, attribute):
-        """ Getting attributes of selected element
+        """ Getting attribute of selected elements
         :param locator: str
         :param attribute:  str
         :return: list of str

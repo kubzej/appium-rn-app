@@ -314,6 +314,7 @@ class TestsWithoutReset:
 
     def set_up(self):
         self.ew = ElementWrapper(self.driver)
+        self.authentication_actions = AuthenticationActions(self.driver)
         self.bank_accounts_actions = BankAccountsActions(self.driver)
         self.bank_account_detail = BankAccountDetail(self.driver)
         self.bank_accounts_general = BankAccountsGeneral(self.driver)
@@ -323,6 +324,7 @@ class TestsWithoutReset:
         self.category_validator = CategoryValidator(self.driver)
         self.main_currency = MainCurrency(self.driver)
         self.more_general = MoreGeneral(self.driver)
+        self.timeline_general = TimelineGeneral(self.driver)
         self.transaction_actions = TransactionActions(self.driver)
         self.transaction_detail = TransactionDetail(self.driver)
         self.transaction_validator = TransactionValidator(self.driver)
@@ -336,6 +338,14 @@ class TestsWithoutReset:
         self.wallets_actions = WalletsActions(self.driver)
         self.wallet_validator = WalletValidator(self.driver)
 
+    @pytest.mark.dependency(name="init-login")
+    def test_init_login(self):
+        """Init login"""
+        self.set_up()
+        self.authentication_actions.login_by_email(s.test_user, s.password)
+        self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 60)
+
+    @pytest.mark.dependency(depends=["init-login"])
     def test_edit_profile_name(self):
         """Change of user's first and last name"""
         self.set_up()
@@ -352,6 +362,7 @@ class TestsWithoutReset:
         self.user_profile.save_user_profile()
         assert self.more_general.get_full_name_on_more_section() == f"{first_name} {last_name}"
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
@@ -368,6 +379,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
             # ("Test", "random", None, "oos", None, None, None, None, None)
@@ -385,6 +397,7 @@ class TestsWithoutReset:
             self.transfer_origination_modal.create_as_new_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
@@ -402,6 +415,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_change_transaction_to_transfer(self):
         """Checking that a transaction can be changed to transfer"""
         self.set_up()
@@ -412,6 +426,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder",
         [
@@ -429,6 +444,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_change_1way_transfer_to_2way(self):
         """Checking that 1-way transfer can be changed to 2-way"""
         self.set_up()
@@ -441,6 +457,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, outgoing_wallet, incoming_wallet, transaction_type",
         [
@@ -462,6 +479,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_transaction(self):
         """Checking that transaction can be deleted"""
         self.set_up()
@@ -470,6 +488,7 @@ class TestsWithoutReset:
         self.transaction_actions.delete_transaction()
         assert self.transaction_validator.is_transaction_on_timeline(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_transfer(self):
         """Checking that transfer can be deleted"""
         self.set_up()
@@ -478,6 +497,7 @@ class TestsWithoutReset:
         self.transaction_actions.delete_transaction()
         assert self.transfer_validator.is_transfer_on_timeline(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
@@ -495,6 +515,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
@@ -512,6 +533,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_change_transaction_template_to_transfer_template(self):
         """Checking that transaction template can be changed to transfer template"""
         self.set_up()
@@ -524,6 +546,7 @@ class TestsWithoutReset:
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes_transaction) is False
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes_transfer) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
             # ("Test", "random", None, None, None, None, "random", None, None)
@@ -539,6 +562,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder",
         [
@@ -556,6 +580,7 @@ class TestsWithoutReset:
         self.transaction_actions.save_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder, transaction_type",
         [
@@ -581,6 +606,7 @@ class TestsWithoutReset:
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes_transfer) is False
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes_transaction) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_change_1_way_transfer_template_to_2_way(self):
         """Checking that 1-way transfer template can be changed to 2-way transfer template"""
         self.set_up()
@@ -596,6 +622,7 @@ class TestsWithoutReset:
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes_1way) is False
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes_2way) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, transaction_type, category, amount, currency, wallet, start_date, note, label, photo, recurrence, end_date, reminder",
         [
@@ -616,6 +643,7 @@ class TestsWithoutReset:
         else:
             assert self.transaction_validator.is_transaction_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, amount, outgoing_wallet, incoming_wallet, start_date, note, recurrence, end_date, reminder", [
             # ("Test", "random", None, None, None, None, "random", None, None)
@@ -635,6 +663,7 @@ class TestsWithoutReset:
         else:
             assert self.transfer_validator.is_transfer_on_timeline(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_transaction_template(self):
         """Checking correct deletion of transaction template"""
         self.set_up()
@@ -643,6 +672,7 @@ class TestsWithoutReset:
         self.transaction_actions.delete_transaction()
         assert self.transaction_template_validator.is_transaction_template_on_timeline(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_transfer_template(self):
         """Checking correct deletion of transfer template"""
         self.set_up()
@@ -651,6 +681,7 @@ class TestsWithoutReset:
         self.transaction_actions.delete_transaction()
         assert self.transfer_template_validator.is_transfer_template_on_timeline(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
             # ("Test", "random", "random", None, None, None, None, None, None)
@@ -665,6 +696,7 @@ class TestsWithoutReset:
         self.budget_actions.save_budget()
         assert self.budget_validator.is_budget_existing(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, name, amount, currency, wallets, categories, recurrence, start_date, end_date", [
             # ("Test", "random", "random", None, None, None, None, None, None)
@@ -679,6 +711,7 @@ class TestsWithoutReset:
         self.budget_actions.save_budget()
         assert self.budget_validator.is_budget_existing(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_budget(self):
         """Checking correct deletion of budget"""
         self.set_up()
@@ -687,6 +720,7 @@ class TestsWithoutReset:
         self.budget_actions.delete_budget()
         assert self.budget_validator.is_budget_existing(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, name, amount, currency, categories", [
             # ("Test", "random", None, None, None)
@@ -700,6 +734,7 @@ class TestsWithoutReset:
         self.wallets_actions.save_wallet()
         assert self.wallet_validator.is_wallet_existing(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     @pytest.mark.parametrize(
         "type_of_test, name, amount, currency, categories", [
             #     ("Test", None, "random", None, None)
@@ -713,6 +748,7 @@ class TestsWithoutReset:
         self.wallets_actions.save_wallet()
         assert self.wallet_validator.is_wallet_existing(attributes)
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_wallet(self):
         """Checking correct deletion of wallet"""
         self.set_up()
@@ -721,6 +757,7 @@ class TestsWithoutReset:
         self.wallets_actions.delete_wallet()
         assert self.wallet_validator.is_wallet_existing(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_create_category(self):
         """Checking that category is created correctly"""
         self.set_up()
@@ -731,6 +768,7 @@ class TestsWithoutReset:
         self.category_actions.save_category()
         assert self.category_validator.is_category_existing(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_edit_category(self):
         """Checking that category is edited correctly"""
         self.set_up()
@@ -741,6 +779,7 @@ class TestsWithoutReset:
         self.category_actions.save_category()
         assert self.category_validator.is_category_existing(attributes) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_delete_category(self):
         """Checking that category is deleted correctly"""
         self.set_up()
@@ -751,6 +790,7 @@ class TestsWithoutReset:
         self.category_actions.delete_category()
         assert self.category_validator.is_category_existing(attributes) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_merge_categories(self):
         """Checking that categories are merged correctly"""
         self.set_up()
@@ -762,6 +802,7 @@ class TestsWithoutReset:
         assert self.category_validator.is_category_existing(remaining)
         assert self.category_validator.is_category_existing(deleted) is False
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_connect_bank_account(self):
         """Checking the bank account can be connected"""
         self.set_up()
@@ -775,6 +816,7 @@ class TestsWithoutReset:
         else:
             assert self.ew.is_element_present(vs.fake_bank_simple) is True
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_bank_account_consent(self):
         """Checking if bank consent exists"""
         self.set_up()
@@ -788,6 +830,7 @@ class TestsWithoutReset:
         self.bank_account_detail.open_consent()
         assert self.ew.is_element_present(self.bank_account_detail.CONSENT_WEBVIEW)
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_disconnect_bank_account(self):
         """Checking that bank account can be disconnected"""
         self.set_up()
@@ -804,6 +847,7 @@ class TestsWithoutReset:
         v_output = len(self.ew.get_elements(self.bank_accounts_general.BANK_ITEM))
         assert v_input - v_output == 1
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_hide_bank_wallets(self):
         """Checking that it's possible to hide bank wallet"""
         self.set_up()
@@ -821,6 +865,7 @@ class TestsWithoutReset:
         self.bank_accounts_general.open_bank_account()
         assert v_input - len(self.ew.get_elements(self.bank_account_detail.EYE_ICON)) == number_of_changes
 
+    @pytest.mark.dependency(depends=["init-login"])
     def test_change_main_currency(self):
         """Checking that main currency can changed correctly"""
         self.set_up()
