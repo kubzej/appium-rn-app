@@ -47,8 +47,8 @@ This file should be created in root of project with these 4 variables
 `xcode_signing_id`= \<[Developer ID](https://appium.io/docs/en/drivers/ios-xcuitest-real-devices/)\>
 
 ### Environmental variables
-- FACEBOOK_APP_ID (Facebook app id of devel application)
-- FACEBOOK_SECRET (Facebook secret of devel application)
+- `FACEBOOK_APP_ID` (Facebook app id of devel application)
+- `FACEBOOK_SECRET` (Facebook secret of devel application)
 
 ### Running real device or emulator/simulator
 - For Android just specify correct `udid` for device you want to use. You can get active `udid` via adb command `adb devices`. You will get connected list of android devices.
