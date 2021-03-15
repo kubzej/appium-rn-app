@@ -21,6 +21,22 @@ def get_list_of_parameters_for_testing(json_file):
             l.append(tuple_of_values)
         return l
 
+prefix = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(8)])
+domain = '@spendee.com'
+auttest_prefix = "qa.aut."
+email_register = auttest_prefix + prefix + domain
+email_login = "automation@spendee.com"
+email_not_existing = "automation_not_existing@spendee.com"
+email_free_user = "qa.automation.free@spendee.com"
+email_plus_user = "qa.automation.plus@spendee.com"
+email_premium_user = "qa.automation.premium@spendee.com"
+email_lifetime_user = "qa.automation.lifetime@spendee.com"
+email_login_facebook = "automation_vampofh_tester@tfbnw.net"
+password = "spendee123"
+password_invalid = "abc"
+password_fake_bank = "secret"
+login_fake_bank = "username"
+test_user = "qa.automation.user@spendee.com"
 
 random_number_from_1_to_3 = random.randint(1, 3)
 random_string = ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(8)])

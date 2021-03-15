@@ -70,10 +70,10 @@ class TestsWithReset:
         self.welcome_screen.skip_notifications_alert()
 
     @pytest.mark.parametrize("email, password, type_of_test", [
-        (s.email_register, s.password, "positive"),
-        (s.prefix, s.password, "invalid_email"),
-        (s.email_register, s.password_invalid, "invalid password"),
-        (s.email_login, s.password, "existing email")
+        (vs.email_register, vs.password, "positive"),
+        (vs.prefix, vs.password, "invalid_email"),
+        (vs.email_register, vs.password_invalid, "invalid password"),
+        (vs.email_login, vs.password, "existing email")
     ])
     def test_register_by_email(self, email, password, type_of_test):
         """Happy and negative test cases of registration by email and password"""
@@ -123,9 +123,9 @@ class TestsWithReset:
         assert self.ew.is_element_present(self.purchase_screen.SUBSCRIPTION_HEADER) is True
 
     @pytest.mark.parametrize("email, password, type_of_test", [
-        (s.email_login, s.password, "positive"),
-        (s.email_not_existing, s.password, "existing_email"),
-        (s.email_login, s.password_invalid, "invalid_password")
+        (vs.email_login, vs.password, "positive"),
+        (vs.email_not_existing, vs.password, "existing_email"),
+        (vs.email_login, vs.password_invalid, "invalid_password")
     ])
     def test_login_by_email(self, email, password, type_of_test):
         """Happy and negative test cases of login by email and password"""
@@ -149,7 +149,7 @@ class TestsWithReset:
     def test_login_by_facebook(self):
         """Happy test case of login by Facebook OAuth"""
         self.set_up()
-        self.authentication_actions.login_by_facebook(s.email_login_facebook, s.password)
+        self.authentication_actions.login_by_facebook(vs.email_login_facebook, vs.password)
         try:
             self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
         except NoSuchElementException:
@@ -171,7 +171,7 @@ class TestsWithReset:
     def test_logout(self):
         """Happy test case of logout"""
         self.set_up()
-        self.authentication_actions.login_by_email(s.email_login, s.password)
+        self.authentication_actions.login_by_email(vs.email_login, vs.password)
         self.authentication_actions.logout()
 
         try:
@@ -181,10 +181,10 @@ class TestsWithReset:
         assert self.ew.is_element_present(self.welcome_screen.WELCOME_SCREEN) is True
 
     @pytest.mark.parametrize("email, type_of_user", [
-        (s.email_free_user, "free"),
-        (s.email_plus_user, "plus"),
-        (s.email_premium_user, "premium"),
-        (s.email_lifetime_user, "lifetime")
+        (vs.email_free_user, "free"),
+        (vs.email_plus_user, "plus"),
+        (vs.email_premium_user, "premium"),
+        (vs.email_lifetime_user, "lifetime")
     ])
     def test_operations_per_type_of_subscription(self, email, type_of_user):
         """Checking the execution of operations that are only allowed to subscribers.
@@ -201,7 +201,7 @@ class TestsWithReset:
 
         """
         self.set_up()
-        self.authentication_actions.login_by_email(email, s.password)
+        self.authentication_actions.login_by_email(email, vs.password)
         self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 30)
 
         # More Wallets
@@ -342,7 +342,7 @@ class TestsWithoutReset:
     def test_init_login(self):
         """Init login"""
         self.set_up()
-        self.authentication_actions.login_by_email(s.test_user, s.password)
+        self.authentication_actions.login_by_email(vs.test_user, vs.password)
         self.ew.wait_till_element_is_visible(self.timeline_general.NAVIGATION_TIMELINE, 60)
 
     @pytest.mark.dependency(depends=["init-login"])

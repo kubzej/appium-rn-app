@@ -1,4 +1,4 @@
-import secrets as s
+import variables as vs
 from conftest import PLATFORM
 from element_wrapper import ElementWrapper
 from page_objects.more.bank_accounts.bank_accounts_general import BankAccountsGeneral
@@ -29,8 +29,8 @@ class BankAccountsActions():
         self.ew.wait_till_element_is_visible(self.bank_search_screen.SEARCH_INPUT, 30)
         self.bank_search_screen.search_bank_by_search_box(bank)
         self.ew.wait_till_element_is_visible(self.LOGIN_INPUT, 15)
-        self.ew.get_element(self.LOGIN_INPUT).send_keys(s.login_fake_bank)
-        self.ew.get_element(self.PASSWORD_INPUT).send_keys(s.password_fake_bank)
+        self.ew.get_element(self.LOGIN_INPUT).send_keys(vs.login_fake_bank)
+        self.ew.get_element(self.PASSWORD_INPUT).send_keys(vs.password_fake_bank)
         if self.driver.is_keyboard_shown():
             self.driver.hide_keyboard()
         self.ew.wait_and_tap_element(self.CONTINUE_BUTTON, 5)
