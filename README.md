@@ -3,7 +3,6 @@
 ## Prerequisities
 - Latest Appium - See [Install Appium on local machine](https://github.com/appium/appium/blob/master/docs/en/about-appium/getting-started.md)
 - Python 3
-- Builded RN app - See [RN app repository](https://gitlab.spendee.com/frontend/spendeern)
 - Created `secrets.py` in root with requested [variables](#secrets.py).
 
 ## Running tests
